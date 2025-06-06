@@ -5,86 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C4 - Gestão para Empreendedoras</title>
     
-    <!-- Link para a Folha de Estilos Externa -->
-    <link rel="stylesheet" href="estilos.css">
-    
-    <!-- Links para Google Fonts -->
+    <!-- Link para a folha de estilos externa -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Links para fontes e bibliotecas externas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Link para o JavaScript Externo (com 'defer' para carregar após o HTML) -->
-    <script src="scripts.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="app-overlay" class="overlay"></div>
 
     <aside id="sidebar-nav" class="sidebar-nav">
-        <!-- O conteúdo do menu lateral permanece aqui -->
+        <div class="sidebar-nav-header">
+            <h2 class="sidebar-title">C4</h2>
+            <button class="close-btn" id="close-sidebar-btn" aria-label="Fechar menu">&times;</button>
+        </div>
+        <div class="sidebar-nav-links">
+            <a href="#dashboard" class="sidebar-nav-item active" data-page="dashboard-page"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Dashboard</a>
+            <a href="#produtos" class="sidebar-nav-item" data-page="produtos-page"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Produtos</a>
+            <a href="#vendas" class="sidebar-nav-item" data-page="vendas-page"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Vendas</a>
+            <a href="#despesas" class="sidebar-nav-item" data-page="despesas-page"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Despesas</a>
+            <a href="#calculadoras" class="sidebar-nav-item" data-page="calculadoras-page"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="16" y2="18"></line></svg>Calculadoras</a>
+        </div>
     </aside>
 
-    <header class="app-header header-gradient">
-         <!-- O conteúdo do cabeçalho permanece aqui -->
+    <header class="app-header">
+        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></button>
+        <h1 class="app-header-title">C4</h1> 
     </header>
 
     <main id="app-content">
-        <!-- Todas as seções de página (Dashboard, Produtos, etc.) permanecem aqui -->
-        <section id="dashboard-page" class="page-content active">
-            <!-- Conteúdo do Dashboard Restaurado -->
-        </section>
-        <section id="produtos-page" class="page-content">
-            <!-- Conteúdo da Página de Produtos Restaurado -->
-        </section>
-        <section id="vendas-page" class="page-content">
-             <!-- Conteúdo da Página de Vendas Restaurado -->
-        </section>
-        <section id="despesas-page" class="page-content">
-            <!-- Conteúdo da Página de Despesas Restaurado -->
-        </section>
-        <section id="liberdade-financeira-page" class="page-content">
-             <!-- Conteúdo da Página Liberdade Financeira Restaurado -->
-        </section>
-        <section id="planejamento-quitacao-divida-page" class="page-content">
-            <!-- Conteúdo da Página de Planejamento de Quitação Restaurado -->
-        </section>
-        <section id="lucro-certo-page" class="page-content">
-            <!-- Conteúdo da Página Lucro Certo Restaurado -->
-        </section>
-        <section id="calculadoras-page" class="page-content">
-             <!-- Conteúdo do Hub de Calculadoras Restaurado -->
-        </section>
-        <section id="calc-lucro-ideal-page" class="page-content calculator-page">
-            <!-- Conteúdo da Calculadora de Lucro Ideal Restaurado -->
-        </section>
-        <section id="calc-frete-unitario-page" class="page-content calculator-page">
-             <!-- Conteúdo da Calculadora de Frete Unitário Restaurado -->
-        </section>
-        <section id="calc-meta-vendas-page" class="page-content calculator-page">
-            <!-- Conteúdo da Calculadora de Meta de Vendas Restaurado -->
-        </section>
-        <section id="calc-reinvestimento-page" class="page-content calculator-page">
-            <!-- Conteúdo da Calculadora de Reinvestimento Inteligente Restaurado -->
-        </section>
-        <section id="calc-precificacao-manual-page" class="page-content calculator-page">
-            <!-- Conteúdo da Calculadora de Precificação Manual Restaurado -->
-        </section>
-        <section id="fluxo-caixa-page" class="page-content">
-            <!-- Conteúdo da Página Fluxo de Caixa Restaurado -->
-        </section>
-        <section id="relatorios-page" class="page-content">
-            <!-- Conteúdo da Página Relatórios -->
-        </section>
-        <section id="c4-ia-page" class="page-content">
-            <!-- Conteúdo da Página C4 IA -->
-        </section>
-        <section id="perfil-page" class="page-content"> 
-            <!-- Conteúdo da Página Perfil -->
+        <section id="dashboard-page" class="page-content active"><h2 class="page-title">Dashboard</h2><p>Conteúdo do Dashboard aqui.</p></section>
+        <section id="produtos-page" class="page-content"><h2 class="page-title">Produtos</h2><p>Conteúdo da página de Produtos aqui.</p></section>
+        <section id="vendas-page" class="page-content"><h2 class="page-title">Vendas</h2><p>Conteúdo da página de Vendas aqui.</p></section>
+        <section id="despesas-page" class="page-content"><h2 class="page-title">Despesas</h2><p>Conteúdo da página de Despesas aqui.</p></section>
+        
+        <section id="calculadoras-page" class="page-content calculator-page">
+            <h2 class="page-title">Calculadora de Preço Inteligente</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="calc-pv-produto">1. Escolha o produto</label>
+                    <select id="calc-pv-produto" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="calc-pv-custo">2. Custo de compra do produto (R$)</label>
+                    <input type="number" id="calc-pv-custo" placeholder="Selecione um produto para preencher" required>
+                </div>
+                <div class="form-group">
+                    <label for="calc-pv-margem-slider">3. Qual a sua margem de lucro desejada?</label>
+                    <div class="slider-container">
+                        <input type="range" id="calc-pv-margem-slider" min="10" max="200" value="100">
+                        <span class="slider-value" id="calc-pv-margem-display">100%</span>
+                    </div>
+                </div>
+                <button class="btn btn-calc" id="btn-calc-pv">Calcular Preço</button>
+                <div id="calc-pv-results" class="results-area" style="display: none;">
+                    <h4>Resultado</h4>
+                    <p>Preço de Venda Sugerido:</p>
+                    <p class="highlight-result" id="calc-pv-preco-sugerido">R$ 0,00</p>
+                    <hr style="border:0; border-top:1px solid #e0e0fc; margin: 1rem 0;">
+                    <p>Lucro líquido por unidade: <strong id="calc-pv-lucro-liquido">R$ 0,00</strong></p>
+                    <p class="alert-text danger" id="calc-pv-alerta-margem" style="display: none;">Atenção: Margem muito baixa! Considere aumentar para ter um lucro saudável.</p>
+                    <button class="btn" id="btn-save-pv" style="background-color: #10b981; color: white; margin-top: 1rem; width: 100%; min-height:44px;">Atualizar Preço do Produto</button>
+                </div>
+            </div>
         </section>
     </main>
 
-    <footer class="app-footer">
+    <footer class="app-footer" style="text-align:center; padding:1.5rem; background-color:#f8f0f4; border-top: 1px solid #e7d8de;">
         <p>&copy; <span id="current-year"></span> C4. Todos os direitos reservados.</p>
     </footer>
+
+    <div id="toast-notification" class="toast-notification"></div>
+
+    <!-- Link para o script externo -->
+    <script src="script.js" defer></script>
 </body>
 </html>
