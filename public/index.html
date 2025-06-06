@@ -4,15 +4,993 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C4 - Gestão para Empreendedoras</title>
-    
-    <!-- Link para a folha de estilos externa -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Links para fontes e bibliotecas externas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Estilos básicos para visualização inicial e mobile-first */
+        body { 
+            font-family: 'Poppins', sans-serif; /* Tipografia sugerida */
+            margin: 0; 
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #fef6fa; /* Fundo rosa bem claro */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cabeçalho */
+        .app-header { 
+            background-color: #db1472; /* Rosa Principal da paleta */
+            background-image: linear-gradient(to right, #db1472, #ec4899); 
+            color: white; 
+            padding: 0.8rem 1rem; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .app-header-title {
+            margin: 0;
+            font-size: 1.6rem; 
+            font-weight: 700; 
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem; 
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-toggle svg {
+            width: 30px; 
+            height: 30px;
+        }
+
+        /* Navegação Lateral (Sidebar) */
+        .sidebar-nav {
+            height: 100%;
+            width: 0; 
+            position: fixed;
+            z-index: 1001; 
+            top: 0;
+            left: 0;
+            background-color: #db1472; 
+            background-image: linear-gradient(to bottom, #db1472, #c01062); 
+            overflow-x: hidden;
+            transition: 0.3s ease-in-out; 
+            padding-top: 20px; 
+            box-shadow: 4px 0 8px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-nav.open {
+            width: 260px; 
+        }
+        .sidebar-nav-header { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px; 
+            border-bottom: 1px solid #c01062; 
+            margin-bottom: 10px;
+        }
+        .sidebar-nav-header .sidebar-title {
+            color: #ffffff;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin:0;
+        }
+        .sidebar-nav .close-btn { 
+            font-size: 2.2rem; 
+            font-weight: 700;
+            color: #fce7f3; 
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px; 
+        }
+        .sidebar-nav .close-btn:hover {
+            color: #f8b81f; 
+        }
+        .sidebar-nav-links {
+            flex-grow: 1;
+            overflow-y: auto; 
+        }
+
+        .sidebar-nav a {
+            padding: 14px 18px 14px 25px; 
+            text-decoration: none;
+            font-size: 1.15rem; 
+            font-weight: 500; 
+            color: #fce7f3; 
+            display: flex; 
+            align-items: center; 
+            transition: 0.2s ease-in-out;
+            border-bottom: 1px solid #c01062; 
+        }
+        .sidebar-nav a svg { 
+            margin-right: 12px; 
+            width: 20px;
+            height: 20px;
+            vertical-align: middle; 
+            fill: none; 
+            stroke: currentColor; 
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .sidebar-nav-links a:last-child { 
+            border-bottom: none; 
+        }
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            color: #db1472; 
+            background-color: #f8b81f; 
+            font-weight: 600;
+        }
+        .sidebar-nav a:hover svg,
+        .sidebar-nav a.active svg {
+            stroke: #db1472; 
+        }
+
+
+        /* Conteúdo Principal */
+        main { 
+            flex-grow: 1; 
+            padding: 1.8rem 1.2rem; 
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            transition: margin-left 0.3s ease-in-out; 
+        }
+        body.sidebar-open main {
+             /* Mantém sem margin-left para sobreposição em mobile */
+        }
+
+        .page-content { 
+             transition: opacity 0.4s ease-in-out;
+        }
+        .page-content.exiting {
+            opacity: 0;
+        }
+        .page-title {
+            color: #db1472; 
+            border-bottom: 4px solid #f8b81f; 
+            padding-bottom: 0.8rem;
+            margin-top: 0;
+            margin-bottom: 1.8rem; 
+            font-size: 2rem; 
+            font-weight: 600; 
+        }
+        .sub-page-title { 
+            color: #c01062; 
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #f8f0f4; 
+            color: #575355; 
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            border-top: 1px solid #e7d8de; 
+        }
+
+        /* Estilos para esconder/mostrar páginas */
+        .page-content:not(.active) {
+            display: none;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(50,10,30,0.5); 
+            z-index: 1000; 
+            transition: opacity 0.3s ease-in-out;
+        }
+        .overlay.active {
+            display: block;
+        }
+
+        /* ======= ESTILOS ATUALIZADOS DO DASHBOARD ======= */
+        #dashboard-page .cards-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        @media(min-width: 500px) {
+            #dashboard-page .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+         @media(min-width: 1024px) {
+            #dashboard-page .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .dashboard-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .dashboard-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .dashboard-card-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #ffffff;
+        }
+        .icon-bg-pink { background-color: #db1472; }
+        .icon-bg-green { background-color: #10b981; }
+        .icon-bg-red { background-color: #ef4444; }
+
+        .dashboard-card-content h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        .dashboard-card-content p {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .dashboard-list-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+         .dashboard-list-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #500724;
+        }
+         .dashboard-list-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+         }
+         .dashboard-list-card li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0.25rem;
+            border-bottom: 1px solid #fce7f3;
+            font-size: 0.95rem;
+            color: #4b5563;
+         }
+        .dashboard-list-card li:last-child {
+            border-bottom: none;
+        }
+         .dashboard-list-card li strong {
+            font-weight: 600;
+            color: #db1472;
+         }
+         .dashboard-list-card .placeholder {
+            text-align: center;
+            padding: 1rem;
+            color: #9ca3af;
+         }
+        
+        .dashboard-summary-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            margin-top: 1.5rem;
+        }
+        @media(min-width: 768px) {
+             .dashboard-summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+             }
+        }
+
+
+        .quick-actions {
+            display: flex;
+            gap: 0.9rem;
+            margin-top: 2rem;
+            flex-wrap: wrap; 
+            justify-content: center;
+        }
+        
+        .btn, 
+        .btn-action {
+            background-color: #f8b81f; 
+            color: #5c3c00; 
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem; 
+            font-weight: 600; 
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            min-height: 44px; /* Altura mínima para botões */
+        }
+        .btn:hover,
+        .btn-action:hover {
+            background-color: #faca50; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+         .btn:focus-visible, .btn-action:focus-visible {
+            outline: 2px solid #db1472;
+            outline-offset: 2px;
+        }
+        .btn:active,
+        .btn-action:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-primary { 
+            background-color: #db1472;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #c01062;
+        }
+        .btn-secondary { 
+            background-color: #e2e8f0; 
+            color: #475569; 
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e1; 
+        }
+        .btn-danger { 
+            background-color: #ef4444; 
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626; 
+        }
+        .btn-sm { 
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            min-height: auto;
+        }
+
+        /* Estilos para Formulários (Genérico) */
+        .form-group {
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #4b5563; 
+            margin-bottom: 0.4rem;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db; 
+            border-radius: 6px;
+            box-sizing: border-box; 
+            font-size: 1rem;
+            color: #374151; 
+            transition: border-color 0.2s;
+        }
+        .form-group input.is-invalid, .form-group select.is-invalid {
+            border-color: #ef4444;
+        }
+        .form-group input.is-valid, .form-group select.is-valid {
+            border-color: #10b981;
+        }
+        .validation-message {
+            font-size: 0.8rem;
+            color: #ef4444;
+            display: none;
+            margin-top: 0.25rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 0.5rem; 
+        }
+        .form-group input[type="checkbox"] { 
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end; 
+            margin-top: 1.5rem;
+        }
+        .image-preview {
+            width: 150px; 
+            height: 150px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-top: 0.5rem;
+            display: none; 
+            object-fit: cover;
+        }
+
+        .status-badge { 
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px; 
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        .status-pago { background-color: #dcfce7; color: #166534; } 
+        .status-pendente { background-color: #ffedd5; color: #9a3412; } 
+        .status-cancelado { background-color: #fee2e2; color: #991b1b; } 
+
+        .form-container { 
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-top: 1.5rem;
+        }
+        
+        /* Página de Vendas Específico */
+        #form-nova-venda-container .sale-items-list {
+            margin-top: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            min-height: 50px; 
+        }
+        #form-nova-venda-container .sale-items-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        #form-nova-venda-container .sale-items-list li:last-child {
+            border-bottom: none;
+        }
+        #form-nova-venda-container .sale-item-details {
+            flex-grow: 1;
+        }
+        #form-nova-venda-container .sale-item-details strong {
+            color: #db1472;
+        }
+        #form-nova-venda-container .sale-item-actions button {
+            background: none;
+            border: none;
+            color: #ef4444; 
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        #form-nova-venda-container .sale-item-actions button:hover {
+            color: #b91c1c;
+        }
+        #sale-summary {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px dashed #fbcfe8;
+        }
+        #sale-summary p {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #500724;
+        }
+        #sale-summary p.total {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #db1472;
+        }
+        .summary-section { 
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #fff1f2; 
+            border-radius: 8px;
+            border: 1px solid #ffe4e6;
+        }
+        .summary-section h4 {
+            margin-top: 0;
+            color: #9d174d;
+        }
+
+        /* Página de Despesas Específico */
+        .despesas-cards-container {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) { 
+            .despesas-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .card-despesa {
+            background-color: #fff1f2; 
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+        }
+        .card-despesa-title {
+            color: #db1472;
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            border-bottom: 2px solid #f8b81f;
+            padding-bottom: 0.5rem;
+        }
+        .informativo {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            background-color: #fdf2f8;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border-left: 3px solid #f8b81f;
+        }
+        .card-despesa .form-group { 
+             margin-bottom: 1rem;
+        }
+        .card-despesa .form-actions {
+             justify-content: flex-start; 
+             margin-top: 1rem;
+        }
+        .custos-lista {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+            max-height: 200px; 
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+        .custos-lista li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+        }
+        .custos-lista li:last-child {
+            border-bottom: none;
+        }
+        .custos-lista li .cost-details {
+            flex-grow: 1;
+        }
+        .custos-lista li .cost-name {
+            font-weight: 500;
+            color: #374151;
+        }
+        .custos-lista li .cost-value {
+            color: #166534; 
+            font-weight: 500;
+        }
+        
+        .custos-lista li .remove-cost-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 1rem;
+        }
+        .custos-lista li .remove-cost-btn:hover {
+            color: #b91c1c;
+        }
+        
+        /* ESTILOS DOS CARDS DE PRODUTO */
+        .item-cards-container { 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 1.5rem; 
+            margin-top: 1.5rem;
+        }
+        @media (min-width: 992px) { 
+            .item-cards-container { 
+                grid-template-columns: repeat(3, 1fr); 
+            }
+        }
+
+
+        .product-card, .sale-card { 
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            border-left: 5px solid #f8b81f; 
+        }
+        .product-card:hover, .sale-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .product-card-image {
+            width: 100%;
+            aspect-ratio: 1 / 1; 
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        .product-card h4, .sale-card h4 {
+            font-size: 1.2rem;
+            color: #db1472;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        .product-card p, .sale-card p {
+            font-size: 0.9rem;
+            color: #4b5563;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+        .product-card p strong, .sale-card p strong {
+            color: #374151;
+        }
+        .product-card p a.link-definir-preco {
+            color: #c01062;
+            font-weight: 600;
+            text-decoration: none;
+        }
+         .product-card p a.link-definir-preco:hover {
+            text-decoration: underline;
+         }
+        .product-card .actions-cell, .sale-card .actions-cell { 
+            margin-top: auto; 
+            padding-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+         .sale-card .status-badge { 
+            display: inline-block; 
+            margin-top: 0.5rem;
+        }
+        
+        /* ESTILOS ATUALIZADOS: LUCRO CERTO E PLANEJAMENTO DÍVIDA */
+        .main-content-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        @media(min-width: 992px) {
+            .main-content-grid {
+                grid-template-columns: repeat(2, 1fr);
+                align-items: flex-start;
+            }
+        }
+        
+        .lucro-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+         .lucro-card h3 {
+            color: #c01062; 
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #fbcfe8;
+            padding-bottom: 0.5rem;
+        }
+        
+        .lucro-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+         .lucro-info-item .label-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .lucro-info-item strong {
+            font-weight: 600;
+            color: #db1472;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltip-icon {
+            background-color: #e2e8f0;
+            color: #475569;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .slider-group input[type="range"] {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #fbcfe8;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        .slider-group input[type="range"]:hover {
+            opacity: 1;
+        }
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #db1472;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #db1472;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-group input[type="number"] {
+            width: 80px;
+            text-align: center;
+        }
+
+        .lucro-result-display {
+            background-color: #f8f0f4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .lucro-result-display p {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            color: #500724;
+        }
+         .lucro-result-display .destaque-preco {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #db1472; 
+        }
+         .lucro-result-display .destaque-lucro {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #16a34a; 
+        }
+
+        #lucro-chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+         .lucro-certo-alert {
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+            display: none; /* Inicia escondido */
+        }
+        .alert-warning { 
+            background-color: #fffbeb;
+            color: #b45309;
+            border-color: #fde68a;
+        }
+
+        /* ESTILOS LIBERDADE FINANCEIRA */
+        #liberdade-financeira-page .debt-cards-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        .debt-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            border-left: 5px solid;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .debt-card.prioridade-alta { border-color: #ef4444; }
+        .debt-card.prioridade-media { border-color: #f59e0b; }
+        .debt-card.prioridade-baixa { border-color: #10b981; }
+
+        .debt-card h4 {
+            font-size: 1.2rem;
+            color: #db1472;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .debt-card p {
+            margin: 0.25rem 0;
+            color: #4b5563;
+        }
+
+        .debt-card .debt-actions {
+            margin-top: auto;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .readonly-field {
+            background-color: #f3f4f6;
+            cursor: not-allowed;
+        }
+
+        /* Página Calculadoras Hub */
+        .calculators-grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 colunas no mobile */
+            gap: 1rem;
+        }
+        @media (min-width: 992px) { /* 3 colunas para desktop */
+            .calculators-grid-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .calculator-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #fbcfe8; /* Borda rosa clara */
+            display: flex; /* Para alinhar conteúdo verticalmente */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px; /* Altura média */
+        }
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(219, 20, 114, 0.15); /* Sombra rosa no hover */
+        }
+        .calculator-card svg {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 0.75rem;
+            color: #db1472; /* Ícone rosa */
+        }
+        .calculator-card h4 {
+            font-size: 1rem;
+            color: #500724; /* Rosa escuro */
+            margin: 0;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #2d3748;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 2000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease-in-out;
+        }
+        .toast-notification.show {
+            transform: translateX(0);
+        }
+        .toast-notification.success { background-color: #10b981; }
+        .toast-notification.error { background-color: #ef4444; }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #db1472;
+            border-right: 4px solid #f8b81f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div id="app-overlay" class="overlay"></div>
@@ -23,64 +1001,1820 @@
             <button class="close-btn" id="close-sidebar-btn" aria-label="Fechar menu">&times;</button>
         </div>
         <div class="sidebar-nav-links">
-            <a href="#dashboard" class="sidebar-nav-item active" data-page="dashboard-page"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Dashboard</a>
-            <a href="#produtos" class="sidebar-nav-item" data-page="produtos-page"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>Produtos</a>
-            <a href="#vendas" class="sidebar-nav-item" data-page="vendas-page"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Vendas</a>
-            <a href="#despesas" class="sidebar-nav-item" data-page="despesas-page"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>Despesas</a>
-            <a href="#calculadoras" class="sidebar-nav-item" data-page="calculadoras-page"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="16" y2="18"></line></svg>Calculadoras</a>
+            <a href="#dashboard" class="sidebar-nav-item active" data-page="dashboard-page">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Dashboard
+            </a>
+            <a href="#produtos" class="sidebar-nav-item" data-page="produtos-page">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                Produtos
+            </a>
+            <a href="#vendas" class="sidebar-nav-item" data-page="vendas-page">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Vendas
+            </a>
+            <a href="#despesas" class="sidebar-nav-item" data-page="despesas-page">
+                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                Despesas
+            </a>
+            <a href="#liberdade-financeira" class="sidebar-nav-item" data-page="liberdade-financeira-page">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                Liberdade Financeira
+            </a>
+            <a href="#lucro-certo" class="sidebar-nav-item" data-page="lucro-certo-page">
+                <svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                Lucro Certo
+            </a>
+            <a href="#calculadoras" class="sidebar-nav-item" data-page="calculadoras-page"> <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="16" y2="18"></line></svg>
+                Calculadoras
+            </a>
+            <a href="#metas" class="sidebar-nav-item" data-page="metas-page">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                Metas
+            </a>
+            <a href="#relatorios" class="sidebar-nav-item" data-page="relatorios-page">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+                Relatórios
+            </a>
+            <a href="#c4-ia" class="sidebar-nav-item" data-page="c4-ia-page">
+                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 6 8 10 10 10s10-4 10-10A10 10 0 0 0 12 2z"></path><path d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path><path d="M12 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>
+                C4 IA
+            </a>
+            <a href="#perfil" class="sidebar-nav-item" data-page="perfil-page"> 
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Perfil
+            </a>
         </div>
     </aside>
 
-    <header class="app-header">
-        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg></button>
+    <header class="app-header header-gradient">
+        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Abrir menu">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+            </svg>
+        </button>
         <h1 class="app-header-title">C4</h1> 
+        <div></div>
     </header>
 
     <main id="app-content">
-        <section id="dashboard-page" class="page-content active"><h2 class="page-title">Dashboard</h2><p>Conteúdo do Dashboard aqui.</p></section>
-        <section id="produtos-page" class="page-content"><h2 class="page-title">Produtos</h2><p>Conteúdo da página de Produtos aqui.</p></section>
-        <section id="vendas-page" class="page-content"><h2 class="page-title">Vendas</h2><p>Conteúdo da página de Vendas aqui.</p></section>
-        <section id="despesas-page" class="page-content"><h2 class="page-title">Despesas</h2><p>Conteúdo da página de Despesas aqui.</p></section>
-        
-        <section id="calculadoras-page" class="page-content calculator-page">
-            <h2 class="page-title">Calculadora de Preço Inteligente</h2>
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="calc-pv-produto">1. Escolha o produto</label>
-                    <select id="calc-pv-produto" required></select>
-                </div>
-                <div class="form-group">
-                    <label for="calc-pv-custo">2. Custo de compra do produto (R$)</label>
-                    <input type="number" id="calc-pv-custo" placeholder="Selecione um produto para preencher" required>
-                </div>
-                <div class="form-group">
-                    <label for="calc-pv-margem-slider">3. Qual a sua margem de lucro desejada?</label>
-                    <div class="slider-container">
-                        <input type="range" id="calc-pv-margem-slider" min="10" max="200" value="100">
-                        <span class="slider-value" id="calc-pv-margem-display">100%</span>
+        <section id="dashboard-page" class="page-content active">
+            <h2 class="page-title">Dashboard</h2>
+            
+            <div class="cards-grid" id="dashboard-cards-summary">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon icon-bg-pink">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h4>Receita Bruta (Mês)</h4>
+                        <p id="dashboard-receita-bruta">R$ 0,00</p>
                     </div>
                 </div>
-                <button class="btn btn-calc" id="btn-calc-pv">Calcular Preço</button>
-                <div id="calc-pv-results" class="results-area" style="display: none;">
-                    <h4>Resultado</h4>
-                    <p>Preço de Venda Sugerido:</p>
-                    <p class="highlight-result" id="calc-pv-preco-sugerido">R$ 0,00</p>
-                    <hr style="border:0; border-top:1px solid #e0e0fc; margin: 1rem 0;">
-                    <p>Lucro líquido por unidade: <strong id="calc-pv-lucro-liquido">R$ 0,00</strong></p>
-                    <p class="alert-text danger" id="calc-pv-alerta-margem" style="display: none;">Atenção: Margem muito baixa! Considere aumentar para ter um lucro saudável.</p>
-                    <button class="btn" id="btn-save-pv" style="background-color: #10b981; color: white; margin-top: 1rem; width: 100%; min-height:44px;">Atualizar Preço do Produto</button>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon icon-bg-green">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h4>Lucro Líquido (Mês)</h4>
+                        <p id="dashboard-lucro-liquido">R$ 0,00</p>
+                    </div>
+                </div>
+                 <div class="dashboard-card">
+                    <div class="dashboard-card-icon icon-bg-red">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h4>Despesas a Vencer</h4>
+                        <p id="dashboard-despesas-vencimento">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-summary-grid">
+                <div class="dashboard-list-card" id="financial-summary-card">
+                    <h3>Resumo Financeiro</h3>
+                    <ul id="financial-summary-list">
+                        <!-- Gerado por JS -->
+                    </ul>
+                </div>
+                <div class="dashboard-list-card" id="top-products-card">
+                    <h3>Top 5 Produtos Vendidos</h3>
+                    <ul id="top-products-list">
+                       <!-- Gerado por JS -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="dashboard-list-card">
+                <h3>Estoque Baixo</h3>
+                <ul id="dashboard-lista-estoque-baixo">
+                    <!-- Gerado por JS -->
+                </ul>
+            </div>
+
+            <div class="quick-actions">
+                <button class="btn-action" data-target-page="vendas-page">Nova Venda</button>
+                <button class="btn-action" data-target-page="produtos-page">Novo Produto</button>
+                <button class="btn-action" data-target-page="lucro-certo-page">Lucro Certo</button>
+            </div>
+        </section>
+
+        <section id="produtos-page" class="page-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 class="page-title" style="margin-bottom: 0;">Produtos</h2>
+                <button class="btn btn-primary" id="btn-show-add-product-form">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Adicionar Produto
+                </button>
+            </div>
+
+            <div id="form-cadastro-produto-container" class="form-container" style="display: none;">
+                <h3 style="color: #db1472; font-weight: 600; margin-top:0; margin-bottom: 1.5rem;">Cadastrar Novo Produto</h3>
+                <form id="form-cadastro-produto">
+                    <input type="hidden" id="produto-id-edit" value="">
+                    <div class="form-group">
+                        <label for="produto-nome">Nome do Produto</label>
+                        <input type="text" id="produto-nome" name="produto-nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="produto-categoria">Categoria</label>
+                        <select id="produto-categoria" name="produto-categoria">
+                            <option value="">Selecione uma categoria</option>
+                            <option value="calcados">Calçados</option>
+                            <option value="roupas">Roupas</option>
+                            <option value="bolsas">Bolsas</option>
+                            <option value="perfumaria">Perfumaria</option>
+                            <option value="maquiagem">Maquiagem</option>
+                            <option value="skin_care">Skin Care</option>
+                            <option value="acessorios">Acessórios</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="produto-descricao">Descrição</label>
+                        <textarea id="produto-descricao" name="produto-descricao"></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label for="produto-valor-custo">Preço de Custo (R$)</label>
+                            <input type="number" id="produto-valor-custo" name="produto-valor-custo" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="produto-estoque">Quantidade em Estoque</label>
+                            <input type="number" id="produto-estoque" name="produto-estoque" step="1" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label for="produto-imagem">Imagem do Produto</label>
+                        <input type="file" id="produto-imagem" name="produto-imagem" accept="image/*">
+                        <img id="produto-imagem-preview" class="image-preview" src="#" alt="Pré-visualização da imagem">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-add-product">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Produto</button>
+                    </div>
+                </form>
+            </div>
+
+            <h3 style="color: #db1472; font-weight: 500; margin-top: 2rem;">Lista de Produtos Cadastrados</h3>
+            <div class="item-cards-container" id="product-cards-list">
+            </div>
+            <p id="no-products-message" style="text-align: center; color: #6b7280; padding: 1rem; display: none;">Nenhum produto cadastrado ainda.</p>
+        </section>
+
+        <section id="vendas-page" class="page-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 class="page-title" style="margin-bottom: 0;">Vendas</h2>
+                <button class="btn btn-primary" id="btn-show-nova-venda-form">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Nova Venda
+                </button>
+            </div>
+            <div id="form-nova-venda-container" class="form-container" style="display: none;">
+                <h3 style="color: #db1472; font-weight: 600; margin-top:0; margin-bottom: 1.5rem;">Registar Nova Venda</h3>
+                <form id="form-nova-venda">
+                    <div class="form-group">
+                        <label for="venda-cliente">Cliente (Opcional)</label>
+                        <input type="text" id="venda-cliente" name="venda-cliente" placeholder="Nome do cliente">
+                    </div>
+                    <fieldset style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
+                        <legend style="color: #4b5563; font-weight:500; padding: 0 0.5rem;">Adicionar Produtos</legend>
+                        <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom:1rem;">
+                            <div class="form-group" style="flex-grow:3; margin-bottom:0;">
+                                <label for="venda-produto-select">Produto</label>
+                                <select id="venda-produto-select" name="venda-produto-select">
+                                    <option value="">Selecione um produto</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex-grow:1; margin-bottom:0;">
+                                <label for="venda-produto-qtd">Qtd.</label>
+                                <input type="number" id="venda-produto-qtd" name="venda-produto-qtd" min="1" value="1" style="width: 70px;">
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="btn-add-produto-venda" style="padding: 0.7rem;">Adicionar</button>
+                        </div>
+                        <h4 style="color:#500724; font-weight:500; margin-top:1.5rem; margin-bottom:0.5rem;">Itens da Venda:</h4>
+                        <ul id="venda-itens-lista" class="sale-items-list" style="list-style: none; padding:0;">
+                             <p id="venda-sem-itens" style="text-align: center; color: #6b7280; padding: 1rem 0;">Nenhum item adicionado à venda.</p>
+                        </ul>
+                    </fieldset>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label for="venda-desconto">Desconto (%)</label>
+                            <input type="number" id="venda-desconto" name="venda-desconto" min="0" max="100" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="venda-forma-pagamento">Forma de Pagamento</label>
+                            <select id="venda-forma-pagamento" name="venda-forma-pagamento" required>
+                                <option value="dinheiro">Dinheiro</option><option value="cartao_debito">Cartão de Débito</option>
+                                <option value="cartao_credito">Cartão de Crédito</option><option value="pix">PIX</option>
+                                <option value="boleto">Boleto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="sale-summary">
+                        <p>Subtotal: <span id="venda-subtotal">R$ 0,00</span></p>
+                        <p>Desconto (<span id="venda-desconto-perc">0</span>%): <span id="venda-valor-desconto">R$ 0,00</span></p>
+                        <p class="total">Total a Pagar: <span id="venda-total-pagar">R$ 0,00</span></p>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-nova-venda">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Finalizar Venda</button>
+                    </div>
+                </form>
+            </div>
+            <h3 style="color: #db1472; font-weight: 500; margin-top: 2rem;">Histórico de Vendas</h3>
+            <div class="item-cards-container" id="sales-history-cards-list">
+            </div>
+             <p id="no-vendas-message" style="text-align: center; color: #6b7280; padding: 1rem; display: none;">Nenhuma venda registada ainda.</p>
+        </section>
+        
+        <section id="despesas-page" class="page-content">
+            <h2 class="page-title">Despesas</h2>
+            <div class="despesas-cards-container">
+                <div class="card-despesa" id="card-custos-fixos">
+                    <h3 class="card-despesa-title">🧾 Custos Fixos</h3>
+                    <p class="informativo">Custos que não mudam com o volume de vendas. Ex: aluguel, salários, internet.</p>
+                    <form id="form-add-custo-fixo">
+                        <div class="form-group">
+                            <label for="custo-fixo-nome">Nome do Custo Fixo</label>
+                            <input type="text" id="custo-fixo-nome" placeholder="Ex: Aluguel do Ateliê" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="custo-fixo-valor">Valor Mensal (R$)</label>
+                            <input type="number" id="custo-fixo-valor" step="0.01" min="0" placeholder="Ex: 800,00" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="custo-fixo-vencimento">Data de Vencimento</label>
+                            <input type="date" id="custo-fixo-vencimento" name="custo-fixo-vencimento" required>
+                        </div>
+                        <div class="form-actions" style="justify-content: flex-start;">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar Custo Fixo</button>
+                        </div>
+                    </form>
+                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Fixos Cadastrados:</h4>
+                    <ul id="lista-custos-fixos" class="custos-lista">
+                    </ul>
+                </div>
+                <div class="card-despesa" id="card-custos-variaveis">
+                    <h3 class="card-despesa-title">⚙️ Custos Variáveis</h3>
+                    <p class="informativo">Custos atrelados a cada produto vendido. Ex: embalagem, taxa de cartão, comissão.</p>
+                     <form id="form-add-custo-variavel">
+                        <div class="form-group">
+                            <label for="custo-variavel-nome">Nome do Custo Variável</label>
+                            <input type="text" id="custo-variavel-nome" placeholder="Ex: Embalagem por produto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="custo-variavel-valor-unitario">Valor por Unidade (R$)</label>
+                            <input type="number" id="custo-variavel-valor-unitario" step="0.01" min="0" placeholder="Ex: 2,50" required>
+                        </div>
+                        <div class="form-actions" style="justify-content: flex-start;">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar Custo Variável</button>
+                        </div>
+                    </form>
+                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Variáveis Cadastrados:</h4>
+                    <ul id="lista-custos-variaveis" class="custos-lista">
+                    </ul>
                 </div>
             </div>
         </section>
+
+        <section id="liberdade-financeira-page" class="page-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                 <h2 class="page-title" style="margin-bottom: 0;">Liberdade Financeira</h2>
+                 <button class="btn btn-primary" id="btn-show-add-debt-form">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Adicionar Dívida
+                </button>
+            </div>
+
+             <div id="form-add-debt-container" class="form-container" style="display: none;">
+                 <h3 class="sub-page-title">Cadastrar Nova Dívida</h3>
+                 <form id="form-add-debt">
+                    <div class="form-group">
+                        <label for="debt-name">Nome da Dívida</label>
+                        <input type="text" id="debt-name" placeholder="Ex: Cartão de Crédito" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="debt-value">Valor Total (R$)</label>
+                        <input type="number" id="debt-value" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="debt-priority">Prioridade de Pagamento</label>
+                        <select id="debt-priority">
+                            <option value="baixa">Baixa</option>
+                            <option value="media" selected>Média</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-actions" style="justify-content: flex-start;">
+                        <button type="submit" class="btn btn-primary">Adicionar Dívida</button>
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-add-debt">Cancelar</button>
+                    </div>
+                 </form>
+            </div>
+            
+            <h3 class="sub-page-title" style="margin-top: 2rem;">Minhas Dívidas</h3>
+            <div class="filters-container" style="margin-bottom: 1rem;">
+                <label for="ordenar-dividas" style="align-self:center; margin-right:0.5rem; font-weight:500; color:#4b5563;">Ordenar por:</label>
+                <select id="ordenar-dividas" class="form-group" style="padding:0.5rem; min-width: 180px;">
+                    <option value="prioridade">Prioridade (Alta > Baixa)</option>
+                    <option value="valor_maior">Valor (Maior > Menor)</option>
+                    <option value="valor_menor">Valor (Menor > Maior)</option>
+                </select>
+            </div>
+            <div id="debt-cards-container" class="debt-cards-container"></div>
+            <p id="no-debts-message" style="text-align: center; color: #6b7280; padding: 1rem; display: none;">Nenhuma dívida cadastrada ainda. Isso é ótimo!</p>
+        </section>
+
+        <!-- NOVA PÁGINA: PLANEJAMENTO DE DÍVIDA -->
+        <section id="planejamento-divida-page" class="page-content">
+             <button class="btn btn-secondary" id="btn-voltar-dividas" style="margin-bottom: 1.5rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Voltar
+            </button>
+            <h2 class="page-title" id="planejamento-divida-titulo">Planejar Pagamento</h2>
+            
+            <div class="main-content-grid">
+                <div class="lucro-card">
+                    <h3>Sua Estratégia</h3>
+                     <form id="form-planejar-divida">
+                        <input type="hidden" id="plan-debt-id">
+                         <div class="form-group">
+                            <label>Nome da Dívida</label>
+                            <input type="text" id="plan-debt-name-display" readonly class="readonly-field">
+                        </div>
+                         <div class="form-group">
+                            <label>Valor Total da Dívida</label>
+                            <input type="text" id="plan-debt-value-display" readonly class="readonly-field">
+                        </div>
+                         <div class="form-group">
+                            <label for="plan-debt-monthly-payment">Valor Mensal que Pode Pagar</label>
+                            <input type="number" id="plan-debt-monthly-payment" step="0.01" min="1" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="plan-debt-start-date">Data de Início do Pagamento</label>
+                            <input type="date" id="plan-debt-start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan-avg-profit">Lucro médio por venda (R$)</label>
+                            <input type="number" id="plan-avg-profit" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-actions" style="justify-content: flex-start; gap: 1rem;">
+                            <button type="submit" class="btn btn-primary">Salvar Planejamento</button>
+                            <button type="button" class="btn btn-secondary" id="btn-simular-novamente">Simular Novamente</button>
+                        </div>
+                     </form>
+                </div>
+                <div class="lucro-card">
+                    <h3>Simulação</h3>
+                    <div id="plan-results-card">
+                        <div class="lucro-info-item">
+                            <span>Tempo para quitar</span>
+                            <strong id="plan-duration-result">--</strong>
+                        </div>
+                         <div class="lucro-info-item">
+                            <span>Vendas/mês necessárias</span>
+                            <strong id="plan-sales-needed-result">--</strong>
+                        </div>
+                         <p id="plan-alert" class="lucro-certo-alert alert-warning" style="text-align: center; margin-top: 1.5rem;">Preencha os campos para simular.</p>
+                         <p id="plan-motivation" class="informativo" style="text-align:center; display:none;"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="lucro-certo-page" class="page-content">
+            <h2 class="page-title">🎯 Calculadora de Preço de Venda</h2>
+            <div class="form-container">
+                 <div class="form-group">
+                    <label for="lucro-produto-select">Selecione um Produto para Análise:</label>
+                    <select id="lucro-produto-select">
+                        <option value="">-- Escolha um Produto --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="lucro-certo-content" style="display:none;">
+                <div class="main-content-grid">
+                    <div class="lucro-card">
+                        <h3><span id="lucro-nome-produto-display">Nome do Produto</span></h3>
+                        <div class="lucro-info-item">
+                            <div class="label-group">
+                                <span>Custo Fixo Unitário</span>
+                                <div class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">Rateio dos seus custos fixos mensais (aluguel, internet) por uma estimativa de vendas.</span>
+                                </div>
+                            </div>
+                            <strong id="lucro-display-custo-fixo">R$ 0,00</strong>
+                        </div>
+                         <div class="lucro-info-item">
+                             <div class="label-group">
+                                <span>Custo Variável Unitário</span>
+                                 <div class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">Soma de todos os custos que ocorrem por venda (embalagem, taxas, etc).</span>
+                                </div>
+                            </div>
+                            <strong id="lucro-display-custo-variavel">R$ 0,00</strong>
+                        </div>
+                        <div class="lucro-info-item">
+                            <div class="label-group">
+                                <span>Custo de Frete (Estimado)</span>
+                                <div class="tooltip">
+                                    <span class="tooltip-icon">?</span>
+                                    <span class="tooltip-text">Um valor médio de frete por unidade para compor seu custo.</span>
+                                </div>
+                            </div>
+                            <strong id="lucro-display-custo-frete">R$ 0,00</strong>
+                        </div>
+                         <div class="lucro-info-item">
+                            <span>Custo de Compra</span>
+                            <strong id="lucro-display-custo-compra">R$ 0,00</strong>
+                        </div>
+                        <hr style="border:none; border-top: 1px solid #fce7f3; margin: 1rem 0;">
+                        <div class="lucro-info-item">
+                            <span style="font-weight: bold; color: #500724;">Custo Total do Produto</span>
+                            <strong id="lucro-custo-total-display">R$ 0,00</strong>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <div class="lucro-info-item">
+                                <label for="lucro-margem-slider" class="label-group">
+                                    Margem de Lucro Desejada
+                                    <div class="tooltip">
+                                        <span class="tooltip-icon">?</span>
+                                        <span class="tooltip-text">Qual porcentagem do preço de venda será seu lucro.</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <input type="range" id="lucro-margem-slider" min="10" max="200" value="100" step="1">
+                                <input type="number" id="lucro-margem-input" min="10" max="200" value="100">
+                                <span>%</span>
+                            </div>
+                        </div>
+
+                         <div id="lucro-alerta-margem" class="lucro-certo-alert alert-warning">
+                            Atenção! Sua margem de lucro está abaixo de 20%. Considere aumentar o preço ou reduzir custos.
+                        </div>
+
+                        <div class="lucro-result-display">
+                            <p>Preço de Venda Sugerido</p>
+                            <p class="destaque-preco" id="lucro-preco-venda-sugerido">R$ 0,00</p>
+                            <p class="destaque-lucro" id="lucro-liquido-unidade">Lucro de R$ 0,00 por unidade</p>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 1.5rem;">
+                             <button type="button" class="btn btn-primary" id="btn-salvar-preco-lucro-certo">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Salvar Preço no Produto
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lucro-card">
+                        <h3>Composição do Preço</h3>
+                        <div id="lucro-chart-container">
+                            <canvas id="lucro-produto-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p id="lucro-certo-selecione-produto-msg" style="text-align:center; color:#6b7280; padding:1rem;">Selecione um produto para começar.</p>
+        </section>
+
+        <!-- PÁGINA HUB DE CALCULADORAS -->
+        <section id="calculadoras-page" class="page-content">
+            <h2 class="page-title">Calculadoras</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #500724;">Selecione uma calculadora abaixo para começar!</p>
+
+            <div class="calculators-grid-container">
+                <div class="calculator-card" data-target-calculator="calc-preco-venda-page">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.57,14.85C21.68,13.74 22.25,12.2 22,10.25C21.75,8.3 20.26,6.81 18.31,6.56C16.36,6.31 14.81,6.88 13.7,8L10,11.69L12.31,14L13.7,12.63C14.81,11.5 16.36,10.94 18.31,11.19C20.26,11.44 21.75,12.93 22,14.88C22.25,16.83 21.68,18.38 20.57,19.5L14,26L2,14L8.5,7.5C9.62,6.38 11.17,5.81 13.12,6.06C15.07,6.31 16.56,7.8 16.81,9.75C17.06,11.7 16.49,13.25 15.37,14.37L10,19.74L7.69,17.41L11.37,13.7Z"/></svg>
+                    <h4>Preço de Venda Inteligente</h4>
+                </div>
+                <div class="calculator-card" data-target-calculator="calc-pecas-vender">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <h4>Quantas Peças Vender</h4>
+                </div>
+                <div class="calculator-card" data-target-calculator="calc-frete-gratis">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.08,4.23L12,2L13.92,4.23C16.83,5.77 18.23,8.83 17.65,11.9L16.5,17.55C16.22,19.14 14.86,20.23 13.2,20.23H10.8C9.14,20.23 7.78,19.14 7.5,17.55L6.35,11.9C5.77,8.83 7.17,5.77 10.08,4.23Z"></path><path d="M12,22C14.21,22 16,20.21 16,18H8C8,20.21 9.79,22 12,22Z"></path></svg>
+                    <h4>Frete Grátis Inteligente</h4>
+                </div>
+                <div class="calculator-card" data-target-calculator="calc-margem-real">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                    <h4>Margem Real</h4>
+                </div>
+                <div class="calculator-card" data-target-calculator="calc-promocao">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                    <h4>Promoção Inteligente</h4>
+                </div>
+                <div class="calculator-card" data-target-calculator="calc-frete-unidade">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9.5L16.5 12L14 14.5"></path><path d="M9.5 14.5L7 12L9.5 9.5"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                    <h4>Custo de Frete por Unidade</h4>
+                </div>
+                 <div class="calculator-card" data-target-calculator="calc-imposto">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <h4>Imposto por Produto</h4>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SUBPÁGINA CALCULADORA PREÇO DE VENDA -->
+        <section id="calc-preco-venda-page" class="page-content">
+             <button class="btn btn-secondary btn-voltar-calculadoras" style="margin-bottom: 1.5rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Voltar para Calculadoras
+            </button>
+            <h2 class="page-title">Preço de Venda Inteligente</h2>
+             <div class="form-container" style="max-width: 600px; margin: 1.5rem auto;">
+                <div id="calc-pvi-content">
+                    <div class="form-group">
+                        <label for="calc-pvi-produto-select">Selecione o Produto</label>
+                        <select id="calc-pvi-produto-select">
+                            <option value="">-- Escolha um Produto --</option>
+                        </select>
+                    </div>
+                    <div id="calc-pvi-details" style="display:none;">
+                        <div class="form-group">
+                            <label for="calc-pvi-custo-produto">Custo do Produto (R$)</label>
+                            <input type="number" id="calc-pvi-custo-produto" readonly class="readonly-field">
+                        </div>
+                         <div class="form-group">
+                            <label for="calc-pvi-margem-slider">Margem de Lucro Desejada (<span id="calc-pvi-margem-value">100</span>%)</label>
+                            <input type="range" id="calc-pvi-margem-slider" min="10" max="200" value="100" step="1">
+                        </div>
+                        <div class="lucro-result-display" style="margin-top: 0; padding: 1rem;">
+                             <p>Preço de Venda Sugerido</p>
+                             <p class="destaque-preco" id="calc-pvi-preco-sugerido">R$ 0,00</p>
+                             <p class="destaque-lucro" id="calc-pvi-lucro-liquido">Lucro de R$ 0,00</p>
+                        </div>
+                        <div id="calc-pvi-alerta-margem" class="lucro-certo-alert alert-warning" style="text-align: center; font-weight: bold;">
+                             Atenção: margem abaixo do recomendado!
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="btn-pvi-salvar-produto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                Salvar Preço no Produto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                 <p id="calc-pvi-initial-msg" style="text-align:center; color:#6b7280; padding:1rem;">Selecione um produto para começar.</p>
+             </div>
+        </section>
+
+        <!-- Páginas placeholder -->
+        
+        <section id="metas-page" class="page-content">
+             <h2 class="page-title">Metas</h2>
+             <div class="form-container"><p><em>Em breve...</em></p></div>
+        </section>
+         <section id="relatorios-page" class="page-content">
+             <h2 class="page-title">Relatórios</h2>
+             <div class="form-container"><p><em>Em breve...</em></p></div>
+        </section>
+         <section id="c4-ia-page" class="page-content">
+             <h2 class="page-title">C4 IA</h2>
+             <div class="form-container"><p><em>Em breve...</em></p></div>
+        </section>
+         <section id="perfil-page" class="page-content">
+            <h2 class="page-title">Perfil e Configurações</h2>
+             <div class="form-container">
+                <h3 class="sub-page-title">Backup e Restauração</h3>
+                <p class="informativo">Salve seus dados em um arquivo seguro ou restaure a partir de um backup.</p>
+                <div class="form-actions" style="justify-content: flex-start;">
+                    <button class="btn btn-secondary" id="btn-export-data">Exportar Dados</button>
+                    <input type="file" id="import-file-input" style="display: none;" accept=".json">
+                    <button class="btn btn-primary" id="btn-import-data">Importar Dados</button>
+                </div>
+             </div>
+        </section>
     </main>
 
-    <footer class="app-footer" style="text-align:center; padding:1.5rem; background-color:#f8f0f4; border-top: 1px solid #e7d8de;">
+    <footer class="app-footer">
         <p>&copy; <span id="current-year"></span> C4. Todos os direitos reservados.</p>
     </footer>
 
-    <div id="toast-notification" class="toast-notification"></div>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
 
-    <!-- Link para o script externo -->
-    <script src="script.js" defer></script>
+            // =================================================================================
+            // ======================== CÉREBRO DO APP (STATE MANAGEMENT) ========================
+            // =================================================================================
+            let appState = {};
+            let lucroProdutoChartInstance = null;
+            let produtoSelecionadoLucroCerto = null;
+            let itensVendaTemporarios = [];
+
+            function saveState() {
+                try {
+                    const serializedState = JSON.stringify(appState);
+                    localStorage.setItem('c4AppState', serializedState);
+                } catch (error) {
+                    console.error("Erro ao salvar dados:", error);
+                    showToast("Erro: Não foi possível salvar os dados. O armazenamento pode estar cheio.", "error");
+                }
+            }
+
+            function loadState() {
+                const savedState = localStorage.getItem('c4AppState');
+                if (savedState) {
+                    try {
+                        const parsedState = JSON.parse(savedState);
+                        // Validação simples da estrutura
+                        if(parsedState && typeof parsedState === 'object' && parsedState.products && parsedState.expenses){
+                             appState = parsedState;
+                        } else {
+                            throw new Error("Dados salvos estão corrompidos.");
+                        }
+                    } catch(e) {
+                         console.error("Erro ao carregar dados salvos:", e);
+                         showToast("Aviso: Dados anteriores não puderam ser carregados. Começando com dados de exemplo.", "error");
+                         loadDefaultState();
+                    }
+                } else {
+                    loadDefaultState();
+                }
+            }
+
+            function loadDefaultState() {
+                 appState = {
+                    products: [ 
+                        { id: 'prod1', name: 'Bolsa de Couro Caramelo', category: 'bolsas', costPrice: 80.00, salePrice: 249.90, stock: 15, image: 'https://placehold.co/400x400/db1472/ffffff?text=Bolsa' },
+                        { id: 'prod2', name: 'Tênis Casual Branco', category: 'calcados', costPrice: 65.00, salePrice: 189.90, stock: 30, image: 'https://placehold.co/400x400/c01062/ffffff?text=Tênis' },
+                        { id: 'prod3', name: 'Perfume Floral Intenso (50ml)', category: 'perfumaria', costPrice: 35.00, salePrice: 99.00, stock: 4, image: 'https://placehold.co/400x400/f8b81f/500724?text=Perfume' },
+                        { id: 'prod4', name: 'Sérum Facial Vitamina C', category: 'skin_care', costPrice: 28.00, salePrice: 0, stock: 40, image: 'https://placehold.co/400x400/fbcfe8/500724?text=Sérum' },
+                    ],
+                    sales: [],
+                    expenses: {
+                        fixed: [
+                            { id: 'fix1', name: 'Aluguel do Espaço', value: 800.00, dueDate: '2025-06-10' },
+                            { id: 'fix2', name: 'Contador', value: 200.00, dueDate: '2025-06-15' },
+                            { id: 'fix3', name: 'Plano Internet', value: 99.00, dueDate: '2025-07-01' },
+                        ],
+                        variable: [
+                            { id: 'var1', name: 'Embalagem de Luxo', unitValue: 2.50 },
+                            { id: 'var2', name: 'Sacola Personalizada', unitValue: 1.20 },
+                        ]
+                    },
+                    debts: [
+                        { id: 'debt1', name: 'Cartão de Crédito', value: 1500.00, priority: 'alta', paid: 0},
+                        { id: 'debt2', name: 'Empréstimo Fornecedor', value: 3200.00, priority: 'media', paid: 0},
+                    ],
+                    debtPlans: [],
+                    settings: { 
+                        lowStockThreshold: 5,
+                        estimatedMonthlySales: 100,
+                        estimatedFreightCost: 1.50
+                    }
+                };
+                saveState();
+            }
+
+            // =================================================================================
+            // ============================= LÓGICA DE NAVEGAÇÃO E SETUP =======================
+            // =================================================================================
+            
+            const sidebarNav = document.getElementById('sidebar-nav');
+            const appOverlay = document.getElementById('app-overlay');
+            const body = document.body;
+
+            function openSidebar() {
+                sidebarNav.classList.add('open');
+                appOverlay.classList.add('active');
+                body.classList.add('sidebar-open');
+            }
+
+            function closeSidebar() {
+                sidebarNav.classList.remove('open');
+                appOverlay.classList.remove('active');
+                body.classList.remove('sidebar-open');
+            }
+
+            function setActivePage(pageId, data = null) { 
+                const currentPage = document.querySelector('.page-content.active');
+                if(currentPage) currentPage.classList.add('exiting');
+
+                setTimeout(() => {
+                    if(currentPage) currentPage.classList.remove('exiting');
+                    document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+                    document.querySelectorAll('.sidebar-nav-item').forEach(nav => nav.classList.remove('active'));
+
+                    const targetPage = document.getElementById(pageId);
+                    let targetNavItemKey = pageId.startsWith('calc-') ? 'calculadoras-page' : pageId;
+                    const targetNavItem = document.querySelector(`.sidebar-nav-item[data-page="${targetNavItemKey}"]`);
+
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                        renderPageContent(pageId, data);
+                    }
+                    if (targetNavItem) targetNavItem.classList.add('active');
+                    
+                    const productForm = document.getElementById('form-cadastro-produto-container');
+                    if (productForm && pageId !== 'produtos-page') productForm.style.display = 'none';
+                    
+                    const saleForm = document.getElementById('form-nova-venda-container');
+                    if (saleForm && pageId !== 'vendas-page') saleForm.style.display = 'none';
+                }, 200);
+            }
+
+            function renderPageContent(pageId, data) {
+                switch(pageId) {
+                    case 'dashboard-page':
+                        setupDashboardPage();
+                        break;
+                    case 'produtos-page':
+                        setupProductsPage();
+                        break;
+                    case 'vendas-page':
+                        setupVendasPage();
+                        break;
+                    case 'despesas-page':
+                        setupDespesasPage();
+                        break;
+                    case 'lucro-certo-page':
+                        setupLucroCertoPage();
+                        break;
+                    case 'liberdade-financeira-page':
+                        setupLiberdadeFinanceiraPage();
+                        break;
+                    case 'planejamento-divida-page':
+                        setupPlanejamentoDividaPage(data);
+                        break;
+                    case 'calculadoras-page':
+                        // Apenas mostra a página, não precisa de setup por enquanto
+                        break;
+                    case 'calc-preco-venda-page':
+                        setupCalcPrecoVendaPage();
+                        break;
+                }
+            }
+            
+            function showToast(message, type = 'success') {
+                let toast = document.querySelector('.toast-notification');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.className = 'toast-notification';
+                    document.body.appendChild(toast);
+                }
+                toast.textContent = message;
+                toast.className = `toast-notification ${type}`; // Adiciona classe de tipo
+
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            // =================================================================================
+            // ============================== MÓDULO: DASHBOARD ================================
+            // =================================================================================
+
+            function setupDashboardPage() {
+                updateDashboard();
+            }
+
+            function updateDashboard() {
+                // --- Cálculos ---
+                const receitaBruta = appState.sales.reduce((total, sale) => total + sale.total, 0);
+                
+                let custoProdutosVendidos = 0;
+                const salesByProduct = {};
+                appState.sales.forEach(sale => {
+                    sale.items.forEach(item => {
+                        const product = appState.products.find(p => p.id === item.productId);
+                        if (product) {
+                            custoProdutosVendidos += product.costPrice * item.quantity;
+                        }
+                        if(salesByProduct[item.productId]) {
+                            salesByProduct[item.productId].quantity += item.quantity;
+                        } else {
+                            const productInfo = appState.products.find(p => p.id === item.productId);
+                            salesByProduct[item.productId] = {
+                                name: productInfo ? productInfo.name : 'Produto Desconhecido',
+                                quantity: item.quantity
+                            };
+                        }
+                    });
+                });
+
+                const despesasFixas = appState.expenses.fixed.reduce((total, cost) => total + cost.value, 0);
+                const lucroLiquido = receitaBruta - custoProdutosVendidos - despesasFixas;
+
+                // --- Card: Despesas a Vencer ---
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const upcomingLimit = new Date();
+                upcomingLimit.setDate(today.getDate() + 7);
+                const despesasVencimento = appState.expenses.fixed.filter(expense => {
+                    if (!expense.dueDate) return false;
+                    const dueDate = new Date(expense.dueDate + 'T03:00:00');
+                    return dueDate >= today && dueDate <= upcomingLimit;
+                });
+                document.getElementById('dashboard-despesas-vencimento').textContent = despesasVencimento.length;
+
+                // --- Atualização dos Cards Principais ---
+                document.getElementById('dashboard-receita-bruta').textContent = `R$ ${receitaBruta.toFixed(2)}`;
+                document.getElementById('dashboard-lucro-liquido').textContent = `R$ ${lucroLiquido.toFixed(2)}`;
+                document.getElementById('dashboard-lucro-liquido').style.color = lucroLiquido < 0 ? '#ef4444' : '#1f2937';
+
+                // --- Card: Resumo Financeiro ---
+                const financialList = document.getElementById('financial-summary-list');
+                financialList.innerHTML = '';
+                financialList.innerHTML += `<li><span>Lucro Líquido</span> <strong>R$ ${lucroLiquido.toFixed(2)}</strong></li>`;
+                financialList.innerHTML += `<li><span>Custo de Produtos</span> <strong>R$ ${custoProdutosVendidos.toFixed(2)}</strong></li>`;
+                financialList.innerHTML += `<li><span>Despesas Fixas</span> <strong>R$ ${despesasFixas.toFixed(2)}</strong></li>`;
+
+
+                // --- Card: Top Produtos ---
+                const topProductsList = document.getElementById('top-products-list');
+                topProductsList.innerHTML = '';
+                const sortedBestSellers = Object.values(salesByProduct)
+                    .sort((a, b) => b.quantity - a.quantity)
+                    .slice(0, 5);
+                
+                if (sortedBestSellers.length > 0) {
+                    sortedBestSellers.forEach(p => {
+                        topProductsList.innerHTML += `<li><span>${p.name}</span> <strong>${p.quantity} un.</strong></li>`;
+                    });
+                } else {
+                    topProductsList.innerHTML = '<li class="placeholder">Nenhuma venda registrada.</li>';
+                }
+
+                // --- Lista: Estoque Baixo ---
+                const listaEstoqueBaixoEl = document.getElementById('dashboard-lista-estoque-baixo');
+                const produtosEstoqueBaixo = appState.products.filter(p => p.stock <= appState.settings.lowStockThreshold);
+                listaEstoqueBaixoEl.innerHTML = '';
+                if (produtosEstoqueBaixo.length > 0) {
+                     produtosEstoqueBaixo.forEach(p => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span>${p.name}</span> <strong>${p.stock} unidades</strong>`;
+                        listaEstoqueBaixoEl.appendChild(li);
+                     });
+                } else {
+                    listaEstoqueBaixoEl.innerHTML = '<li class="placeholder">Nenhum produto com estoque baixo.</li>';
+                }
+            }
+
+            // =================================================================================
+            // ============================== MÓDULO: PRODUTOS =================================
+            // =================================================================================
+            
+            function setupProductsPage() {
+                renderProductCards();
+            }
+            
+            function renderProductCards() {
+                const container = document.getElementById('product-cards-list');
+                const noProductsMessage = document.getElementById('no-products-message');
+                container.innerHTML = '';
+                
+                if (!appState.products || appState.products.length === 0) {
+                    noProductsMessage.style.display = 'block';
+                    return;
+                }
+                noProductsMessage.style.display = 'none';
+
+                appState.products.forEach(produto => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.classList.add('product-card');
+                    cardDiv.innerHTML = `
+                        <img src="${produto.image || 'https://placehold.co/400x400/f8b81f/db1472?text=C4'}" alt="${produto.name}" class="product-card-image">
+                        <h4>${produto.name}</h4>
+                        <p><strong>Custo:</strong> R$ ${parseFloat(produto.costPrice || 0).toFixed(2)}</p>
+                        <p><strong>Estoque:</strong> ${produto.stock || 0} unidades</p>
+                        <p><strong>Preço Venda:</strong> ${produto.salePrice > 0 ? `R$ ${produto.salePrice.toFixed(2)}` : '<a href="#" class="link-definir-preco" data-product-id="'+produto.id+'">Definir Preço</a>'}</p>
+                        <div class="actions-cell">
+                            <button class="btn btn-sm btn-secondary btn-edit-product" title="Editar" data-product-id="${produto.id}">Editar</button>
+                        </div>
+                    `;
+                    container.appendChild(cardDiv);
+                });
+                 document.querySelectorAll('.link-definir-preco').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        setActivePage('lucro-certo-page');
+                        const lucroSelect = document.getElementById('lucro-produto-select');
+                        lucroSelect.value = e.target.dataset.productId;
+                        lucroSelect.dispatchEvent(new Event('change'));
+                    });
+                });
+            }
+
+            function handleProductFormSubmit(event) {
+                event.preventDefault();
+                const spinner = document.getElementById('product-spinner');
+                spinner.style.display = 'block';
+
+                // Simula uma operação assíncrona
+                setTimeout(() => {
+                    const produtoId = document.getElementById('produto-id-edit').value;
+                    const produtoData = {
+                        id: produtoId || `prod_${Date.now()}`,
+                        name: document.getElementById('produto-nome').value,
+                        category: document.getElementById('produto-categoria').value,
+                        costPrice: parseFloat(document.getElementById('produto-valor-custo').value) || 0,
+                        stock: parseInt(document.getElementById('produto-estoque').value) || 0,
+                        image: document.getElementById('produto-imagem-preview').src.startsWith('data:') ? document.getElementById('produto-imagem-preview').src : ''
+                    };
+
+                    if (produtoId) {
+                        const index = appState.products.findIndex(p => p.id === produtoId);
+                        if (index > -1) {
+                            const existingProduct = appState.products[index];
+                            appState.products[index] = { 
+                                ...existingProduct,
+                                ...produtoData
+                            };
+                        }
+                    } else {
+                        produtoData.salePrice = 0;
+                        appState.products.push(produtoData);
+                    }
+
+                    saveState();
+                    renderProductCards();
+                    updateAllProductSelects();
+                    
+                    document.getElementById('form-cadastro-produto').reset();
+                    document.getElementById('form-cadastro-produto-container').style.display = 'none';
+                    document.getElementById('btn-show-add-product-form').style.display = 'inline-flex';
+                    spinner.style.display = 'none';
+                    showToast('Produto salvo com sucesso!', 'success');
+                }, 1000); 
+            }
+
+            function openProductFormForEdit(productId) {
+                const product = appState.products.find(p => p.id === productId);
+                if (!product) return;
+
+                const formContainer = document.getElementById('form-cadastro-produto-container');
+                formContainer.style.display = 'block';
+                document.getElementById('btn-show-add-product-form').style.display = 'none';
+
+                document.getElementById('produto-id-edit').value = product.id;
+                document.getElementById('produto-nome').value = product.name;
+                document.getElementById('produto-categoria').value = product.category;
+                document.getElementById('produto-valor-custo').value = product.costPrice;
+                document.getElementById('produto-estoque').value = product.stock;
+                const preview = document.getElementById('produto-imagem-preview');
+                if (product.image) {
+                    preview.src = product.image;
+                    preview.style.display = 'block';
+                } else {
+                    preview.src = '#';
+                    preview.style.display = 'none';
+                }
+            }
+            
+            // =================================================================================
+            // =============================== MÓDULO: VENDAS ==================================
+            // =================================================================================
+            
+            function setupVendasPage() {
+                renderSalesHistory();
+                populateSalesProductSelect();
+                updateCurrentSaleUI();
+            }
+
+            function populateSalesProductSelect() {
+                const select = document.getElementById('venda-produto-select');
+                if (!select) return;
+                select.innerHTML = '<option value="">Selecione um produto</option>'; 
+                appState.products.forEach(produto => {
+                    const option = document.createElement('option');
+                    option.value = produto.id;
+                    const precoDefinido = produto.salePrice && produto.salePrice > 0;
+                    option.textContent = `${produto.name} (Est: ${produto.stock}) - ${precoDefinido ? `R$ ${produto.salePrice.toFixed(2)}` : 'Preço não definido'}`;
+                    option.dataset.price = produto.salePrice;
+                    option.dataset.stock = produto.stock;
+                    option.dataset.name = produto.name;
+                    option.disabled = produto.stock <= 0 || !precoDefinido;
+                    select.appendChild(option);
+                });
+            }
+
+            function renderSalesHistory() {
+                const container = document.getElementById('sales-history-cards-list');
+                const noSalesMessage = document.getElementById('no-vendas-message');
+                container.innerHTML = '';
+                if (!appState.sales || appState.sales.length === 0) {
+                    noSalesMessage.style.display = 'block';
+                    return;
+                }
+                noSalesMessage.style.display = 'none';
+
+                const sortedSales = [...appState.sales].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                sortedSales.forEach(venda => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.classList.add('sale-card');
+                    cardDiv.innerHTML = `
+                        <h4>Venda ID: ${venda.id}</h4>
+                        <p><strong>Data:</strong> ${new Date(venda.date + 'T03:00:00').toLocaleDateString('pt-BR')}</p>
+                        <p><strong>Cliente:</strong> ${venda.client || 'Não informado'}</p>
+                        <p><strong>Itens:</strong> ${venda.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
+                        <p><strong>Total:</strong> R$ ${venda.total.toFixed(2)}</p>
+                        <p><strong>Status:</strong> <span class="status-badge status-${venda.status}">${venda.status}</span></p>
+                    `;
+                    container.appendChild(cardDiv);
+                });
+            }
+
+            function updateCurrentSaleUI() {
+                const listEl = document.getElementById('venda-itens-lista');
+                listEl.innerHTML = ''; 
+                if (itensVendaTemporarios.length === 0) {
+                    listEl.innerHTML = '<p id="venda-sem-itens" style="text-align: center; color: #6b7280; padding: 1rem 0;">Nenhum item adicionado à venda.</p>';
+                } else {
+                    itensVendaTemporarios.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="sale-item-details"><strong>${item.name}</strong> (${item.quantity} x R$ ${item.unitPrice.toFixed(2)})</div>
+                            <span>R$ ${item.subtotal.toFixed(2)}</span>
+                            <button type="button" class="sale-item-remove" data-index="${index}" title="Remover">&times;</button>
+                        `;
+                        listEl.appendChild(li);
+                    });
+                }
+                
+                const subtotal = itensVendaTemporarios.reduce((sum, item) => sum + item.subtotal, 0);
+                const descontoPerc = parseFloat(document.getElementById('venda-desconto').value) || 0;
+                const valorDesconto = (subtotal * descontoPerc) / 100;
+                document.getElementById('venda-subtotal').textContent = `R$ ${subtotal.toFixed(2)}`;
+                document.getElementById('venda-desconto-perc').textContent = descontoPerc;
+                document.getElementById('venda-valor-desconto').textContent = `- R$ ${valorDesconto.toFixed(2)}`;
+                document.getElementById('venda-total-pagar').textContent = `R$ ${(subtotal - valorDesconto).toFixed(2)}`;
+            }
+
+
+            function handleNewSaleSubmit(event) {
+                event.preventDefault();
+                if (itensVendaTemporarios.length === 0) {
+                    alert('Adicione produtos à venda.'); return;
+                }
+
+                itensVendaTemporarios.forEach(itemVendido => {
+                    const produtoNoEstoque = appState.products.find(p => p.id === itemVendido.productId);
+                    if (produtoNoEstoque) produtoNoEstoque.stock -= itemVendido.quantity;
+                });
+
+                const totalVenda = parseFloat(document.getElementById('venda-total-pagar').textContent.replace('R$ ', '').replace(',', '.'));
+                const novaVenda = {
+                    id: `VEN_${Date.now()}`,
+                    date: new Date().toISOString().split('T')[0],
+                    client: document.getElementById('venda-cliente').value,
+                    items: [...itensVendaTemporarios],
+                    total: totalVenda,
+                    status: 'pago'
+                };
+                appState.sales.push(novaVenda);
+
+                saveState();
+                showToast(`Venda registrada com sucesso!`);
+                
+                itensVendaTemporarios = [];
+                document.getElementById('form-nova-venda').reset();
+                document.getElementById('form-nova-venda-container').style.display = 'none';
+                document.getElementById('btn-show-nova-venda-form').style.display = 'inline-flex';
+                
+                renderSalesHistory();
+                updateDashboard();
+            }
+
+            // =================================================================================
+            // ============================== MÓDULO: DESPESAS =================================
+            // =================================================================================
+            function setupDespesasPage() {
+                renderFixedCosts();
+                renderVariableCosts();
+            }
+
+            function renderFixedCosts() {
+                const list = document.getElementById('lista-custos-fixos');
+                list.innerHTML = '';
+                if(!appState.expenses.fixed || appState.expenses.fixed.length === 0) {
+                    list.innerHTML = '<p style="text-align:center; padding:1rem; color:#6b7280;">Nenhum custo fixo adicionado.</p>';
+                } else {
+                    appState.expenses.fixed.forEach(cost => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
+                            <span class="cost-value">R$ ${cost.value.toFixed(2)}</span>
+                            <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="fixed" title="Remover">&times;</button>
+                        `;
+                        list.appendChild(li);
+                    });
+                }
+            }
+            
+            function renderVariableCosts() {
+                 const list = document.getElementById('lista-custos-variaveis');
+                list.innerHTML = '';
+                 if(!appState.expenses.variable || appState.expenses.variable.length === 0) {
+                    list.innerHTML = '<p style="text-align:center; padding:1rem; color:#6b7280;">Nenhum custo variável adicionado.</p>';
+                } else {
+                    appState.expenses.variable.forEach(cost => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
+                            <span class="cost-value">R$ ${cost.unitValue.toFixed(2)}</span>
+                            <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="variable" title="Remover">&times;</button>
+                        `;
+                        list.appendChild(li);
+                    });
+                }
+            }
+
+            function handleAddFixedCost(event) {
+                event.preventDefault();
+                const name = document.getElementById('custo-fixo-nome').value;
+                const value = parseFloat(document.getElementById('custo-fixo-valor').value);
+                const dueDate = document.getElementById('custo-fixo-vencimento').value;
+                if (!name || isNaN(value) || value <= 0 || !dueDate) {
+                    alert("Por favor, preencha todos os campos com valores válidos."); return;
+                }
+                appState.expenses.fixed.push({ id: `fix_${Date.now()}`, name, value, dueDate });
+                saveState();
+                renderFixedCosts();
+                updateDashboard();
+                event.target.reset();
+            }
+            
+            function handleAddVariableCost(event) {
+                event.preventDefault();
+                const name = document.getElementById('custo-variavel-nome').value;
+                const unitValue = parseFloat(document.getElementById('custo-variavel-valor-unitario').value);
+                 if (!name || isNaN(unitValue) || unitValue <= 0) {
+                    alert("Por favor, preencha o nome e um valor válido."); return;
+                }
+                appState.expenses.variable.push({ id: `var_${Date.now()}`, name, unitValue });
+                saveState();
+                renderVariableCosts();
+                event.target.reset();
+            }
+
+            function handleRemoveCost(type, id) {
+                if(type === 'fixed') {
+                    appState.expenses.fixed = appState.expenses.fixed.filter(c => c.id !== id);
+                    renderFixedCosts();
+                } else if(type === 'variable') {
+                    appState.expenses.variable = appState.expenses.variable.filter(c => c.id !== id);
+                    renderVariableCosts();
+                }
+                saveState();
+                updateDashboard();
+            }
+            
+            // =================================================================================
+            // ======================== MÓDULO: LIBERDADE FINANCEIRA ===========================
+            // =================================================================================
+            function setupLiberdadeFinanceiraPage() {
+                renderDebtCards();
+                updateDebtSummary();
+                document.getElementById('form-add-debt-container').style.display = 'none';
+                document.getElementById('btn-show-add-debt-form').style.display = 'inline-flex';
+            }
+            
+            function updateDebtSummary() {
+                if(!document.getElementById('liberdade-financeira-page').classList.contains('active')) return;
+                const totalDebt = appState.debts.reduce((sum, debt) => sum + debt.value, 0);
+                const totalPaid = appState.debts.reduce((sum, debt) => sum + debt.paid, 0);
+                const totalRemaining = totalDebt - totalPaid;
+
+                const totalEl = document.getElementById('debt-total');
+                const remainingEl = document.getElementById('debt-remaining');
+
+                if(totalEl) totalEl.textContent = `R$ ${totalDebt.toFixed(2)}`;
+                if(remainingEl) remainingEl.textContent = `R$ ${totalRemaining.toFixed(2)}`;
+            }
+
+            function renderDebtCards() {
+                const container = document.getElementById('debt-cards-container');
+                const noDebtsMsg = document.getElementById('no-debts-message');
+                container.innerHTML = '';
+                
+                if (!appState.debts || appState.debts.length === 0) {
+                    noDebtsMsg.style.display = 'block';
+                    container.style.display = 'none';
+                    return;
+                }
+                noDebtsMsg.style.display = 'none';
+                container.style.display = 'grid';
+
+                appState.debts.forEach(debt => {
+                    const card = document.createElement('div');
+                    card.className = `debt-card prioridade-${debt.priority}`;
+                    card.innerHTML = `
+                        <h4>${debt.name}</h4>
+                        <p><strong>Valor:</strong> R$ ${debt.value.toFixed(2)}</p>
+                        <p><strong>Prioridade:</strong> <span style="text-transform: capitalize;">${debt.priority}</span></p>
+                        <div class="debt-actions">
+                            <button class="btn btn-sm btn-primary btn-plan-payment" data-debt-id="${debt.id}">Planejar Pagamento</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            function handleAddDebt(event) {
+                event.preventDefault();
+                const name = document.getElementById('debt-name').value;
+                const value = parseFloat(document.getElementById('debt-value').value);
+                const priority = document.getElementById('debt-priority').value;
+
+                if (!name || isNaN(value) || value <= 0) {
+                    alert("Preencha nome e valor da dívida."); return;
+                }
+                appState.debts.push({
+                    id: `debt_${Date.now()}`,
+                    name,
+                    value,
+                    priority,
+                    paid: 0
+                });
+                saveState();
+                renderDebtCards();
+                updateDebtSummary();
+                event.target.reset();
+                 document.getElementById('form-add-debt-container').style.display = 'none';
+                document.getElementById('btn-show-add-debt-form').style.display = 'inline-flex';
+            }
+
+            // =================================================================================
+            // ===================== SUB-PÁGINA: PLANEJAMENTO DE DÍVIDAS =======================
+            // =================================================================================
+
+            function setupPlanejamentoDividaPage(debtId) {
+                const debt = appState.debts.find(d => d.id === debtId);
+                if (!debt) {
+                    alert("Dívida não encontrada.");
+                    setActivePage('liberdade-financeira-page');
+                    return;
+                }
+
+                document.getElementById('planejamento-divida-titulo').textContent = `Planejar: ${debt.name}`;
+                document.getElementById('plan-debt-id').value = debt.id;
+                document.getElementById('plan-debt-name-display').value = debt.name;
+                document.getElementById('plan-debt-value-display').value = `R$ ${debt.value.toFixed(2)}`;
+                
+                const form = document.getElementById('form-planejar-divida');
+                
+                const newForm = form.cloneNode(true);
+                form.parentNode.replaceChild(newForm, form);
+
+                const updateSimulation = () => {
+                    const monthlyPayment = parseFloat(document.getElementById('plan-debt-monthly-payment').value);
+                    const avgProfit = parseFloat(document.getElementById('plan-avg-profit').value);
+                    const alertEl = document.getElementById('plan-alert');
+                    const motivationEl = document.getElementById('plan-motivation');
+
+                    let hasError = false;
+
+                    if (isNaN(monthlyPayment) || monthlyPayment <= 0) {
+                         document.getElementById('plan-duration-result').textContent = '--';
+                         hasError = true;
+                    } else {
+                         const months = Math.ceil(debt.value / monthlyPayment);
+                         document.getElementById('plan-duration-result').textContent = `${months} ${months > 1 ? 'meses' : 'mês'}`;
+                    }
+
+                     if (isNaN(avgProfit) || avgProfit <= 0) {
+                         document.getElementById('plan-sales-needed-result').textContent = '--';
+                         hasError = true;
+                    } else {
+                         const salesNeeded = Math.ceil(monthlyPayment / avgProfit);
+                         document.getElementById('plan-sales-needed-result').textContent = `${salesNeeded} vendas/mês`;
+                    }
+                    
+                    if(hasError) {
+                        alertEl.style.display = 'block';
+                        motivationEl.style.display = 'none';
+                    } else {
+                        alertEl.style.display = 'none';
+                        motivationEl.textContent = `Com ${Math.ceil(monthlyPayment / avgProfit)} vendas por mês, você quitará essa dívida em ${Math.ceil(debt.value / monthlyPayment)} meses!`;
+                        motivationEl.style.display = 'block';
+                        showToast('Simulação atualizada!');
+                    }
+                };
+
+                newForm.addEventListener('input', updateSimulation);
+                newForm.addEventListener('submit', handleSaveDebtPlan);
+                document.getElementById('btn-simular-novamente').addEventListener('click', () => {
+                     setupPlanejamentoDividaPage(debt.id);
+                });
+            }
+
+            function handleSaveDebtPlan(event) {
+                event.preventDefault();
+                const debtId = document.getElementById('plan-debt-id').value;
+                const monthlyPayment = parseFloat(document.getElementById('plan-debt-monthly-payment').value);
+                const startDate = document.getElementById('plan-debt-start-date').value;
+                const avgProfit = parseFloat(document.getElementById('plan-avg-profit').value);
+
+                if (!debtId || !startDate || isNaN(monthlyPayment) || monthlyPayment <= 0 || isNaN(avgProfit) || avgProfit <= 0) {
+                    alert("Por favor, preencha todos os campos com valores válidos para salvar.");
+                    return;
+                }
+
+                const newPlan = {
+                    planId: `plan_${Date.now()}`,
+                    debtId,
+                    monthlyPayment,
+                    startDate,
+                    avgProfit
+                };
+
+                if (!appState.debtPlans) {
+                    appState.debtPlans = [];
+                }
+                
+                appState.debtPlans = appState.debtPlans.filter(p => p.debtId !== debtId);
+                appState.debtPlans.push(newPlan);
+                saveState();
+
+                showToast("Planejamento salvo com sucesso!");
+                setActivePage('liberdade-financeira-page');
+            }
+
+
+            // =================================================================================
+            // ============================ MÓDULO: LUCRO CERTO (CALCULADORA) ====================
+            // =================================================================================
+            
+            function setupLucroCertoPage() {
+                const select = document.getElementById('lucro-produto-select');
+                select.innerHTML = '<option value="">-- Escolha um Produto --</option>';
+                appState.products.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.textContent = p.name;
+                    select.appendChild(option);
+                });
+                
+                document.getElementById('lucro-certo-content').style.display = 'none';
+                document.getElementById('lucro-certo-selecione-produto-msg').style.display = 'block';
+            }
+
+            function handleLucroCertoProductSelect(event) {
+                const productId = event.target.value;
+                produtoSelecionadoLucroCerto = appState.products.find(p => p.id === productId) || null;
+
+                const contentEl = document.getElementById('lucro-certo-content');
+                const msgEl = document.getElementById('lucro-certo-selecione-produto-msg');
+
+                if (produtoSelecionadoLucroCerto) {
+                    contentEl.style.display = 'block';
+                    msgEl.style.display = 'none';
+                    document.getElementById('lucro-nome-produto-display').textContent = produtoSelecionadoLucroCerto.name;
+                    calculateAndDisplayLucroCerto();
+                } else {
+                     contentEl.style.display = 'none';
+                     msgEl.style.display = 'block';
+                }
+            }
+
+            function calculateAndDisplayLucroCerto() {
+                if (!produtoSelecionadoLucroCerto) return;
+
+                const totalFixedCosts = appState.expenses.fixed.reduce((sum, cost) => sum + cost.value, 0);
+                const fixedCostPerUnit = totalFixedCosts / (appState.settings.estimatedMonthlySales || 1);
+                const totalVariableCost = appState.expenses.variable.reduce((sum, cost) => sum + cost.unitValue, 0);
+                const freightCost = appState.settings.estimatedFreightCost || 0;
+                const purchaseCost = produtoSelecionadoLucroCerto.costPrice;
+
+                const totalUnitCost = purchaseCost + totalVariableCost + fixedCostPerUnit + freightCost;
+
+                document.getElementById('lucro-display-custo-fixo').textContent = `R$ ${fixedCostPerUnit.toFixed(2)}`;
+                document.getElementById('lucro-display-custo-variavel').textContent = `R$ ${totalVariableCost.toFixed(2)}`;
+                document.getElementById('lucro-display-custo-frete').textContent = `R$ ${freightCost.toFixed(2)}`;
+                document.getElementById('lucro-display-custo-compra').textContent = `R$ ${purchaseCost.toFixed(2)}`;
+                document.getElementById('lucro-custo-total-display').textContent = `R$ ${totalUnitCost.toFixed(2)}`;
+
+                const marginSlider = document.getElementById('lucro-margem-slider');
+                const marginInput = document.getElementById('lucro-margem-input');
+                const margin = parseFloat(marginInput.value) || 100;
+
+                const salePrice = totalUnitCost / (1 - (margin / 100));
+                const netProfit = salePrice - totalUnitCost;
+
+                document.getElementById('lucro-preco-venda-sugerido').textContent = `R$ ${salePrice.toFixed(2)}`;
+                document.getElementById('lucro-liquido-unidade').textContent = `Lucro de R$ ${netProfit.toFixed(2)} por unidade`;
+
+                const alertEl = document.getElementById('lucro-alerta-margem');
+                if (margin < 20) {
+                    alertEl.style.display = 'block';
+                } else {
+                    alertEl.style.display = 'none';
+                }
+
+                updateLucroChart({
+                    purchaseCost,
+                    totalVariableCost,
+                    fixedCostPerUnit,
+                    freightCost,
+                    netProfit
+                });
+            }
+            
+            function updateLucroChart(data) {
+                const ctx = document.getElementById('lucro-produto-chart').getContext('2d');
+                if (lucroProdutoChartInstance) {
+                    lucroProdutoChartInstance.destroy();
+                }
+
+                if (data.netProfit < 0) data.netProfit = 0;
+
+                lucroProdutoChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Custo de Compra', 'Custo Variável', 'Custo Fixo', 'Frete', 'Lucro Líquido'],
+                        datasets: [{
+                            data: [
+                                data.purchaseCost,
+                                data.totalVariableCost,
+                                data.fixedCostPerUnit,
+                                data.freightCost,
+                                data.netProfit
+                            ],
+                            backgroundColor: [
+                                '#db1472', 
+                                '#f8b81f', 
+                                '#fbcfe8', 
+                                '#fee2e2', 
+                                '#10b981'
+                            ],
+                             borderColor: '#fff',
+                             borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) label += ': ';
+                                        if (context.parsed !== null) {
+                                            label += `R$ ${context.parsed.toFixed(2)}`;
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function handleSalvarPrecoLucroCerto() {
+                if(!produtoSelecionadoLucroCerto) {
+                    alert('Nenhum produto selecionado.'); return;
+                }
+                const newPriceText = document.getElementById('lucro-preco-venda-sugerido').textContent;
+                const newPrice = parseFloat(newPriceText.replace('R$ ', '').replace(',', '.'));
+                
+                if(isNaN(newPrice) || newPrice <= 0) {
+                     alert('Preço inválido. Calcule um preço de venda primeiro.'); return;
+                }
+                
+                const productIndex = appState.products.findIndex(p => p.id === produtoSelecionadoLucroCerto.id);
+                if(productIndex > -1) {
+                    appState.products[productIndex].salePrice = newPrice;
+                    saveState();
+                    alert(`Preço do produto "${appState.products[productIndex].name}" atualizado para R$ ${newPrice.toFixed(2)}.`);
+                    updateAllProductSelects();
+                    if(document.getElementById('produtos-page').classList.contains('active')) {
+                        renderProductCards();
+                    }
+                }
+            }
+
+            // =================================================================================
+            // ======================== MÓDULO: CALCULADORA DE PREÇO ===========================
+            // =================================================================================
+
+            function setupCalcPrecoVendaPage() {
+                let selectedProduct = null;
+                const selectEl = document.getElementById('calc-pvi-produto-select');
+                const detailsEl = document.getElementById('calc-pvi-details');
+                const msgEl = document.getElementById('calc-pvi-initial-msg');
+                const costInput = document.getElementById('calc-pvi-custo-produto');
+                const marginSlider = document.getElementById('calc-pvi-margem-slider');
+                const marginValueSpan = document.getElementById('calc-pvi-margem-value');
+                const priceResultEl = document.getElementById('calc-pvi-preco-sugerido');
+                const profitResultEl = document.getElementById('calc-pvi-lucro-liquido');
+                const alertEl = document.getElementById('calc-pvi-alerta-margem');
+                const saveBtn = document.getElementById('btn-pvi-salvar-produto');
+
+                selectEl.innerHTML = '<option value="">-- Escolha um Produto --</option>';
+                appState.products.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.textContent = p.name;
+                    selectEl.appendChild(option);
+                });
+                
+                detailsEl.style.display = 'none';
+                msgEl.style.display = 'block';
+
+                const calculateAndDisplay = () => {
+                    if (!selectedProduct) return;
+                    const cost = parseFloat(costInput.value);
+                    const margin = parseFloat(marginSlider.value);
+                    
+                    marginValueSpan.textContent = margin;
+
+                    if (isNaN(cost) || cost < 0) {
+                        priceResultEl.textContent = 'R$ 0,00';
+                        profitResultEl.textContent = 'Lucro de R$ 0,00';
+                        return;
+                    }
+
+                    const salePrice = cost / (1 - (margin / 100));
+                    const netProfit = salePrice - cost;
+
+                    priceResultEl.textContent = `R$ ${salePrice.toFixed(2)}`;
+                    profitResultEl.textContent = `Lucro de R$ ${netProfit.toFixed(2)}`;
+
+                    alertEl.style.display = margin < 20 ? 'block' : 'none';
+                };
+
+                selectEl.onchange = () => {
+                    const productId = selectEl.value;
+                    selectedProduct = appState.products.find(p => p.id === productId);
+
+                    if (selectedProduct) {
+                        detailsEl.style.display = 'block';
+                        msgEl.style.display = 'none';
+                        costInput.value = selectedProduct.costPrice.toFixed(2);
+                        calculateAndDisplay();
+                    } else {
+                        detailsEl.style.display = 'none';
+                        msgEl.style.display = 'block';
+                    }
+                };
+
+                marginSlider.oninput = calculateAndDisplay;
+
+                saveBtn.onclick = () => {
+                    if (!selectedProduct) {
+                        alert('Por favor, selecione um produto primeiro.');
+                        return;
+                    }
+                    const newPriceText = priceResultEl.textContent;
+                    const newPrice = parseFloat(newPriceText.replace('R$ ', '').replace(',', '.'));
+
+                    if (isNaN(newPrice) || newPrice <= 0) {
+                        alert('Preço de venda inválido. Por favor, ajuste a margem.');
+                        return;
+                    }
+                    const productIndex = appState.products.findIndex(p => p.id === selectedProduct.id);
+                    if (productIndex > -1) {
+                        appState.products[productIndex].salePrice = newPrice;
+                        saveState();
+                        showToast(`Preço de "${selectedProduct.name}" salvo com sucesso!`);
+                        updateAllProductSelects();
+                    }
+                };
+            }
+
+            // =================================================================================
+            // ============================= FUNÇÕES GLOBAIS DE APOIO ==========================
+            // =================================================================================
+            function updateAllProductSelects() {
+                if (document.getElementById('vendas-page').classList.contains('active')) {
+                    populateSalesProductSelect();
+                }
+                if (document.getElementById('lucro-certo-page').classList.contains('active')) {
+                    setupLucroCertoPage();
+                }
+                if(document.getElementById('calc-preco-venda-page').classList.contains('active')){
+                    setupCalcPrecoVendaPage();
+                }
+            }
+
+            // =================================================================================
+            // ========================== INICIALIZAÇÃO E EVENT LISTENERS ========================
+            // =================================================================================
+            
+            function initializeApp() {
+                loadState();
+
+                // --- Navegação Principal ---
+                document.getElementById('menu-toggle-btn').addEventListener('click', openSidebar);
+                document.getElementById('close-sidebar-btn').addEventListener('click', closeSidebar);
+                appOverlay.addEventListener('click', closeSidebar); 
+                document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        setActivePage(item.dataset.page);
+                        closeSidebar(); 
+                    });
+                });
+                document.querySelectorAll('.btn-action[data-target-page]').forEach(button => {
+                    button.addEventListener('click', () => setActivePage(button.dataset.targetPage));
+                });
+                document.querySelectorAll('.calculator-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const targetPage = this.dataset.targetCalculator;
+                        if(targetPage) {
+                           setActivePage(targetPage);
+                        } else {
+                             alert(`Navegação para ${this.querySelector('h4').textContent} ainda não implementada.`);
+                        }
+                    })
+                });
+                 document.querySelectorAll('.btn-voltar-calculadoras').forEach(button => {
+                    button.addEventListener('click', () => setActivePage('calculadoras-page'));
+                });
+                
+                // --- Listeners Página de Produtos ---
+                document.getElementById('btn-show-add-product-form').addEventListener('click', () => {
+                    const formContainer = document.getElementById('form-cadastro-produto-container');
+                    formContainer.style.display = 'block';
+                    document.getElementById('btn-show-add-product-form').style.display = 'none';
+                    formContainer.querySelector('form').reset();
+                    document.getElementById('produto-id-edit').value = '';
+                    document.getElementById('produto-imagem-preview').style.display = 'none';
+                });
+                document.getElementById('btn-cancel-add-product').addEventListener('click', () => {
+                     document.getElementById('form-cadastro-produto-container').style.display = 'none';
+                     document.getElementById('btn-show-add-product-form').style.display = 'inline-flex';
+                });
+                document.getElementById('form-cadastro-produto').addEventListener('submit', handleProductFormSubmit);
+                document.getElementById('product-cards-list').addEventListener('click', event => {
+                    const editButton = event.target.closest('.btn-edit-product');
+                    if (editButton) {
+                        openProductFormForEdit(editButton.dataset.productId);
+                    }
+                });
+                document.getElementById('produto-imagem').addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                           const preview = document.getElementById('produto-imagem-preview');
+                           preview.src = e.target.result;
+                           preview.style.display = 'block';
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+
+                // --- Listeners Página de Vendas ---
+                document.getElementById('btn-show-nova-venda-form').addEventListener('click', () => {
+                    document.getElementById('form-nova-venda-container').style.display = 'block';
+                    document.getElementById('btn-show-nova-venda-form').style.display = 'none';
+                    document.getElementById('form-nova-venda').reset();
+                    itensVendaTemporarios = [];
+                    updateCurrentSaleUI();
+                    populateSalesProductSelect();
+                });
+                document.getElementById('btn-add-produto-venda').addEventListener('click', () => {
+                    const select = document.getElementById('venda-produto-select');
+                    const selectedOption = select.options[select.selectedIndex];
+                    const produtoId = selectedOption.value;
+                    if (!produtoId) { alert('Selecione um produto.'); return; }
+
+                    const quantidadeInput = document.getElementById('venda-produto-qtd');
+                    const quantidade = parseInt(quantidadeInput.value);
+                    const estoqueDisponivel = parseInt(selectedOption.dataset.stock);
+
+                    if (isNaN(quantidade) || quantidade <= 0) { alert('Insira uma quantidade válida.'); return; }
+                    
+                    const itemJaNoCarrinho = itensVendaTemporarios.find(item => item.productId === produtoId);
+                    const qtdTotalNoCarrinho = (itemJaNoCarrinho ? itemJaNoCarrinho.quantity : 0) + quantidade;
+
+                    if (qtdTotalNoCarrinho > estoqueDisponivel) { alert(`Estoque insuficiente! Apenas ${estoqueDisponivel} unidades disponíveis.`); return; }
+                    
+                    if (itemJaNoCarrinho) {
+                        itemJaNoCarrinho.quantity += quantidade;
+                        itemJaNoCarrinho.subtotal = itemJaNoCarrinho.quantity * itemJaNoCarrinho.unitPrice;
+                    } else {
+                        itensVendaTemporarios.push({
+                            productId: produtoId,
+                            name: selectedOption.dataset.name,
+                            quantity: quantidade,
+                            unitPrice: parseFloat(selectedOption.dataset.price),
+                            subtotal: quantidade * parseFloat(selectedOption.dataset.price)
+                        });
+                    }
+                    updateCurrentSaleUI();
+                    quantidadeInput.value = 1;
+                    select.value = "";
+                });
+                document.getElementById('venda-itens-lista').addEventListener('click', event => {
+                    const removeButton = event.target.closest('.sale-item-remove');
+                    if (removeButton) {
+                        const indexToRemove = parseInt(removeButton.dataset.index);
+                        itensVendaTemporarios.splice(indexToRemove, 1);
+                        updateCurrentSaleUI();
+                    }
+                });
+                 document.getElementById('form-nova-venda').addEventListener('submit', handleNewSaleSubmit);
+                 document.getElementById('btn-cancel-nova-venda').addEventListener('click', () => {
+                    document.getElementById('form-nova-venda-container').style.display = 'none';
+                    document.getElementById('btn-show-nova-venda-form').style.display = 'inline-flex';
+                 });
+                 document.getElementById('venda-desconto').addEventListener('input', updateCurrentSaleUI);
+
+
+                // --- Listeners da Página de Despesas ---
+                document.getElementById('form-add-custo-fixo').addEventListener('submit', handleAddFixedCost);
+                document.getElementById('form-add-custo-variavel').addEventListener('submit', handleAddVariableCost);
+                document.getElementById('despesas-page').addEventListener('click', event => {
+                    const removeBtn = event.target.closest('.remove-cost-btn');
+                    if (removeBtn) {
+                        handleRemoveCost(removeBtn.dataset.type, removeBtn.dataset.id);
+                    }
+                });
+
+                // --- Listeners da Página Liberdade Financeira ---
+                document.getElementById('btn-show-add-debt-form').addEventListener('click', () => {
+                     document.getElementById('form-add-debt-container').style.display = 'block';
+                     document.getElementById('btn-show-add-debt-form').style.display = 'none';
+                });
+                document.getElementById('btn-cancel-add-debt').addEventListener('click', () => {
+                     document.getElementById('form-add-debt-container').style.display = 'none';
+                     document.getElementById('btn-show-add-debt-form').style.display = 'inline-flex';
+                });
+                document.getElementById('form-add-debt').addEventListener('submit', handleAddDebt);
+                document.getElementById('liberdade-financeira-page').addEventListener('click', (event) => {
+                    const planButton = event.target.closest('.btn-plan-payment');
+                    if (planButton) {
+                        const debtId = planButton.dataset.debtId;
+                        setActivePage('planejamento-divida-page', debtId);
+                    }
+                });
+                document.getElementById('btn-voltar-dividas').addEventListener('click', () => setActivePage('liberdade-financeira-page'));
+                document.getElementById('planejamento-divida-page').addEventListener('submit', (event) => {
+                    if (event.target.id === 'form-planejar-divida') {
+                        handleSaveDebtPlan(event);
+                    }
+                });
+                document.getElementById('planejamento-divida-page').addEventListener('click', (event) => {
+                    if (event.target.id === 'btn-simular-novamente') {
+                        const debtId = document.getElementById('plan-debt-id').value;
+                        setupPlanejamentoDividaPage(debtId); 
+                    }
+                });
+
+
+                // --- Listeners da Página Lucro Certo ---
+                const lucroMargemSlider = document.getElementById('lucro-margem-slider');
+                const lucroMargemInput = document.getElementById('lucro-margem-input');
+                lucroMargemSlider.addEventListener('input', () => {
+                    lucroMargemInput.value = lucroMargemSlider.value;
+                    calculateAndDisplayLucroCerto();
+                });
+                lucroMargemInput.addEventListener('input', () => {
+                    lucroMargemSlider.value = lucroMargemInput.value;
+                    calculateAndDisplayLucroCerto();
+                });
+
+                document.getElementById('lucro-produto-select').addEventListener('change', handleLucroCertoProductSelect);
+                document.getElementById('btn-salvar-preco-lucro-certo').addEventListener('click', handleSalvarPrecoLucroCerto);
+
+
+                // --- Inicialização ---
+                document.getElementById('current-year').textContent = new Date().getFullYear();
+                setActivePage('dashboard-page');
+            }
+
+            initializeApp();
+
+        });
+    </script>
 </body>
 </html>
