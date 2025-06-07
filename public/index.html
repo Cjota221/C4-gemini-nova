@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C4 - Gestão para Empreendedoras</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
         /* Estilos básicos para visualização inicial e mobile-first */
         body { 
@@ -533,13 +534,13 @@
             color: #9d174d;
         }
 
-        /* Página de Despesas Específico */
+        /* ======= ESTILOS ATUALIZADOS: PÁGINA DE DESPESAS ======= */
         .despesas-cards-container {
             display: grid;
-            grid-template-columns: 1fr; 
+            grid-template-columns: repeat(2, 1fr); /* 2 colunas para mobile */
             gap: 1.5rem;
         }
-        @media (min-width: 768px) { 
+        @media (min-width: 992px) { /* 2x2 para desktop para harmonia */
             .despesas-cards-container {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -552,7 +553,7 @@
         }
         .card-despesa-title {
             color: #db1472;
-            font-size: 1.5rem;
+            font-size: 1.4rem; /* Ajuste de tamanho para caber melhor */
             margin-top: 0;
             margin-bottom: 0.75rem;
             border-bottom: 2px solid #f8b81f;
@@ -578,7 +579,7 @@
             list-style: none;
             padding: 0;
             margin-top: 1rem;
-            max-height: 200px; 
+            max-height: 180px; /* Reduz altura para melhor visualização */
             overflow-y: auto;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
@@ -601,6 +602,11 @@
             font-weight: 500;
             color: #374151;
         }
+         .custos-lista li .cost-unit { /* Novo estilo para custo unitario */
+             font-size: 0.85rem;
+             color: #6b7280;
+             display: block;
+         }
         .custos-lista li .cost-value {
             color: #166534; 
             font-weight: 500;
@@ -617,29 +623,86 @@
         .custos-lista li .remove-cost-btn:hover {
             color: #b91c1c;
         }
+        .despesas-summary-container {
+            margin-top: 2.5rem;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+         @media (min-width: 768px) {
+             .despesas-summary-container {
+                 grid-template-columns: 1fr 1fr;
+             }
+         }
         
-        /* ESTILOS DOS CARDS DE PRODUTO */
+        .summary-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .summary-button {
+            background-color: #fdf2f8;
+            border: 1px solid #fbcfe8;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            text-align: center;
+        }
+        .summary-button .label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #500724;
+            margin: 0 0 0.5rem 0;
+        }
+        .summary-button .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #c01062;
+        }
+        .summary-button.primary {
+            background-color: #db1472;
+            border-color: #c01062;
+        }
+        .summary-button.primary .label {
+             color: #fce7f3;
+        }
+        .summary-button.primary .value {
+             color: #ffffff;
+        }
+        .despesas-chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            max-width: 300px; /* Limita o tamanho do gráfico */
+            margin: 0 auto;
+        }
+        
+        /* ======= ESTILOS ATUALIZADOS: PÁGINA DE PRODUTOS ======= */
+        #produtos-page .page-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
         .item-cards-container { 
             display: grid;
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 1.5rem; 
+            gap: 1rem; 
             margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
         }
-        @media (min-width: 992px) { 
-            .item-cards-container { 
-                grid-template-columns: repeat(3, 1fr); 
-            }
-        }
-
 
         .product-card, .sale-card { 
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 1.2rem;
+            padding: 0.8rem; 
             display: flex;
             flex-direction: column;
             border-left: 5px solid #f8b81f; 
+            font-size: 0.9rem;
         }
         .product-card:hover, .sale-card:hover {
             transform: translateY(-3px);
@@ -651,19 +714,21 @@
             aspect-ratio: 1 / 1; 
             object-fit: cover;
             border-radius: 6px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         .product-card h4, .sale-card h4 {
-            font-size: 1.2rem;
+            font-size: 1rem; 
             color: #db1472;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
+            margin: 0 0 0.4rem 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .product-card p, .sale-card p {
-            font-size: 0.9rem;
+            font-size: 0.85rem; 
             color: #4b5563;
-            margin-bottom: 0.3rem;
-            line-height: 1.4;
+            margin: 0.2rem 0;
+            line-height: 1.3;
         }
         .product-card p strong, .sale-card p strong {
             color: #374151;
@@ -678,7 +743,7 @@
          }
         .product-card .actions-cell, .sale-card .actions-cell { 
             margin-top: auto; 
-            padding-top: 0.75rem;
+            padding-top: 0.5rem;
             display: flex;
             gap: 0.5rem;
             justify-content: flex-end;
@@ -687,8 +752,180 @@
             display: inline-block; 
             margin-top: 0.5rem;
         }
+
+        /* ======= NOVOS ESTILOS: FORMULÁRIO DE PRODUTO ATUALIZADO ======= */
+        .cost-display-badge {
+            background-color: #fce7f3;
+            border: 1px solid #fbcfe8;
+            color: #9d174d;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .cost-display-badge span {
+            font-weight: 700;
+        }
+
+        #form-pricing-calculator {
+            border-top: 2px dashed #fbcfe8;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+
+        .price-slider-group input[type="range"] {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            background: #fbcfe8;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.8;
+            transition: opacity .2s;
+        }
+        .price-slider-group input[type="range"]:hover {
+            opacity: 1;
+        }
+        .price-slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            background: #db1472;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .price-slider-group input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: #db1472;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .pricing-result {
+            background-color: #fdf2f8;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .pricing-result div p {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #500724;
+        }
+         .pricing-result div .suggested-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #db1472; 
+        }
+         .pricing-result div .profit-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #10b981; 
+        }
         
-        /* ESTILOS ATUALIZADOS: LUCRO CERTO E PLANEJAMENTO DÍVIDA */
+        /* ======= NOVOS ESTILOS: IMPORTAÇÃO DE PRODUTOS ======= */
+        #import-preview-table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+        #import-preview-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #import-preview-table th, #import-preview-table td {
+            padding: 0.6rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+        }
+        #import-preview-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        #import-preview-table tr.invalid-row {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        #import-preview-table tr.invalid-row td:last-child::after {
+            content: ' (Inválido)';
+            font-weight: bold;
+        }
+
+        /* ======= NOVOS ESTILOS: PÁGINA DE CLIENTES (CRM) ======= */
+        .customer-cards-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        }
+
+        .customer-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 5px solid #db1472;
+        }
+        .customer-card.dormant {
+            border-left-color: #f59e0b; /* Laranja para chamar atenção */
+        }
+        .customer-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .customer-card-header h4 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #500724;
+        }
+        .customer-card-header p {
+             margin: 0;
+             font-size: 0.9rem;
+             color: #6b7280;
+        }
+        .customer-card-info p {
+            font-size: 0.95rem;
+            margin: 0.25rem 0;
+            color: #4b5563;
+        }
+         .customer-card-info p strong {
+             color: #1f2937;
+         }
+        .last-purchase-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #c01062;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .last-purchase-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        .last-purchase-list li {
+            padding: 0.2rem 0;
+        }
+
+        /* ESTILOS ATUALIZADOS: LUCRO CERTO E LIBERDADE FINANCEIRA */
         .main-content-grid {
             display: grid;
             gap: 1.5rem;
@@ -860,8 +1097,33 @@
             color: #b45309;
             border-color: #fde68a;
         }
+        #plan-ai-assistant {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #fdf2f8;
+            border: 1px dashed #fbcfe8;
+            border-radius: 8px;
+            text-align: center;
+        }
+        #plan-ai-assistant p {
+            margin: 0 0 1rem 0;
+            color: #500724;
+            font-weight: 500;
+        }
 
         /* ESTILOS LIBERDADE FINANCEIRA */
+        .lf-summary-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            margin-bottom: 2rem;
+        }
+        @media(min-width: 768px) {
+            .lf-summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
         #liberdade-financeira-page .debt-cards-container {
             display: grid;
             gap: 1.5rem;
@@ -904,6 +1166,44 @@
         .readonly-field {
             background-color: #f3f4f6;
             cursor: not-allowed;
+        }
+
+        /* ======= NOVOS ESTILOS: PÁGINA METAS ======= */
+        #goals-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media(min-width: 992px) {
+            #goals-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .goal-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .goal-card h3 {
+            color: #c01062;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        .goal-chart-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem auto;
+        }
+        .goal-card .form-group {
+            margin-bottom: 0.5rem;
+        }
+        .goal-card input {
+            text-align: center;
+            font-weight: 600;
+            color: #db1472;
         }
 
         /* Página Calculadoras Hub */
@@ -1005,6 +1305,10 @@
                 <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 Dashboard
             </a>
+            <a href="#despesas" class="sidebar-nav-item" data-page="despesas-page">
+                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                Despesas
+            </a>
             <a href="#produtos" class="sidebar-nav-item" data-page="produtos-page">
                 <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 Produtos
@@ -1013,17 +1317,13 @@
                 <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 Vendas
             </a>
-            <a href="#despesas" class="sidebar-nav-item" data-page="despesas-page">
-                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                Despesas
+            <a href="#clientes" class="sidebar-nav-item" data-page="clientes-page">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Clientes
             </a>
             <a href="#liberdade-financeira" class="sidebar-nav-item" data-page="liberdade-financeira-page">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 Liberdade Financeira
-            </a>
-            <a href="#lucro-certo" class="sidebar-nav-item" data-page="lucro-certo-page">
-                <svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                Lucro Certo
             </a>
             <a href="#calculadoras" class="sidebar-nav-item" data-page="calculadoras-page"> <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="16" y2="18"></line></svg>
                 Calculadoras
@@ -1116,21 +1416,28 @@
             <div class="quick-actions">
                 <button class="btn-action" data-target-page="vendas-page">Nova Venda</button>
                 <button class="btn-action" data-target-page="produtos-page">Novo Produto</button>
-                <button class="btn-action" data-target-page="lucro-certo-page">Lucro Certo</button>
+                <button class="btn-action" data-target-page="calculadoras-page">Calculadoras</button>
             </div>
         </section>
 
         <section id="produtos-page" class="page-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                 <h2 class="page-title" style="margin-bottom: 0;">Produtos</h2>
-                <button class="btn btn-primary" id="btn-show-add-product-form">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    Adicionar Produto
-                </button>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" id="btn-show-import-product-form">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Importar Planilha
+                    </button>
+                    <button class="btn btn-primary" id="btn-show-add-product-form">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Cadastro Manual
+                    </button>
+                </div>
             </div>
 
-            <div id="form-cadastro-produto-container" class="form-container" style="display: none;">
-                <h3 style="color: #db1472; font-weight: 600; margin-top:0; margin-bottom: 1.5rem;">Cadastrar Novo Produto</h3>
+            <!-- Formulário de Cadastro Manual -->
+            <div id="form-cadastro-produto-container" class="form-container" style="display: none; max-width: 600px; margin-left:auto; margin-right: auto;">
+                <h3 style="color: #db1472; font-weight: 600; margin-top:0; margin-bottom: 1.5rem;">Cadastro Manual de Produto</h3>
                 <form id="form-cadastro-produto">
                     <input type="hidden" id="produto-id-edit" value="">
                     <div class="form-group">
@@ -1140,7 +1447,7 @@
                     <div class="form-group">
                         <label for="produto-categoria">Categoria</label>
                         <select id="produto-categoria" name="produto-categoria">
-                            <option value="">Selecione uma categoria</option>
+                            <option value="">Selecione</option>
                             <option value="calcados">Calçados</option>
                             <option value="roupas">Roupas</option>
                             <option value="bolsas">Bolsas</option>
@@ -1151,25 +1458,42 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="produto-descricao">Descrição</label>
-                        <textarea id="produto-descricao" name="produto-descricao"></textarea>
+                        <label for="produto-valor-custo">Preço de Custo (R$)</label>
+                        <input type="number" id="produto-valor-custo" name="produto-valor-custo" step="0.01" min="0" required placeholder="0,00">
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="cost-display-badge">Custo Unitário de Despesas: <span id="produto-custo-unitario-despesas">R$ 0,00</span></div>
+
+                    <div id="form-pricing-calculator">
                         <div class="form-group">
-                            <label for="produto-valor-custo">Preço de Custo (R$)</label>
-                            <input type="number" id="produto-valor-custo" name="produto-valor-custo" step="0.01" min="0" required>
+                            <label for="produto-margem-lucro-slider">Margem de Lucro Desejada (<span id="produto-margem-lucro-label">100</span>%)</label>
+                            <div class="price-slider-group">
+                                <input type="range" id="produto-margem-lucro-slider" min="10" max="300" value="100" step="1">
+                            </div>
                         </div>
+                        <div class="pricing-result">
+                            <div>
+                                <p>Preço de Venda</p>
+                                <p class="suggested-price" id="produto-preco-sugerido">R$ 0,00</p>
+                            </div>
+                             <div>
+                                <p>Lucro por Venda</p>
+                                <p class="profit-value" id="produto-lucro-estimado">R$ 0,00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top:1.5rem;">
                         <div class="form-group">
                             <label for="produto-estoque">Quantidade em Estoque</label>
                             <input type="number" id="produto-estoque" name="produto-estoque" step="1" min="0" required>
                         </div>
+                        <div class="form-group">
+                            <label for="produto-imagem">Imagem do Produto</label>
+                            <input type="file" id="produto-imagem" name="produto-imagem" accept="image/*">
+                        </div>
                     </div>
+                    <img id="produto-imagem-preview" class="image-preview" src="#" alt="Pré-visualização da imagem">
                     
-                    <div class="form-group" style="margin-top: 1.5rem;">
-                        <label for="produto-imagem">Imagem do Produto</label>
-                        <input type="file" id="produto-imagem" name="produto-imagem" accept="image/*">
-                        <img id="produto-imagem-preview" class="image-preview" src="#" alt="Pré-visualização da imagem">
-                    </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" id="btn-cancel-add-product">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar Produto</button>
@@ -1177,7 +1501,23 @@
                 </form>
             </div>
 
-            <h3 style="color: #db1472; font-weight: 500; margin-top: 2rem;">Lista de Produtos Cadastrados</h3>
+            <!-- Seção de Importação de Planilha -->
+            <div id="form-importar-planilha-container" class="form-container" style="display: none;">
+                 <h3 style="color: #db1472; font-weight: 600; margin-top:0; margin-bottom: 1.5rem;">Importar Produtos via Planilha</h3>
+                 <p class="informativo">Para importar, sua planilha (formato .CSV) deve conter as seguintes colunas, nesta ordem: <code>Nome,Categoria,PrecoCusto,Estoque</code>.</p>
+                 <a href="#" id="download-csv-template" class="btn btn-sm btn-secondary" style="margin-bottom: 1.5rem;">Baixar Modelo de Planilha (.csv)</a>
+                 <div class="form-group">
+                     <label for="import-csv-file">Selecione o arquivo .CSV</label>
+                     <input type="file" id="import-csv-file" accept=".csv">
+                 </div>
+                 <div id="import-preview-container"></div>
+                 <div class="form-actions" id="import-actions" style="display:none;">
+                     <button class="btn btn-secondary" id="btn-cancel-import">Cancelar</button>
+                     <button class="btn btn-primary" id="btn-confirm-import">Confirmar Importação</button>
+                 </div>
+            </div>
+
+            <h3 style="color: #db1472; font-weight: 500; margin-top: 2rem;">Meus Produtos</h3>
             <div class="item-cards-container" id="product-cards-list">
             </div>
             <p id="no-products-message" style="text-align: center; color: #6b7280; padding: 1rem; display: none;">Nenhum produto cadastrado ainda.</p>
@@ -1194,9 +1534,15 @@
             <div id="form-nova-venda-container" class="form-container" style="display: none;">
                 <h3 style="color: #db1472; font-weight: 600; margin-top:0; margin-bottom: 1.5rem;">Registar Nova Venda</h3>
                 <form id="form-nova-venda">
-                    <div class="form-group">
-                        <label for="venda-cliente">Cliente (Opcional)</label>
-                        <input type="text" id="venda-cliente" name="venda-cliente" placeholder="Nome do cliente">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label for="venda-cliente">Nome do Cliente</label>
+                            <input type="text" id="venda-cliente" name="venda-cliente" placeholder="Nome do cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="venda-cliente-telefone">Telefone do Cliente</label>
+                            <input type="tel" id="venda-cliente-telefone" name="venda-cliente-telefone" placeholder="(99) 99999-9999">
+                        </div>
                     </div>
                     <fieldset style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
                         <legend style="color: #4b5563; font-weight:500; padding: 0 0.5rem;">Adicionar Produtos</legend>
@@ -1248,60 +1594,141 @@
             </div>
              <p id="no-vendas-message" style="text-align: center; color: #6b7280; padding: 1rem; display: none;">Nenhuma venda registada ainda.</p>
         </section>
+
+        <section id="clientes-page" class="page-content">
+            <h2 class="page-title">Gestão de Clientes (CRM)</h2>
+            <p class="informativo">Acompanhe seus clientes, veja o histórico de compras e identifique novas oportunidades de venda.</p>
+            <div id="customer-cards-container" class="customer-cards-container">
+                <!-- Cards de cliente serão gerados aqui -->
+            </div>
+            <p id="no-customers-message" style="display: none; text-align:center; color: #6b7280; padding: 1.5rem;">Nenhum cliente registrado. Faça uma venda para começar!</p>
+        </section>
         
         <section id="despesas-page" class="page-content">
-            <h2 class="page-title">Despesas</h2>
+            <h2 class="page-title">Controle de Despesas</h2>
             <div class="despesas-cards-container">
+                <!-- Card Custos Fixos -->
                 <div class="card-despesa" id="card-custos-fixos">
                     <h3 class="card-despesa-title">🧾 Custos Fixos</h3>
-                    <p class="informativo">Custos que não mudam com o volume de vendas. Ex: aluguel, salários, internet.</p>
+                    <p class="informativo">Custos que não mudam com o volume de vendas.</p>
                     <form id="form-add-custo-fixo">
                         <div class="form-group">
                             <label for="custo-fixo-nome">Nome do Custo Fixo</label>
-                            <input type="text" id="custo-fixo-nome" placeholder="Ex: Aluguel do Ateliê" required>
+                            <input type="text" id="custo-fixo-nome" placeholder="Ex: Aluguel" required>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="custo-fixo-valor">Valor Mensal (R$)</label>
                             <input type="number" id="custo-fixo-valor" step="0.01" min="0" placeholder="Ex: 800,00" required>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="custo-fixo-vencimento">Data de Vencimento</label>
                             <input type="date" id="custo-fixo-vencimento" name="custo-fixo-vencimento" required>
                         </div>
-                        <div class="form-actions" style="justify-content: flex-start;">
-                            <button type="submit" class="btn btn-primary btn-sm">Adicionar Custo Fixo</button>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
                         </div>
                     </form>
-                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Fixos Cadastrados:</h4>
-                    <ul id="lista-custos-fixos" class="custos-lista">
-                    </ul>
+                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Cadastrados:</h4>
+                    <ul id="lista-custos-fixos" class="custos-lista"></ul>
                 </div>
+
+                <!-- Card Custos Variáveis -->
                 <div class="card-despesa" id="card-custos-variaveis">
                     <h3 class="card-despesa-title">⚙️ Custos Variáveis</h3>
-                    <p class="informativo">Custos atrelados a cada produto vendido. Ex: embalagem, taxa de cartão, comissão.</p>
-                     <form id="form-add-custo-variavel">
+                    <p class="informativo">Custos por unidade vendida. Ex: embalagem.</p>
+                    <form id="form-add-custo-variavel">
                         <div class="form-group">
-                            <label for="custo-variavel-nome">Nome do Custo Variável</label>
-                            <input type="text" id="custo-variavel-nome" placeholder="Ex: Embalagem por produto" required>
+                            <label for="custo-variavel-nome">Nome do Custo</label>
+                            <input type="text" id="custo-variavel-nome" placeholder="Ex: Embalagem" required>
                         </div>
                         <div class="form-group">
                             <label for="custo-variavel-valor-unitario">Valor por Unidade (R$)</label>
                             <input type="number" id="custo-variavel-valor-unitario" step="0.01" min="0" placeholder="Ex: 2,50" required>
                         </div>
-                        <div class="form-actions" style="justify-content: flex-start;">
-                            <button type="submit" class="btn btn-primary btn-sm">Adicionar Custo Variável</button>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
                         </div>
                     </form>
-                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Variáveis Cadastrados:</h4>
-                    <ul id="lista-custos-variaveis" class="custos-lista">
-                    </ul>
+                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Cadastrados:</h4>
+                    <ul id="lista-custos-variaveis" class="custos-lista"></ul>
+                </div>
+
+                <!-- NOVO Card Custo de Frete -->
+                <div class="card-despesa" id="card-custo-frete">
+                    <h3 class="card-despesa-title">🚚 Custo de Frete</h3>
+                    <p class="informativo">Rateio do frete de compra por unidade.</p>
+                    <form id="form-add-custo-frete">
+                        <div class="form-group">
+                            <label for="frete-valor-total">Valor Total do Frete (R$)</label>
+                            <input type="number" id="frete-valor-total" step="0.01" min="0" placeholder="Ex: 150,00" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="frete-quantidade-pecas">Quantidade de Peças</label>
+                            <input type="number" id="frete-quantidade-pecas" step="1" min="1" placeholder="Ex: 30" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
+                        </div>
+                    </form>
+                    <h4 style="margin-top:1.5rem; color:#500724;">Fretes Cadastrados:</h4>
+                    <ul id="lista-custos-frete" class="custos-lista"></ul>
+                </div>
+
+                <!-- NOVO Card Custo de Imposto -->
+                 <div class="card-despesa" id="card-custo-imposto">
+                    <h3 class="card-despesa-title">📊 Custo de Imposto</h3>
+                    <p class="informativo">Impostos sobre a venda. Ex: ICMS, Simples.</p>
+                    <form id="form-add-custo-imposto">
+                        <div class="form-group">
+                            <label for="imposto-nome">Nome do Imposto</label>
+                            <input type="text" id="imposto-nome" placeholder="Ex: Simples Nacional" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="imposto-valor-percentual">Alíquota (%)</label>
+                            <input type="number" id="imposto-valor-percentual" step="0.01" min="0" placeholder="Ex: 4.5" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
+                        </div>
+                    </form>
+                    <h4 style="margin-top:1.5rem; color:#500724;">Impostos Cadastrados:</h4>
+                    <ul id="lista-custos-impostos" class="custos-lista"></ul>
                 </div>
             </div>
+
+            <!-- NOVA Seção de Resumo e Gráfico -->
+            <div class="despesas-summary-container">
+                <div class="summary-buttons-container">
+                    <div id="summary-total-fixo" class="summary-button">
+                        <p class="label">Custo Fixo Total Mensal</p>
+                        <p class="value">R$ 0,00</p>
+                    </div>
+                    <div id="summary-total-unitario" class="summary-button primary">
+                        <p class="label">Custo Total por Unidade</p>
+                        <p class="value">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="despesas-chart-container">
+                    <canvas id="despesas-pie-chart"></canvas>
+                </div>
+            </div>
+
         </section>
 
         <section id="liberdade-financeira-page" class="page-content">
+            <h2 class="page-title">Liberdade Financeira</h2>
+             <div class="lf-summary-grid">
+                 <div class="summary-button">
+                     <p class="label">Total de Dívidas</p>
+                     <p class="value" id="lf-total-dividas">R$ 0,00</p>
+                 </div>
+                  <div class="summary-button">
+                     <p class="label">Economia Mensal Planejada</p>
+                     <p class="value" id="lf-total-economias">R$ 0,00</p>
+                 </div>
+             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                 <h2 class="page-title" style="margin-bottom: 0;">Liberdade Financeira</h2>
+                <h3 class="sub-page-title" style="margin:0;">Minhas Dívidas</h3>
                  <button class="btn btn-primary" id="btn-show-add-debt-form">
                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Adicionar Dívida
@@ -1334,72 +1761,57 @@
                  </form>
             </div>
             
-            <h3 class="sub-page-title" style="margin-top: 2rem;">Minhas Dívidas</h3>
-            <div class="filters-container" style="margin-bottom: 1rem;">
-                <label for="ordenar-dividas" style="align-self:center; margin-right:0.5rem; font-weight:500; color:#4b5563;">Ordenar por:</label>
-                <select id="ordenar-dividas" class="form-group" style="padding:0.5rem; min-width: 180px;">
-                    <option value="prioridade">Prioridade (Alta > Baixa)</option>
-                    <option value="valor_maior">Valor (Maior > Menor)</option>
-                    <option value="valor_menor">Valor (Menor > Maior)</option>
-                </select>
-            </div>
-            <div id="debt-cards-container" class="debt-cards-container"></div>
+            <div class="debt-cards-container" id="debt-cards-container"></div>
             <p id="no-debts-message" style="text-align: center; color: #6b7280; padding: 1rem; display: none;">Nenhuma dívida cadastrada ainda. Isso é ótimo!</p>
         </section>
 
-        <!-- NOVA PÁGINA: PLANEJAMENTO DE DÍVIDA -->
         <section id="planejamento-divida-page" class="page-content">
              <button class="btn btn-secondary" id="btn-voltar-dividas" style="margin-bottom: 1.5rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 Voltar
             </button>
-            <h2 class="page-title" id="planejamento-divida-titulo">Planejar Pagamento</h2>
+            <h2 class="page-title" id="planejamento-divida-titulo">Planejar Quitação</h2>
             
             <div class="main-content-grid">
                 <div class="lucro-card">
-                    <h3>Sua Estratégia</h3>
+                    <h3>Sua Estratégia de Quitação</h3>
                      <form id="form-planejar-divida">
                         <input type="hidden" id="plan-debt-id">
                          <div class="form-group">
-                            <label>Nome da Dívida</label>
+                            <label>Dívida:</label>
                             <input type="text" id="plan-debt-name-display" readonly class="readonly-field">
                         </div>
                          <div class="form-group">
-                            <label>Valor Total da Dívida</label>
-                            <input type="text" id="plan-debt-value-display" readonly class="readonly-field">
+                            <label for="planejar-divida-valor">Quanto você pode poupar?</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <input type="number" id="planejar-divida-valor" step="0.01" min="1" required placeholder="Ex: 5,00" style="flex-grow: 2;">
+                                <select id="planejar-divida-frequencia" class="form-group" style="margin:0; flex-grow: 1;">
+                                    <option value="dia">por Dia</option>
+                                    <option value="quinzena">por Quinzena</option>
+                                    <option value="mes" selected>por Mês</option>
+                                </select>
+                            </div>
                         </div>
-                         <div class="form-group">
-                            <label for="plan-debt-monthly-payment">Valor Mensal que Pode Pagar</label>
-                            <input type="number" id="plan-debt-monthly-payment" step="0.01" min="1" required>
+                        <div class="lucro-result-display" style="padding: 1rem; margin-top: 0; margin-bottom: 1.5rem;">
+                            <div class="lucro-info-item" style="margin: 0.5rem 0;">
+                                <span>Tempo para quitar:</span>
+                                <strong id="plan-duration-result">--</strong>
+                            </div>
+                             <div class="lucro-info-item" style="margin: 0.5rem 0;">
+                                <span>Vendas/mês para Atingir a Meta:</span>
+                                <strong id="plan-sales-needed-result">--</strong>
+                            </div>
                         </div>
-                         <div class="form-group">
-                            <label for="plan-debt-start-date">Data de Início do Pagamento</label>
-                            <input type="date" id="plan-debt-start-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="plan-avg-profit">Lucro médio por venda (R$)</label>
-                            <input type="number" id="plan-avg-profit" step="0.01" min="0.01" required>
-                        </div>
+                        <p id="plan-motivation-message" class="informativo" style="text-align:center; display:none;"></p>
                         <div class="form-actions" style="justify-content: flex-start; gap: 1rem;">
                             <button type="submit" class="btn btn-primary">Salvar Planejamento</button>
-                            <button type="button" class="btn btn-secondary" id="btn-simular-novamente">Simular Novamente</button>
                         </div>
                      </form>
                 </div>
-                <div class="lucro-card">
-                    <h3>Simulação</h3>
-                    <div id="plan-results-card">
-                        <div class="lucro-info-item">
-                            <span>Tempo para quitar</span>
-                            <strong id="plan-duration-result">--</strong>
-                        </div>
-                         <div class="lucro-info-item">
-                            <span>Vendas/mês necessárias</span>
-                            <strong id="plan-sales-needed-result">--</strong>
-                        </div>
-                         <p id="plan-alert" class="lucro-certo-alert alert-warning" style="text-align: center; margin-top: 1.5rem;">Preencha os campos para simular.</p>
-                         <p id="plan-motivation" class="informativo" style="text-align:center; display:none;"></p>
-                    </div>
+                <div id="plan-ai-assistant" class="lucro-card">
+                     <h3>✨ Assistente C4 IA</h3>
+                     <p>Precisa de ajuda para vender mais e atingir sua meta de economia? Nossa IA pode te dar dicas!</p>
+                     <button class="btn btn-primary" data-target-page="c4-ia-page">Pedir Dicas para IA</button>
                 </div>
             </div>
         </section>
@@ -1585,12 +1997,53 @@
              </div>
         </section>
 
-        <!-- Páginas placeholder -->
-        
         <section id="metas-page" class="page-content">
-             <h2 class="page-title">Metas</h2>
-             <div class="form-container"><p><em>Em breve...</em></p></div>
+            <h2 class="page-title">Minhas Metas de Vendas</h2>
+             <div id="goals-container">
+                 <!-- Meta Diária -->
+                 <div class="goal-card">
+                     <h3>Meta Diária</h3>
+                     <div class="goal-chart-container">
+                         <canvas id="daily-goal-chart"></canvas>
+                     </div>
+                     <div class="form-group">
+                         <label for="daily-goal-input">Definir Meta (R$)</label>
+                         <input type="number" id="daily-goal-input" placeholder="R$ 0,00">
+                     </div>
+                     <button class="btn btn-primary btn-sm save-goal-btn" data-period="daily">Salvar Meta</button>
+                 </div>
+                 <!-- Meta Semanal -->
+                 <div class="goal-card">
+                     <h3>Meta Semanal</h3>
+                     <div class="goal-chart-container">
+                         <canvas id="weekly-goal-chart"></canvas>
+                     </div>
+                      <div class="form-group">
+                         <label for="weekly-goal-input">Definir Meta (R$)</label>
+                         <input type="number" id="weekly-goal-input" placeholder="R$ 0,00">
+                     </div>
+                     <button class="btn btn-primary btn-sm save-goal-btn" data-period="weekly">Salvar Meta</button>
+                 </div>
+                 <!-- Meta Mensal -->
+                 <div class="goal-card">
+                     <h3>Meta Mensal</h3>
+                     <div class="goal-chart-container">
+                         <canvas id="monthly-goal-chart"></canvas>
+                     </div>
+                      <div class="form-group">
+                         <label for="monthly-goal-input">Definir Meta (R$)</label>
+                         <input type="number" id="monthly-goal-input" placeholder="R$ 0,00">
+                     </div>
+                     <button class="btn btn-primary btn-sm save-goal-btn" data-period="monthly">Salvar Meta</button>
+                 </div>
+             </div>
+             <div id="plan-ai-assistant" class="form-container" style="margin-top: 2.5rem;">
+                 <h3>✨ Assistente C4 IA</h3>
+                 <p>Precisa de um plano para bater suas metas? Nossa IA pode te ajudar a criar estratégias de vendas eficazes!</p>
+                 <button class="btn btn-primary" data-target-page="c4-ia-page">Pedir Ajuda para IA</button>
+            </div>
         </section>
+        
          <section id="relatorios-page" class="page-content">
              <h2 class="page-title">Relatórios</h2>
              <div class="form-container"><p><em>Em breve...</em></p></div>
@@ -1617,16 +2070,26 @@
         <p>&copy; <span id="current-year"></span> C4. Todos os direitos reservados.</p>
     </footer>
 
-    <script defer>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
 
             // =================================================================================
             // ======================== CÉREBRO DO APP (STATE MANAGEMENT) ========================
             // =================================================================================
             let appState = {};
+            let goalCharts = {};
             let lucroProdutoChartInstance = null;
+            let despesasChartInstance = null;
             let produtoSelecionadoLucroCerto = null;
             let itensVendaTemporarios = [];
+            let produtosImportadosParaConfirmacao = [];
+            const motivationalQuotes = [
+                "Cada real guardado é um passo em direção à sua tranquilidade financeira. Continue!",
+                "Pequenas economias diárias constroem grandes fortunas. Você está no caminho certo!",
+                "Sua disciplina hoje é a sua liberdade amanhã. Força!",
+                "Você é mais forte que suas dívidas. Continue planejando e você vencerá!",
+                "Imagine a sensação de quitar essa dívida. Mantenha o foco nesse sentimento!"
+            ];
 
             function saveState() {
                 try {
@@ -1643,15 +2106,18 @@
                 if (savedState) {
                     try {
                         const parsedState = JSON.parse(savedState);
-                        // Validação simples da estrutura
                         if(parsedState && typeof parsedState === 'object' && parsedState.products && parsedState.expenses){
                              appState = parsedState;
+                             if (!appState.expenses.freight) appState.expenses.freight = [];
+                             if (!appState.expenses.taxes) appState.expenses.taxes = [];
+                             if (!appState.debtPlans) appState.debtPlans = [];
+                             if (!appState.goals) appState.goals = { daily: 0, weekly: 0, monthly: 0 }; // NOVO
                         } else {
                             throw new Error("Dados salvos estão corrompidos.");
                         }
                     } catch(e) {
                          console.error("Erro ao carregar dados salvos:", e);
-                         showToast("Aviso: Dados anteriores não puderam ser carregados. Começando com dados de exemplo.", "error");
+                         showToast("Aviso: Dados anteriores não puderam ser carregados.", "error");
                          loadDefaultState();
                     }
                 } else {
@@ -1664,30 +2130,20 @@
                     products: [ 
                         { id: 'prod1', name: 'Bolsa de Couro Caramelo', category: 'bolsas', costPrice: 80.00, salePrice: 249.90, stock: 15, image: 'https://placehold.co/400x400/db1472/ffffff?text=Bolsa' },
                         { id: 'prod2', name: 'Tênis Casual Branco', category: 'calcados', costPrice: 65.00, salePrice: 189.90, stock: 30, image: 'https://placehold.co/400x400/c01062/ffffff?text=Tênis' },
-                        { id: 'prod3', name: 'Perfume Floral Intenso (50ml)', category: 'perfumaria', costPrice: 35.00, salePrice: 99.00, stock: 4, image: 'https://placehold.co/400x400/f8b81f/500724?text=Perfume' },
-                        { id: 'prod4', name: 'Sérum Facial Vitamina C', category: 'skin_care', costPrice: 28.00, salePrice: 0, stock: 40, image: 'https://placehold.co/400x400/fbcfe8/500724?text=Sérum' },
                     ],
                     sales: [],
                     expenses: {
-                        fixed: [
-                            { id: 'fix1', name: 'Aluguel do Espaço', value: 800.00, dueDate: '2025-06-10' },
-                            { id: 'fix2', name: 'Contador', value: 200.00, dueDate: '2025-06-15' },
-                            { id: 'fix3', name: 'Plano Internet', value: 99.00, dueDate: '2025-07-01' },
-                        ],
-                        variable: [
-                            { id: 'var1', name: 'Embalagem de Luxo', unitValue: 2.50 },
-                            { id: 'var2', name: 'Sacola Personalizada', unitValue: 1.20 },
-                        ]
+                        fixed: [ { id: 'fix1', name: 'Aluguel do Espaço', value: 800.00, dueDate: '2025-06-10' } ],
+                        variable: [ { id: 'var1', name: 'Embalagem de Luxo', unitValue: 2.50 } ],
+                        freight: [],
+                        taxes: []
                     },
-                    debts: [
-                        { id: 'debt1', name: 'Cartão de Crédito', value: 1500.00, priority: 'alta', paid: 0},
-                        { id: 'debt2', name: 'Empréstimo Fornecedor', value: 3200.00, priority: 'media', paid: 0},
-                    ],
+                    debts: [],
                     debtPlans: [],
+                    goals: { daily: 0, weekly: 0, monthly: 0 }, // NOVO
                     settings: { 
                         lowStockThreshold: 5,
-                        estimatedMonthlySales: 100,
-                        estimatedFreightCost: 1.50
+                        estimatedMonthlySales: 100
                     }
                 };
                 saveState();
@@ -1723,52 +2179,42 @@
                     document.querySelectorAll('.sidebar-nav-item').forEach(nav => nav.classList.remove('active'));
 
                     const targetPage = document.getElementById(pageId);
-                    let targetNavItemKey = pageId.startsWith('calc-') ? 'calculadoras-page' : pageId;
+                    let targetNavItemKey = pageId;
+                    if (pageId.startsWith('calc-')) targetNavItemKey = 'calculadoras-page';
+                    if (pageId === 'planejamento-divida-page') targetNavItemKey = 'liberdade-financeira-page';
+
                     const targetNavItem = document.querySelector(`.sidebar-nav-item[data-page="${targetNavItemKey}"]`);
 
                     if (targetPage) {
                         targetPage.classList.add('active');
+                        window.scrollTo(0, 0);
                         renderPageContent(pageId, data);
                     }
                     if (targetNavItem) targetNavItem.classList.add('active');
                     
-                    const productForm = document.getElementById('form-cadastro-produto-container');
-                    if (productForm && pageId !== 'produtos-page') productForm.style.display = 'none';
-                    
-                    const saleForm = document.getElementById('form-nova-venda-container');
-                    if (saleForm && pageId !== 'vendas-page') saleForm.style.display = 'none';
+                    document.querySelectorAll('.form-container').forEach(form => {
+                        if (form.id !== 'form-cadastro-produto-container' && form.id !== 'form-importar-planilha-container') {
+                            if (pageId.includes('page') && !pageId.startsWith(form.id.split('-')[1])) {
+                                // Lógica de esconder outros forms se necessário
+                            }
+                        }
+                    });
                 }, 200);
             }
 
             function renderPageContent(pageId, data) {
                 switch(pageId) {
-                    case 'dashboard-page':
-                        setupDashboardPage();
-                        break;
-                    case 'produtos-page':
-                        setupProductsPage();
-                        break;
-                    case 'vendas-page':
-                        setupVendasPage();
-                        break;
-                    case 'despesas-page':
-                        setupDespesasPage();
-                        break;
-                    case 'lucro-certo-page':
-                        setupLucroCertoPage();
-                        break;
-                    case 'liberdade-financeira-page':
-                        setupLiberdadeFinanceiraPage();
-                        break;
-                    case 'planejamento-divida-page':
-                        setupPlanejamentoDividaPage(data);
-                        break;
-                    case 'calculadoras-page':
-                        // Apenas mostra a página, não precisa de setup por enquanto
-                        break;
-                    case 'calc-preco-venda-page':
-                        setupCalcPrecoVendaPage();
-                        break;
+                    case 'dashboard-page': setupDashboardPage(); break;
+                    case 'produtos-page': setupProductsPage(); break;
+                    case 'vendas-page': setupVendasPage(data); break;
+                    case 'clientes-page': setupClientesPage(); break;
+                    case 'despesas-page': setupDespesasPage(); break;
+                    case 'metas-page': setupMetasPage(); break; // NOVO
+                    case 'lucro-certo-page': setupLucroCertoPage(); break;
+                    case 'liberdade-financeira-page': setupLiberdadeFinanceiraPage(); break;
+                    case 'planejamento-divida-page': setupPlanejamentoDividaPage(data); break;
+                    case 'calculadoras-page': break;
+                    case 'calc-preco-venda-page': setupCalcPrecoVendaPage(); break;
                 }
             }
             
@@ -1780,15 +2226,9 @@
                     document.body.appendChild(toast);
                 }
                 toast.textContent = message;
-                toast.className = `toast-notification ${type}`; // Adiciona classe de tipo
-
-                setTimeout(() => {
-                    toast.classList.add('show');
-                }, 100);
-
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
+                toast.className = `toast-notification ${type}`; 
+                setTimeout(() => { toast.classList.add('show'); }, 100);
+                setTimeout(() => { toast.classList.remove('show'); }, 3000);
             }
 
             // =================================================================================
@@ -1800,7 +2240,6 @@
             }
 
             function updateDashboard() {
-                // --- Cálculos ---
                 const receitaBruta = appState.sales.reduce((total, sale) => total + sale.total, 0);
                 
                 let custoProdutosVendidos = 0;
@@ -1808,17 +2247,13 @@
                 appState.sales.forEach(sale => {
                     sale.items.forEach(item => {
                         const product = appState.products.find(p => p.id === item.productId);
-                        if (product) {
-                            custoProdutosVendidos += product.costPrice * item.quantity;
-                        }
+                        if (product) custoProdutosVendidos += product.costPrice * item.quantity;
+                        
                         if(salesByProduct[item.productId]) {
                             salesByProduct[item.productId].quantity += item.quantity;
                         } else {
                             const productInfo = appState.products.find(p => p.id === item.productId);
-                            salesByProduct[item.productId] = {
-                                name: productInfo ? productInfo.name : 'Produto Desconhecido',
-                                quantity: item.quantity
-                            };
+                            salesByProduct[item.productId] = { name: productInfo ? productInfo.name : 'Desconhecido', quantity: item.quantity };
                         }
                     });
                 });
@@ -1826,7 +2261,6 @@
                 const despesasFixas = appState.expenses.fixed.reduce((total, cost) => total + cost.value, 0);
                 const lucroLiquido = receitaBruta - custoProdutosVendidos - despesasFixas;
 
-                // --- Card: Despesas a Vencer ---
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 const upcomingLimit = new Date();
@@ -1836,28 +2270,21 @@
                     const dueDate = new Date(expense.dueDate + 'T03:00:00');
                     return dueDate >= today && dueDate <= upcomingLimit;
                 });
-                document.getElementById('dashboard-despesas-vencimento').textContent = despesasVencimento.length;
-
-                // --- Atualização dos Cards Principais ---
+                
                 document.getElementById('dashboard-receita-bruta').textContent = `R$ ${receitaBruta.toFixed(2)}`;
                 document.getElementById('dashboard-lucro-liquido').textContent = `R$ ${lucroLiquido.toFixed(2)}`;
                 document.getElementById('dashboard-lucro-liquido').style.color = lucroLiquido < 0 ? '#ef4444' : '#1f2937';
+                document.getElementById('dashboard-despesas-vencimento').textContent = despesasVencimento.length;
 
-                // --- Card: Resumo Financeiro ---
                 const financialList = document.getElementById('financial-summary-list');
-                financialList.innerHTML = '';
-                financialList.innerHTML += `<li><span>Lucro Líquido</span> <strong>R$ ${lucroLiquido.toFixed(2)}</strong></li>`;
-                financialList.innerHTML += `<li><span>Custo de Produtos</span> <strong>R$ ${custoProdutosVendidos.toFixed(2)}</strong></li>`;
-                financialList.innerHTML += `<li><span>Despesas Fixas</span> <strong>R$ ${despesasFixas.toFixed(2)}</strong></li>`;
+                financialList.innerHTML = `
+                    <li><span>Lucro Líquido</span> <strong>R$ ${lucroLiquido.toFixed(2)}</strong></li>
+                    <li><span>Custo de Produtos</span> <strong>R$ ${custoProdutosVendidos.toFixed(2)}</strong></li>
+                    <li><span>Despesas Fixas</span> <strong>R$ ${despesasFixas.toFixed(2)}</strong></li>`;
 
-
-                // --- Card: Top Produtos ---
                 const topProductsList = document.getElementById('top-products-list');
                 topProductsList.innerHTML = '';
-                const sortedBestSellers = Object.values(salesByProduct)
-                    .sort((a, b) => b.quantity - a.quantity)
-                    .slice(0, 5);
-                
+                const sortedBestSellers = Object.values(salesByProduct).sort((a, b) => b.quantity - a.quantity).slice(0, 5);
                 if (sortedBestSellers.length > 0) {
                     sortedBestSellers.forEach(p => {
                         topProductsList.innerHTML += `<li><span>${p.name}</span> <strong>${p.quantity} un.</strong></li>`;
@@ -1866,29 +2293,63 @@
                     topProductsList.innerHTML = '<li class="placeholder">Nenhuma venda registrada.</li>';
                 }
 
-                // --- Lista: Estoque Baixo ---
                 const listaEstoqueBaixoEl = document.getElementById('dashboard-lista-estoque-baixo');
                 const produtosEstoqueBaixo = appState.products.filter(p => p.stock <= appState.settings.lowStockThreshold);
                 listaEstoqueBaixoEl.innerHTML = '';
                 if (produtosEstoqueBaixo.length > 0) {
                      produtosEstoqueBaixo.forEach(p => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<span>${p.name}</span> <strong>${p.stock} unidades</strong>`;
-                        listaEstoqueBaixoEl.appendChild(li);
+                        listaEstoqueBaixoEl.innerHTML += `<li><span>${p.name}</span> <strong>${p.stock} unidades</strong></li>`;
                      });
                 } else {
                     listaEstoqueBaixoEl.innerHTML = '<li class="placeholder">Nenhum produto com estoque baixo.</li>';
                 }
             }
-
-            // =================================================================================
-            // ============================== MÓDULO: PRODUTOS =================================
-            // =================================================================================
             
+            // =================================================================================
+            // ============================== MÓDULO: PRODUTOS ==================================
+            // =================================================================================
             function setupProductsPage() {
                 renderProductCards();
+                setupProductFormListeners();
+                
+                document.getElementById('form-cadastro-produto-container').style.display = 'none';
+                document.getElementById('form-importar-planilha-container').style.display = 'none';
             }
-            
+
+            function getUnitExpenses() {
+                const totalUnitarioVariavel = appState.expenses.variable.reduce((sum, cost) => sum + cost.unitValue, 0);
+                const totalUnitarioFrete = appState.expenses.freight.reduce((sum, cost) => sum + cost.unitValue, 0);
+                return totalUnitarioVariavel + totalUnitarioFrete;
+            }
+
+            function updatePricingCalculation() {
+                const costPrice = parseFloat(document.getElementById('produto-valor-custo').value) || 0;
+                const unitExpenses = getUnitExpenses();
+                const marginPercent = parseFloat(document.getElementById('produto-margem-lucro-slider').value);
+
+                document.getElementById('produto-margem-lucro-label').textContent = marginPercent;
+
+                const totalCost = costPrice + unitExpenses;
+                let salePrice = 0;
+                let profit = 0;
+
+                if (totalCost > 0) {
+                    salePrice = totalCost / (1 - (marginPercent / 100));
+                    profit = salePrice - totalCost;
+                }
+
+                document.getElementById('produto-preco-sugerido').textContent = `R$ ${salePrice.toFixed(2)}`;
+                document.getElementById('produto-lucro-estimado').textContent = `R$ ${profit.toFixed(2)}`;
+            }
+
+            function setupProductFormListeners() {
+                const costInput = document.getElementById('produto-valor-custo');
+                const marginSlider = document.getElementById('produto-margem-lucro-slider');
+
+                costInput.addEventListener('input', updatePricingCalculation);
+                marginSlider.addEventListener('input', updatePricingCalculation);
+            }
+
             function renderProductCards() {
                 const container = document.getElementById('product-cards-list');
                 const noProductsMessage = document.getElementById('no-products-message');
@@ -1907,66 +2368,52 @@
                         <img src="${produto.image || 'https://placehold.co/400x400/f8b81f/db1472?text=C4'}" alt="${produto.name}" class="product-card-image">
                         <h4>${produto.name}</h4>
                         <p><strong>Custo:</strong> R$ ${parseFloat(produto.costPrice || 0).toFixed(2)}</p>
-                        <p><strong>Estoque:</strong> ${produto.stock || 0} unidades</p>
-                        <p><strong>Preço Venda:</strong> ${produto.salePrice > 0 ? `R$ ${produto.salePrice.toFixed(2)}` : '<a href="#" class="link-definir-preco" data-product-id="'+produto.id+'">Definir Preço</a>'}</p>
+                        <p><strong>Estoque:</strong> ${produto.stock || 0}</p>
+                        <p><strong>Venda:</strong> ${produto.salePrice > 0 ? `R$ ${produto.salePrice.toFixed(2)}` : '<a href="#" class="link-definir-preco" data-product-id="'+produto.id+'">Definir</a>'}</p>
                         <div class="actions-cell">
                             <button class="btn btn-sm btn-secondary btn-edit-product" title="Editar" data-product-id="${produto.id}">Editar</button>
                         </div>
                     `;
                     container.appendChild(cardDiv);
                 });
-                 document.querySelectorAll('.link-definir-preco').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        setActivePage('lucro-certo-page');
-                        const lucroSelect = document.getElementById('lucro-produto-select');
-                        lucroSelect.value = e.target.dataset.productId;
-                        lucroSelect.dispatchEvent(new Event('change'));
-                    });
-                });
             }
 
             function handleProductFormSubmit(event) {
                 event.preventDefault();
-                const spinner = document.getElementById('product-spinner');
-                spinner.style.display = 'block';
+                const produtoId = document.getElementById('produto-id-edit').value;
+                const salePrice = parseFloat(document.getElementById('produto-preco-sugerido').textContent.replace('R$ ', '')) || 0;
 
-                // Simula uma operação assíncrona
-                setTimeout(() => {
-                    const produtoId = document.getElementById('produto-id-edit').value;
-                    const produtoData = {
-                        id: produtoId || `prod_${Date.now()}`,
-                        name: document.getElementById('produto-nome').value,
-                        category: document.getElementById('produto-categoria').value,
-                        costPrice: parseFloat(document.getElementById('produto-valor-custo').value) || 0,
-                        stock: parseInt(document.getElementById('produto-estoque').value) || 0,
-                        image: document.getElementById('produto-imagem-preview').src.startsWith('data:') ? document.getElementById('produto-imagem-preview').src : ''
-                    };
+                if (salePrice <= 0) {
+                    showToast("Defina um preço de venda válido movendo a régua de margem.", "error");
+                    return;
+                }
 
-                    if (produtoId) {
-                        const index = appState.products.findIndex(p => p.id === produtoId);
-                        if (index > -1) {
-                            const existingProduct = appState.products[index];
-                            appState.products[index] = { 
-                                ...existingProduct,
-                                ...produtoData
-                            };
-                        }
-                    } else {
-                        produtoData.salePrice = 0;
-                        appState.products.push(produtoData);
+                const produtoData = {
+                    id: produtoId || `prod_${Date.now()}`,
+                    name: document.getElementById('produto-nome').value,
+                    category: document.getElementById('produto-categoria').value,
+                    costPrice: parseFloat(document.getElementById('produto-valor-custo').value) || 0,
+                    stock: parseInt(document.getElementById('produto-estoque').value) || 0,
+                    image: document.getElementById('produto-imagem-preview').src.startsWith('data:') ? document.getElementById('produto-imagem-preview').src : '',
+                    salePrice: salePrice,
+                };
+
+                if (produtoId) {
+                    const index = appState.products.findIndex(p => p.id === produtoId);
+                    if (index > -1) {
+                        appState.products[index] = { ...appState.products[index], ...produtoData };
                     }
+                } else {
+                    appState.products.push(produtoData);
+                }
 
-                    saveState();
-                    renderProductCards();
-                    updateAllProductSelects();
-                    
-                    document.getElementById('form-cadastro-produto').reset();
-                    document.getElementById('form-cadastro-produto-container').style.display = 'none';
-                    document.getElementById('btn-show-add-product-form').style.display = 'inline-flex';
-                    spinner.style.display = 'none';
-                    showToast('Produto salvo com sucesso!', 'success');
-                }, 1000); 
+                saveState();
+                renderProductCards();
+                updateAllProductSelects();
+                
+                document.getElementById('form-cadastro-produto').reset();
+                document.getElementById('form-cadastro-produto-container').style.display = 'none';
+                showToast('Produto salvo com sucesso!', 'success');
             }
 
             function openProductFormForEdit(productId) {
@@ -1974,32 +2421,142 @@
                 if (!product) return;
 
                 const formContainer = document.getElementById('form-cadastro-produto-container');
+                const importContainer = document.getElementById('form-importar-planilha-container');
+                importContainer.style.display = 'none';
                 formContainer.style.display = 'block';
-                document.getElementById('btn-show-add-product-form').style.display = 'none';
 
                 document.getElementById('produto-id-edit').value = product.id;
                 document.getElementById('produto-nome').value = product.name;
                 document.getElementById('produto-categoria').value = product.category;
-                document.getElementById('produto-valor-custo').value = product.costPrice;
+                const costInput = document.getElementById('produto-valor-custo');
+                costInput.value = product.costPrice;
                 document.getElementById('produto-estoque').value = product.stock;
+                
                 const preview = document.getElementById('produto-imagem-preview');
-                if (product.image) {
-                    preview.src = product.image;
-                    preview.style.display = 'block';
-                } else {
-                    preview.src = '#';
-                    preview.style.display = 'none';
+                preview.src = product.image || '#';
+                preview.style.display = product.image ? 'block' : 'none';
+
+                const unitExpenses = getUnitExpenses();
+                document.getElementById('produto-custo-unitario-despesas').textContent = `R$ ${unitExpenses.toFixed(2)}`;
+                const totalCost = product.costPrice + unitExpenses;
+                let margin = 100;
+                if (product.salePrice > totalCost) {
+                    margin = (1 - (totalCost / product.salePrice)) * 100;
                 }
+                const marginSlider = document.getElementById('produto-margem-lucro-slider');
+                marginSlider.value = Math.round(margin);
+                
+                updatePricingCalculation();
             }
-            
+
+            function handleCSVFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    parseAndPreviewCSV(text);
+                };
+                reader.readAsText(file);
+            }
+
+            function parseAndPreviewCSV(csvText) {
+                const lines = csvText.split('\n').filter(line => line.trim() !== '');
+                const headers = lines.shift().trim().split(',').map(h => h.toLowerCase());
+                
+                const expectedHeaders = ['nome', 'categoria', 'precocusto', 'estoque'];
+                if (headers.length !== expectedHeaders.length || !expectedHeaders.every((h, i) => headers[i].trim() === h)) {
+                    showToast('O cabeçalho do arquivo CSV está incorreto. Use o modelo.', 'error');
+                    return;
+                }
+
+                produtosImportadosParaConfirmacao = [];
+                const previewContainer = document.getElementById('import-preview-container');
+                
+                const products = lines.map(line => {
+                    const values = line.trim().split(',');
+                    const product = {
+                        name: values[0] || '',
+                        category: values[1] || '',
+                        costPrice: parseFloat(values[2]) || 0,
+                        stock: parseInt(values[3]) || 0,
+                        isValid: false
+                    };
+                    if (product.name && !isNaN(product.costPrice) && !isNaN(product.stock)) {
+                        product.isValid = true;
+                    }
+                    return product;
+                });
+
+                if (products.length === 0) {
+                    previewContainer.innerHTML = '<p>Nenhum produto encontrado no arquivo.</p>';
+                    return;
+                }
+
+                let tableHTML = `<div id="import-preview-table-container">
+                                    <table id="import-preview-table">
+                                        <thead><tr><th>Nome</th><th>Categoria</th><th>Custo</th><th>Estoque</th></tr></thead>
+                                        <tbody>`;
+                products.forEach(p => {
+                    tableHTML += `<tr class="${p.isValid ? '' : 'invalid-row'}">
+                                    <td>${p.name}</td>
+                                    <td>${p.category}</td>
+                                    <td>R$ ${p.costPrice.toFixed(2)}</td>
+                                    <td>${p.stock}</td>
+                                  </tr>`;
+                    if (p.isValid) {
+                        produtosImportadosParaConfirmacao.push(p);
+                    }
+                });
+                tableHTML += `</tbody></table></div>`;
+                previewContainer.innerHTML = tableHTML;
+
+                document.getElementById('import-actions').style.display = 'flex';
+            }
+
+            function handleConfirmImport() {
+                if(produtosImportadosParaConfirmacao.length === 0) {
+                    showToast('Nenhum produto válido para importar.', 'error');
+                    return;
+                }
+
+                const newProducts = produtosImportadosParaConfirmacao.map(p => ({
+                    id: `prod_${Date.now()}_${Math.random()}`,
+                    name: p.name,
+                    category: p.category,
+                    costPrice: p.costPrice,
+                    stock: p.stock,
+                    salePrice: 0, 
+                    image: ''
+                }));
+
+                appState.products.push(...newProducts);
+                saveState();
+                
+                showToast(`${newProducts.length} produtos importados com sucesso!`, 'success');
+                renderProductCards();
+                
+                document.getElementById('form-importar-planilha-container').style.display = 'none';
+                document.getElementById('import-csv-file').value = '';
+                document.getElementById('import-preview-container').innerHTML = '';
+                document.getElementById('import-actions').style.display = 'none';
+            }
+
+
             // =================================================================================
-            // =============================== MÓDULO: VENDAS ==================================
+            // =============================== MÓDULO: VENDAS (ATUALIZADO) =====================
             // =================================================================================
-            
-            function setupVendasPage() {
+            function setupVendasPage(data = null) {
                 renderSalesHistory();
                 populateSalesProductSelect();
                 updateCurrentSaleUI();
+
+                if (data && data.clientName) {
+                    document.getElementById('btn-show-nova-venda-form').click();
+                    document.getElementById('venda-cliente').value = data.clientName;
+                    document.getElementById('venda-cliente-telefone').value = data.clientPhone || '';
+                }
             }
 
             function populateSalesProductSelect() {
@@ -2025,9 +2582,11 @@
                 container.innerHTML = '';
                 if (!appState.sales || appState.sales.length === 0) {
                     noSalesMessage.style.display = 'block';
+                    container.style.display = 'none';
                     return;
                 }
                 noSalesMessage.style.display = 'none';
+                container.style.display = 'grid';
 
                 const sortedSales = [...appState.sales].sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -2035,12 +2594,11 @@
                     const cardDiv = document.createElement('div');
                     cardDiv.classList.add('sale-card');
                     cardDiv.innerHTML = `
-                        <h4>Venda ID: ${venda.id}</h4>
-                        <p><strong>Data:</strong> ${new Date(venda.date + 'T03:00:00').toLocaleDateString('pt-BR')}</p>
+                        <h4>Venda #${venda.id.substring(4,10)}</h4>
                         <p><strong>Cliente:</strong> ${venda.client || 'Não informado'}</p>
-                        <p><strong>Itens:</strong> ${venda.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
+                        <p><strong>Data:</strong> ${new Date(venda.date + 'T03:00:00').toLocaleDateString('pt-BR')}</p>
                         <p><strong>Total:</strong> R$ ${venda.total.toFixed(2)}</p>
-                        <p><strong>Status:</strong> <span class="status-badge status-${venda.status}">${venda.status}</span></p>
+                        <p><strong>Itens:</strong> ${venda.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
                     `;
                     container.appendChild(cardDiv);
                 });
@@ -2050,14 +2608,14 @@
                 const listEl = document.getElementById('venda-itens-lista');
                 listEl.innerHTML = ''; 
                 if (itensVendaTemporarios.length === 0) {
-                    listEl.innerHTML = '<p id="venda-sem-itens" style="text-align: center; color: #6b7280; padding: 1rem 0;">Nenhum item adicionado à venda.</p>';
+                    listEl.innerHTML = '<p id="venda-sem-itens" style="text-align: center; color: #6b7280; padding: 1rem 0;">Nenhum item adicionado.</p>';
                 } else {
                     itensVendaTemporarios.forEach((item, index) => {
                         const li = document.createElement('li');
                         li.innerHTML = `
                             <div class="sale-item-details"><strong>${item.name}</strong> (${item.quantity} x R$ ${item.unitPrice.toFixed(2)})</div>
                             <span>R$ ${item.subtotal.toFixed(2)}</span>
-                            <button type="button" class="sale-item-remove" data-index="${index}" title="Remover">&times;</button>
+                            <button type="button" class="remove-item-btn" data-index="${index}" title="Remover">&times;</button>
                         `;
                         listEl.appendChild(li);
                     });
@@ -2072,11 +2630,15 @@
                 document.getElementById('venda-total-pagar').textContent = `R$ ${(subtotal - valorDesconto).toFixed(2)}`;
             }
 
-
             function handleNewSaleSubmit(event) {
                 event.preventDefault();
+                const clientName = document.getElementById('venda-cliente').value;
+                if (!clientName) {
+                    showToast('O nome do cliente é obrigatório.', 'error');
+                    return;
+                }
                 if (itensVendaTemporarios.length === 0) {
-                    alert('Adicione produtos à venda.'); return;
+                    showToast('Adicione produtos à venda.', 'error'); return;
                 }
 
                 itensVendaTemporarios.forEach(itemVendido => {
@@ -2088,7 +2650,8 @@
                 const novaVenda = {
                     id: `VEN_${Date.now()}`,
                     date: new Date().toISOString().split('T')[0],
-                    client: document.getElementById('venda-cliente').value,
+                    client: clientName,
+                    phone: document.getElementById('venda-cliente-telefone').value, // NOVO
                     items: [...itensVendaTemporarios],
                     total: totalVenda,
                     status: 'pago'
@@ -2096,7 +2659,7 @@
                 appState.sales.push(novaVenda);
 
                 saveState();
-                showToast(`Venda registrada com sucesso!`);
+                showToast(`Venda para ${clientName} registrada com sucesso!`);
                 
                 itensVendaTemporarios = [];
                 document.getElementById('form-nova-venda').reset();
@@ -2105,50 +2668,176 @@
                 
                 renderSalesHistory();
                 updateDashboard();
+                if (document.getElementById('metas-page').classList.contains('active')) {
+                    setupMetasPage();
+                }
             }
 
             // =================================================================================
-            // ============================== MÓDULO: DESPESAS =================================
+            // ========================= MÓDULO: CLIENTES (NOVO) ===============================
+            // =================================================================================
+            function setupClientesPage() {
+                const customers = {};
+                appState.sales.forEach(sale => {
+                    const key = sale.client.trim().toLowerCase();
+                    if (!key) return;
+
+                    if (!customers[key] || new Date(sale.date) > new Date(customers[key].lastSale.date)) {
+                        customers[key] = {
+                            name: sale.client,
+                            phone: sale.phone,
+                            lastSale: sale,
+                        };
+                    }
+                });
+                
+                const customerList = Object.values(customers).sort((a,b) => new Date(b.lastSale.date) - new Date(a.lastSale.date));
+                renderCustomerCards(customerList);
+            }
+
+            function calculateTimeSince(dateString) {
+                const saleDate = new Date(dateString + 'T03:00:00');
+                const today = new Date('2025-06-07T17:30:00-03:00');
+                const diffTime = Math.abs(today - saleDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 0) return 'hoje';
+                if (diffDays === 1) return 'há 1 dia';
+                if (diffDays <= 30) return `há ${diffDays} dias`;
+                const diffMonths = Math.floor(diffDays / 30);
+                if (diffMonths === 1) return 'há 1 mês';
+                return `há ${diffMonths} meses`;
+            }
+
+            function renderCustomerCards(customerList) {
+                const container = document.getElementById('customer-cards-container');
+                const noCustomersMsg = document.getElementById('no-customers-message');
+                container.innerHTML = '';
+
+                if (customerList.length === 0) {
+                    noCustomersMsg.style.display = 'block';
+                    return;
+                }
+                noCustomersMsg.style.display = 'none';
+
+                customerList.forEach(customer => {
+                    const timeSince = calculateTimeSince(customer.lastSale.date);
+                    const daysSince = (new Date('2025-06-07T17:30:00-03:00') - new Date(customer.lastSale.date + 'T03:00:00')) / (1000 * 60 * 60 * 24);
+                    const isDormant = daysSince > 30;
+
+                    const card = document.createElement('div');
+                    card.className = `customer-card ${isDormant ? 'dormant' : ''}`;
+                    
+                    let itemsHtml = '<ul class="last-purchase-list">';
+                    customer.lastSale.items.forEach(item => {
+                        itemsHtml += `<li>- ${item.quantity}x ${item.name}</li>`;
+                    });
+                    itemsHtml += '</ul>';
+
+                    card.innerHTML = `
+                        <div class="customer-card-header">
+                            <div>
+                                <h4>${customer.name}</h4>
+                                <p>${customer.phone || 'Telefone não cadastrado'}</p>
+                            </div>
+                            <span class="status-badge status-pago" style="flex-shrink: 0;">${timeSince}</span>
+                        </div>
+                        <div class="customer-card-info">
+                             <p class="last-purchase-title">Última Compra:</p>
+                             ${itemsHtml}
+                        </div>
+                        <div class="form-actions" style="justify-content: flex-end;">
+                            <button class="btn btn-primary btn-sm btn-sell-again" data-name="${customer.name}" data-phone="${customer.phone || ''}">Vender Novamente</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+
+            // =================================================================================
+            // ========================= MÓDULO: DESPESAS =========================
             // =================================================================================
             function setupDespesasPage() {
                 renderFixedCosts();
                 renderVariableCosts();
+                renderFreightCosts();
+                renderTaxCosts();
+                updateDespesasSummary();
             }
 
             function renderFixedCosts() {
                 const list = document.getElementById('lista-custos-fixos');
                 list.innerHTML = '';
                 if(!appState.expenses.fixed || appState.expenses.fixed.length === 0) {
-                    list.innerHTML = '<p style="text-align:center; padding:1rem; color:#6b7280;">Nenhum custo fixo adicionado.</p>';
-                } else {
-                    appState.expenses.fixed.forEach(cost => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
-                            <span class="cost-value">R$ ${cost.value.toFixed(2)}</span>
-                            <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="fixed" title="Remover">&times;</button>
-                        `;
-                        list.appendChild(li);
-                    });
-                }
+                    list.innerHTML = '<li class="placeholder">Nenhum custo fixo.</li>';
+                    return;
+                } 
+                appState.expenses.fixed.forEach(cost => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
+                        <span class="cost-value">R$ ${cost.value.toFixed(2)}</span>
+                        <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="fixed" title="Remover">&times;</button>
+                    `;
+                    list.appendChild(li);
+                });
             }
             
             function renderVariableCosts() {
-                 const list = document.getElementById('lista-custos-variaveis');
+                const list = document.getElementById('lista-custos-variaveis');
                 list.innerHTML = '';
-                 if(!appState.expenses.variable || appState.expenses.variable.length === 0) {
-                    list.innerHTML = '<p style="text-align:center; padding:1rem; color:#6b7280;">Nenhum custo variável adicionado.</p>';
-                } else {
-                    appState.expenses.variable.forEach(cost => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
-                            <span class="cost-value">R$ ${cost.unitValue.toFixed(2)}</span>
-                            <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="variable" title="Remover">&times;</button>
-                        `;
-                        list.appendChild(li);
-                    });
+                if(!appState.expenses.variable || appState.expenses.variable.length === 0) {
+                    list.innerHTML = '<li class="placeholder">Nenhum custo variável.</li>';
+                    return;
+                } 
+                appState.expenses.variable.forEach(cost => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
+                        <span class="cost-value">R$ ${cost.unitValue.toFixed(2)}</span>
+                        <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="variable" title="Remover">&times;</button>
+                    `;
+                    list.appendChild(li);
+                });
+            }
+
+            function renderFreightCosts() {
+                const list = document.getElementById('lista-custos-frete');
+                list.innerHTML = '';
+                if(!appState.expenses.freight || appState.expenses.freight.length === 0) {
+                    list.innerHTML = '<li class="placeholder">Nenhum frete adicionado.</li>';
+                    return;
+                } 
+                appState.expenses.freight.forEach(cost => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="cost-details">
+                            <span class="cost-name">Frete (R$ ${cost.totalValue.toFixed(2)} / ${cost.quantity} pçs)</span>
+                            <span class="cost-unit">Custo por unidade: R$ ${cost.unitValue.toFixed(2)}</span>
+                        </div>
+                        <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="freight" title="Remover">&times;</button>
+                    `;
+                    list.appendChild(li);
+                });
+            }
+
+            function renderTaxCosts() {
+                const list = document.getElementById('lista-custos-impostos');
+                list.innerHTML = '';
+                 if(!appState.expenses.taxes || appState.expenses.taxes.length === 0) {
+                    list.innerHTML = '<li class="placeholder">Nenhum imposto.</li>';
+                    return;
                 }
+                appState.expenses.taxes.forEach(cost => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="cost-details"><span class="cost-name">${cost.name}</span></div>
+                        <span class="cost-value">${cost.percentageValue}%</span>
+                        <button type="button" class="remove-cost-btn" data-id="${cost.id}" data-type="tax" title="Remover">&times;</button>
+                    `;
+                    list.appendChild(li);
+                });
             }
 
             function handleAddFixedCost(event) {
@@ -2156,13 +2845,11 @@
                 const name = document.getElementById('custo-fixo-nome').value;
                 const value = parseFloat(document.getElementById('custo-fixo-valor').value);
                 const dueDate = document.getElementById('custo-fixo-vencimento').value;
-                if (!name || isNaN(value) || value <= 0 || !dueDate) {
-                    alert("Por favor, preencha todos os campos com valores válidos."); return;
-                }
+                if (!name || isNaN(value) || value <= 0 || !dueDate) { alert("Preencha todos os campos."); return; }
                 appState.expenses.fixed.push({ id: `fix_${Date.now()}`, name, value, dueDate });
                 saveState();
                 renderFixedCosts();
-                updateDashboard();
+                updateDespesasSummary();
                 event.target.reset();
             }
             
@@ -2170,50 +2857,126 @@
                 event.preventDefault();
                 const name = document.getElementById('custo-variavel-nome').value;
                 const unitValue = parseFloat(document.getElementById('custo-variavel-valor-unitario').value);
-                 if (!name || isNaN(unitValue) || unitValue <= 0) {
-                    alert("Por favor, preencha o nome e um valor válido."); return;
-                }
+                if (!name || isNaN(unitValue) || unitValue <= 0) { alert("Preencha todos os campos."); return; }
                 appState.expenses.variable.push({ id: `var_${Date.now()}`, name, unitValue });
                 saveState();
                 renderVariableCosts();
+                updateDespesasSummary();
+                event.target.reset();
+            }
+
+            function handleAddFreightCost(event) {
+                 event.preventDefault();
+                const totalValue = parseFloat(document.getElementById('frete-valor-total').value);
+                const quantity = parseInt(document.getElementById('frete-quantidade-pecas').value);
+                if (isNaN(totalValue) || totalValue <= 0 || isNaN(quantity) || quantity <= 0) { alert("Preencha valores válidos para frete."); return; }
+                
+                const unitValue = totalValue / quantity;
+                const name = `Frete Compra (${new Date().toLocaleDateString('pt-BR')})`;
+                appState.expenses.freight.push({ id: `frt_${Date.now()}`, name, totalValue, quantity, unitValue });
+                saveState();
+                renderFreightCosts();
+                updateDespesasSummary();
+                showToast(`Custo unitário do frete: R$ ${unitValue.toFixed(2)}`, 'success');
+                event.target.reset();
+            }
+
+             function handleAddTaxCost(event) {
+                event.preventDefault();
+                const name = document.getElementById('imposto-nome').value;
+                const percentageValue = parseFloat(document.getElementById('imposto-valor-percentual').value);
+                if (!name || isNaN(percentageValue) || percentageValue < 0) { alert("Preencha um nome e percentual válidos."); return; }
+                appState.expenses.taxes.push({ id: `tax_${Date.now()}`, name, percentageValue });
+                saveState();
+                renderTaxCosts();
+                updateDespesasSummary();
                 event.target.reset();
             }
 
             function handleRemoveCost(type, id) {
-                if(type === 'fixed') {
-                    appState.expenses.fixed = appState.expenses.fixed.filter(c => c.id !== id);
-                    renderFixedCosts();
-                } else if(type === 'variable') {
-                    appState.expenses.variable = appState.expenses.variable.filter(c => c.id !== id);
-                    renderVariableCosts();
-                }
+                if(type === 'fixed') appState.expenses.fixed = appState.expenses.fixed.filter(c => c.id !== id);
+                else if(type === 'variable') appState.expenses.variable = appState.expenses.variable.filter(c => c.id !== id);
+                else if(type === 'freight') appState.expenses.freight = appState.expenses.freight.filter(c => c.id !== id);
+                else if(type === 'tax') appState.expenses.taxes = appState.expenses.taxes.filter(c => c.id !== id);
+                
                 saveState();
-                updateDashboard();
+                setupDespesasPage();
+            }
+
+            function updateDespesasSummary() {
+                const totalFixo = appState.expenses.fixed.reduce((sum, cost) => sum + cost.value, 0);
+                const custoTotalUnitario = getUnitExpenses();
+
+                document.querySelector('#summary-total-fixo .value').textContent = `R$ ${totalFixo.toFixed(2)}`;
+                document.querySelector('#summary-total-unitario .value').textContent = `R$ ${custoTotalUnitario.toFixed(2)}`;
+                
+                const totalUnitarioVariavel = appState.expenses.variable.reduce((sum, cost) => sum + cost.unitValue, 0);
+                const totalUnitarioFrete = appState.expenses.freight.reduce((sum, cost) => sum + cost.unitValue, 0);
+                const totalPercentualImposto = appState.expenses.taxes.reduce((sum, cost) => sum + cost.percentageValue, 0);
+
+                updateDespesasChart({
+                    variavel: totalUnitarioVariavel,
+                    frete: totalUnitarioFrete,
+                    imposto: totalPercentualImposto > 0 ? (custoTotalUnitario * totalPercentualImposto) / 100 : 0
+                });
             }
             
-            // =================================================================================
-            // ======================== MÓDULO: LIBERDADE FINANCEIRA ===========================
+            function updateDespesasChart(data) {
+                const ctx = document.getElementById('despesas-pie-chart').getContext('2d');
+                if (despesasChartInstance) {
+                    despesasChartInstance.destroy();
+                }
+
+                const labels = [];
+                const values = [];
+                const colors = [];
+
+                if(data.variavel > 0) { labels.push('Custos Variáveis'); values.push(data.variavel); colors.push('#f8b81f'); }
+                if(data.frete > 0) { labels.push('Custo de Frete'); values.push(data.frete); colors.push('#ec4899'); }
+                if(data.imposto > 0) { labels.push('Impostos (Estimado)'); values.push(data.imposto); colors.push('#ef4444'); }
+                
+                if(values.length === 0){
+                     labels.push('Sem custos unitários');
+                     values.push(1);
+                     colors.push('#e2e8f0');
+                }
+
+                despesasChartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{ data: values, backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: { callbacks: { label: (context) => `R$ ${context.parsed.toFixed(2)}` } }
+                        }
+                    }
+                });
+            }
+
+
+             // =================================================================================
+            // ======================== MÓDULO: LIBERDADE FINANCEIRA (ATUALIZADO) ==================
             // =================================================================================
             function setupLiberdadeFinanceiraPage() {
                 renderDebtCards();
-                updateDebtSummary();
+                updateLFCards();
                 document.getElementById('form-add-debt-container').style.display = 'none';
                 document.getElementById('btn-show-add-debt-form').style.display = 'inline-flex';
             }
-            
-            function updateDebtSummary() {
-                if(!document.getElementById('liberdade-financeira-page').classList.contains('active')) return;
-                const totalDebt = appState.debts.reduce((sum, debt) => sum + debt.value, 0);
-                const totalPaid = appState.debts.reduce((sum, debt) => sum + debt.paid, 0);
-                const totalRemaining = totalDebt - totalPaid;
 
-                const totalEl = document.getElementById('debt-total');
-                const remainingEl = document.getElementById('debt-remaining');
+            function updateLFCards() {
+                const totalDebts = appState.debts.reduce((sum, debt) => sum + debt.value, 0);
+                document.getElementById('lf-total-dividas').textContent = `R$ ${totalDebts.toFixed(2)}`;
 
-                if(totalEl) totalEl.textContent = `R$ ${totalDebt.toFixed(2)}`;
-                if(remainingEl) remainingEl.textContent = `R$ ${totalRemaining.toFixed(2)}`;
+                const totalSavings = appState.debtPlans.reduce((sum, plan) => sum + plan.monthlyAmount, 0);
+                document.getElementById('lf-total-economias').textContent = `R$ ${totalSavings.toFixed(2)}`;
             }
-
+            
             function renderDebtCards() {
                 const container = document.getElementById('debt-cards-container');
                 const noDebtsMsg = document.getElementById('no-debts-message');
@@ -2251,113 +3014,103 @@
                 if (!name || isNaN(value) || value <= 0) {
                     alert("Preencha nome e valor da dívida."); return;
                 }
-                appState.debts.push({
-                    id: `debt_${Date.now()}`,
-                    name,
-                    value,
-                    priority,
-                    paid: 0
-                });
+                appState.debts.push({ id: `debt_${Date.now()}`, name, value, priority, paid: 0 });
                 saveState();
                 renderDebtCards();
-                updateDebtSummary();
+                updateLFCards();
                 event.target.reset();
-                 document.getElementById('form-add-debt-container').style.display = 'none';
+                document.getElementById('form-add-debt-container').style.display = 'none';
                 document.getElementById('btn-show-add-debt-form').style.display = 'inline-flex';
             }
 
-            // =================================================================================
-            // ===================== SUB-PÁGINA: PLANEJAMENTO DE DÍVIDAS =======================
-            // =================================================================================
-
             function setupPlanejamentoDividaPage(debtId) {
                 const debt = appState.debts.find(d => d.id === debtId);
-                if (!debt) {
-                    alert("Dívida não encontrada.");
-                    setActivePage('liberdade-financeira-page');
-                    return;
-                }
+                if (!debt) { setActivePage('liberdade-financeira-page'); return; }
 
-                document.getElementById('planejamento-divida-titulo').textContent = `Planejar: ${debt.name}`;
+                document.getElementById('planejamento-divida-titulo').textContent = `Planejar Quitação: ${debt.name}`;
                 document.getElementById('plan-debt-id').value = debt.id;
-                document.getElementById('plan-debt-name-display').value = debt.name;
-                document.getElementById('plan-debt-value-display').value = `R$ ${debt.value.toFixed(2)}`;
+                document.getElementById('plan-debt-name-display').value = `${debt.name} (R$ ${debt.value.toFixed(2)})`;
                 
                 const form = document.getElementById('form-planejar-divida');
+                const valorInput = document.getElementById('planejar-divida-valor');
+                const freqSelect = document.getElementById('planejar-divida-frequencia');
                 
+                // Resetar e recriar listeners para evitar duplicação
                 const newForm = form.cloneNode(true);
                 form.parentNode.replaceChild(newForm, form);
+                
+                newForm.addEventListener('input', () => updateDebtPlanSimulation(debt));
+                newForm.addEventListener('submit', (e) => handleSaveDebtPlan(e, debt));
 
-                const updateSimulation = () => {
-                    const monthlyPayment = parseFloat(document.getElementById('plan-debt-monthly-payment').value);
-                    const avgProfit = parseFloat(document.getElementById('plan-avg-profit').value);
-                    const alertEl = document.getElementById('plan-alert');
-                    const motivationEl = document.getElementById('plan-motivation');
-
-                    let hasError = false;
-
-                    if (isNaN(monthlyPayment) || monthlyPayment <= 0) {
-                         document.getElementById('plan-duration-result').textContent = '--';
-                         hasError = true;
-                    } else {
-                         const months = Math.ceil(debt.value / monthlyPayment);
-                         document.getElementById('plan-duration-result').textContent = `${months} ${months > 1 ? 'meses' : 'mês'}`;
-                    }
-
-                     if (isNaN(avgProfit) || avgProfit <= 0) {
-                         document.getElementById('plan-sales-needed-result').textContent = '--';
-                         hasError = true;
-                    } else {
-                         const salesNeeded = Math.ceil(monthlyPayment / avgProfit);
-                         document.getElementById('plan-sales-needed-result').textContent = `${salesNeeded} vendas/mês`;
-                    }
-                    
-                    if(hasError) {
-                        alertEl.style.display = 'block';
-                        motivationEl.style.display = 'none';
-                    } else {
-                        alertEl.style.display = 'none';
-                        motivationEl.textContent = `Com ${Math.ceil(monthlyPayment / avgProfit)} vendas por mês, você quitará essa dívida em ${Math.ceil(debt.value / monthlyPayment)} meses!`;
-                        motivationEl.style.display = 'block';
-                        showToast('Simulação atualizada!');
-                    }
-                };
-
-                newForm.addEventListener('input', updateSimulation);
-                newForm.addEventListener('submit', handleSaveDebtPlan);
-                document.getElementById('btn-simular-novamente').addEventListener('click', () => {
-                     setupPlanejamentoDividaPage(debt.id);
-                });
+                updateDebtPlanSimulation(debt); // Executar uma vez para limpar os campos
             }
 
-            function handleSaveDebtPlan(event) {
-                event.preventDefault();
-                const debtId = document.getElementById('plan-debt-id').value;
-                const monthlyPayment = parseFloat(document.getElementById('plan-debt-monthly-payment').value);
-                const startDate = document.getElementById('plan-debt-start-date').value;
-                const avgProfit = parseFloat(document.getElementById('plan-avg-profit').value);
+            function updateDebtPlanSimulation(debt) {
+                const valor = parseFloat(document.getElementById('planejar-divida-valor').value) || 0;
+                const freq = document.getElementById('planejar-divida-frequencia').value;
+                const durationEl = document.getElementById('plan-duration-result');
+                const salesEl = document.getElementById('plan-sales-needed-result');
+                const motivationEl = document.getElementById('plan-motivation-message');
 
-                if (!debtId || !startDate || isNaN(monthlyPayment) || monthlyPayment <= 0 || isNaN(avgProfit) || avgProfit <= 0) {
-                    alert("Por favor, preencha todos os campos com valores válidos para salvar.");
+                if (valor <= 0) {
+                    durationEl.textContent = '--';
+                    salesEl.textContent = '--';
+                    motivationEl.style.display = 'none';
                     return;
                 }
 
-                const newPlan = {
-                    planId: `plan_${Date.now()}`,
-                    debtId,
-                    monthlyPayment,
-                    startDate,
-                    avgProfit
-                };
-
-                if (!appState.debtPlans) {
-                    appState.debtPlans = [];
-                }
+                let monthlyAmount = valor;
+                if (freq === 'dia') monthlyAmount = valor * 30;
+                if (freq === 'quinzena') monthlyAmount = valor * 2;
                 
-                appState.debtPlans = appState.debtPlans.filter(p => p.debtId !== debtId);
-                appState.debtPlans.push(newPlan);
-                saveState();
+                const monthsToPay = debt.value / monthlyAmount;
+                const fullMonths = Math.floor(monthsToPay);
+                const remainingDays = Math.ceil((monthsToPay - fullMonths) * 30);
+                durationEl.textContent = `${fullMonths} ${fullMonths > 1 ? 'meses' : 'mês'} e ${remainingDays} dias`;
 
+                let totalProfit = 0;
+                let pricedProducts = 0;
+                appState.products.forEach(p => {
+                    if (p.salePrice > 0) {
+                        totalProfit += (p.salePrice - p.costPrice);
+                        pricedProducts++;
+                    }
+                });
+                
+                const avgProfit = pricedProducts > 0 ? totalProfit / pricedProducts : 0;
+
+                if(avgProfit > 0) {
+                    const salesNeeded = Math.ceil(monthlyAmount / avgProfit);
+                    salesEl.textContent = `${salesNeeded} vendas/mês`;
+                } else {
+                    salesEl.textContent = 'Defina preços!';
+                }
+
+                motivationEl.textContent = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+                motivationEl.style.display = 'block';
+            }
+
+            function handleSaveDebtPlan(event, debt) {
+                event.preventDefault();
+                const valor = parseFloat(document.getElementById('planejar-divida-valor').value) || 0;
+                const frequencia = document.getElementById('planejar-divida-frequencia').value;
+                
+                if (valor <= 0) { showToast('Insira um valor de economia válido.', 'error'); return; }
+
+                let monthlyAmount = valor;
+                if (frequencia === 'dia') monthlyAmount = valor * 30;
+                if (frequencia === 'quinzena') monthlyAmount = valor * 2;
+                
+                const newPlan = { planId: `plan_${debt.id}`, debtId: debt.id, amount: valor, frequency: frequencia, monthlyAmount: monthlyAmount };
+                
+                const existingPlanIndex = appState.debtPlans.findIndex(p => p.debtId === debt.id);
+                if(existingPlanIndex > -1) {
+                    appState.debtPlans[existingPlanIndex] = newPlan;
+                } else {
+                    appState.debtPlans.push(newPlan);
+                }
+
+                saveState();
                 showToast("Planejamento salvo com sucesso!");
                 setActivePage('liberdade-financeira-page');
             }
@@ -2405,7 +3158,7 @@
                 const totalFixedCosts = appState.expenses.fixed.reduce((sum, cost) => sum + cost.value, 0);
                 const fixedCostPerUnit = totalFixedCosts / (appState.settings.estimatedMonthlySales || 1);
                 const totalVariableCost = appState.expenses.variable.reduce((sum, cost) => sum + cost.unitValue, 0);
-                const freightCost = appState.settings.estimatedFreightCost || 0;
+                const freightCost = getUnitExpenses();
                 const purchaseCost = produtoSelecionadoLucroCerto.costPrice;
 
                 const totalUnitCost = purchaseCost + totalVariableCost + fixedCostPerUnit + freightCost;
@@ -2416,7 +3169,6 @@
                 document.getElementById('lucro-display-custo-compra').textContent = `R$ ${purchaseCost.toFixed(2)}`;
                 document.getElementById('lucro-custo-total-display').textContent = `R$ ${totalUnitCost.toFixed(2)}`;
 
-                const marginSlider = document.getElementById('lucro-margem-slider');
                 const marginInput = document.getElementById('lucro-margem-input');
                 const margin = parseFloat(marginInput.value) || 100;
 
@@ -2426,28 +3178,14 @@
                 document.getElementById('lucro-preco-venda-sugerido').textContent = `R$ ${salePrice.toFixed(2)}`;
                 document.getElementById('lucro-liquido-unidade').textContent = `Lucro de R$ ${netProfit.toFixed(2)} por unidade`;
 
-                const alertEl = document.getElementById('lucro-alerta-margem');
-                if (margin < 20) {
-                    alertEl.style.display = 'block';
-                } else {
-                    alertEl.style.display = 'none';
-                }
+                document.getElementById('lucro-alerta-margem').style.display = margin < 20 ? 'block' : 'none';
 
-                updateLucroChart({
-                    purchaseCost,
-                    totalVariableCost,
-                    fixedCostPerUnit,
-                    freightCost,
-                    netProfit
-                });
+                updateLucroChart({ purchaseCost, totalVariableCost, fixedCostPerUnit, freightCost, netProfit });
             }
             
             function updateLucroChart(data) {
                 const ctx = document.getElementById('lucro-produto-chart').getContext('2d');
-                if (lucroProdutoChartInstance) {
-                    lucroProdutoChartInstance.destroy();
-                }
-
+                if (lucroProdutoChartInstance) lucroProdutoChartInstance.destroy();
                 if (data.netProfit < 0) data.netProfit = 0;
 
                 lucroProdutoChartInstance = new Chart(ctx, {
@@ -2455,69 +3193,35 @@
                     data: {
                         labels: ['Custo de Compra', 'Custo Variável', 'Custo Fixo', 'Frete', 'Lucro Líquido'],
                         datasets: [{
-                            data: [
-                                data.purchaseCost,
-                                data.totalVariableCost,
-                                data.fixedCostPerUnit,
-                                data.freightCost,
-                                data.netProfit
-                            ],
-                            backgroundColor: [
-                                '#db1472', 
-                                '#f8b81f', 
-                                '#fbcfe8', 
-                                '#fee2e2', 
-                                '#10b981'
-                            ],
-                             borderColor: '#fff',
-                             borderWidth: 2,
+                            data: [ data.purchaseCost, data.totalVariableCost, data.fixedCostPerUnit, data.freightCost, data.netProfit ],
+                            backgroundColor: [ '#db1472', '#f8b81f', '#fbcfe8', '#fee2e2', '#10b981' ],
+                            borderColor: '#fff', borderWidth: 2,
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '60%',
+                        responsive: true, maintainAspectRatio: false, cutout: '60%',
                         plugins: {
-                            legend: {
-                                position: 'bottom',
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.label || '';
-                                        if (label) label += ': ';
-                                        if (context.parsed !== null) {
-                                            label += `R$ ${context.parsed.toFixed(2)}`;
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
+                            legend: { position: 'bottom' },
+                            tooltip: { callbacks: { label: (c) => `${c.label}: R$ ${c.parsed.toFixed(2)}` } }
                         }
                     }
                 });
             }
 
             function handleSalvarPrecoLucroCerto() {
-                if(!produtoSelecionadoLucroCerto) {
-                    alert('Nenhum produto selecionado.'); return;
-                }
+                if(!produtoSelecionadoLucroCerto) { showToast('Nenhum produto selecionado.', 'error'); return; }
                 const newPriceText = document.getElementById('lucro-preco-venda-sugerido').textContent;
                 const newPrice = parseFloat(newPriceText.replace('R$ ', '').replace(',', '.'));
                 
-                if(isNaN(newPrice) || newPrice <= 0) {
-                     alert('Preço inválido. Calcule um preço de venda primeiro.'); return;
-                }
+                if(isNaN(newPrice) || newPrice <= 0) { showToast('Preço inválido.', 'error'); return; }
                 
                 const productIndex = appState.products.findIndex(p => p.id === produtoSelecionadoLucroCerto.id);
                 if(productIndex > -1) {
                     appState.products[productIndex].salePrice = newPrice;
                     saveState();
-                    alert(`Preço do produto "${appState.products[productIndex].name}" atualizado para R$ ${newPrice.toFixed(2)}.`);
+                    showToast(`Preço de "${appState.products[productIndex].name}" atualizado!`);
                     updateAllProductSelects();
-                    if(document.getElementById('produtos-page').classList.contains('active')) {
-                        renderProductCards();
-                    }
+                    if(document.getElementById('produtos-page').classList.contains('active')) renderProductCards();
                 }
             }
 
@@ -2567,7 +3271,6 @@
 
                     priceResultEl.textContent = `R$ ${salePrice.toFixed(2)}`;
                     profitResultEl.textContent = `Lucro de R$ ${netProfit.toFixed(2)}`;
-
                     alertEl.style.display = margin < 20 ? 'block' : 'none';
                 };
 
@@ -2585,21 +3288,13 @@
                         msgEl.style.display = 'block';
                     }
                 };
-
                 marginSlider.oninput = calculateAndDisplay;
-
                 saveBtn.onclick = () => {
-                    if (!selectedProduct) {
-                        alert('Por favor, selecione um produto primeiro.');
-                        return;
-                    }
+                    if (!selectedProduct) { showToast('Selecione um produto.', 'error'); return; }
                     const newPriceText = priceResultEl.textContent;
                     const newPrice = parseFloat(newPriceText.replace('R$ ', '').replace(',', '.'));
+                    if (isNaN(newPrice) || newPrice <= 0) { showToast('Preço inválido.', 'error'); return; }
 
-                    if (isNaN(newPrice) || newPrice <= 0) {
-                        alert('Preço de venda inválido. Por favor, ajuste a margem.');
-                        return;
-                    }
                     const productIndex = appState.products.findIndex(p => p.id === selectedProduct.id);
                     if (productIndex > -1) {
                         appState.products[productIndex].salePrice = newPrice;
@@ -2611,18 +3306,95 @@
             }
 
             // =================================================================================
+            // ============================= MÓDULO: METAS (NOVO) ==============================
+            // =================================================================================
+            function setupMetasPage() {
+                ['daily', 'weekly', 'monthly'].forEach(period => {
+                    const goal = appState.goals[period] || 0;
+                    document.getElementById(`${period}-goal-input`).value = goal > 0 ? goal : '';
+                    updateGoalChart(period);
+                });
+            }
+
+            function handleSaveGoal(period) {
+                const input = document.getElementById(`${period}-goal-input`);
+                const value = parseFloat(input.value) || 0;
+                appState.goals[period] = value;
+                saveState();
+                showToast(`Meta ${period.charAt(0).toUpperCase() + period.slice(1)} salva!`);
+                updateGoalChart(period);
+            }
+
+            function updateGoalChart(period) {
+                const goal = appState.goals[period] || 0;
+                let currentTotal = 0;
+                const today = new Date('2025-06-07T17:30:00-03:00');
+                const todayStr = today.toISOString().split('T')[0];
+                
+                if (period === 'daily') {
+                    currentTotal = appState.sales.filter(s => s.date === todayStr).reduce((sum, s) => sum + s.total, 0);
+                } else if (period === 'weekly') {
+                    const startOfWeek = new Date(today);
+                    startOfWeek.setDate(startOfWeek.getDate() - today.getDay());
+                    const startOfWeekStr = startOfWeek.toISOString().split('T')[0];
+                    currentTotal = appState.sales.filter(s => s.date >= startOfWeekStr).reduce((sum, s) => sum + s.total, 0);
+                } else if (period === 'monthly') {
+                    const startOfMonthStr = today.toISOString().slice(0, 8) + '01';
+                     currentTotal = appState.sales.filter(s => s.date >= startOfMonthStr).reduce((sum, s) => sum + s.total, 0);
+                }
+                
+                const percentage = goal > 0 ? (currentTotal / goal) * 100 : 0;
+                renderGoalChart(period, percentage, currentTotal, goal);
+            }
+            
+            function renderGoalChart(period, percentage, current, goal) {
+                const ctx = document.getElementById(`${period}-goal-chart`).getContext('2d');
+                if (goalCharts[period]) {
+                    goalCharts[period].destroy();
+                }
+
+                const progress = Math.min(percentage / 100, 1);
+
+                goalCharts[period] = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [progress, 1 - progress],
+                            backgroundColor: ['#db1472', '#e2e8f0'],
+                            borderColor: ['#ffffff', '#ffffff'],
+                            borderWidth: 2,
+                            circumference: 180,
+                            rotation: -90,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            tooltip: { enabled: false },
+                            datalabels: {
+                                color: '#500724',
+                                formatter: () => {
+                                    return `${Math.round(percentage)}%\n(R$ ${current.toFixed(2)})`;
+                                },
+                                font: { size: 16, weight: 'bold' },
+                                textAlign: 'center',
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+
+            // =================================================================================
             // ============================= FUNÇÕES GLOBAIS DE APOIO ==========================
             // =================================================================================
             function updateAllProductSelects() {
-                if (document.getElementById('vendas-page').classList.contains('active')) {
-                    populateSalesProductSelect();
-                }
-                if (document.getElementById('lucro-certo-page').classList.contains('active')) {
-                    setupLucroCertoPage();
-                }
-                if(document.getElementById('calc-preco-venda-page').classList.contains('active')){
-                    setupCalcPrecoVendaPage();
-                }
+                if (document.getElementById('vendas-page').classList.contains('active')) populateSalesProductSelect();
+                if (document.getElementById('lucro-certo-page').classList.contains('active')) setupLucroCertoPage();
+                if (document.getElementById('calc-preco-venda-page').classList.contains('active')) setupCalcPrecoVendaPage();
             }
 
             // =================================================================================
@@ -2643,41 +3415,45 @@
                         closeSidebar(); 
                     });
                 });
-                document.querySelectorAll('.btn-action[data-target-page]').forEach(button => {
-                    button.addEventListener('click', () => setActivePage(button.dataset.targetPage));
+                document.querySelectorAll('.btn-action[data-target-page], .calculator-card[data-target-calculator], #plan-ai-assistant button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetPage = button.dataset.targetPage || button.dataset.targetCalculator;
+                        if(targetPage) setActivePage(targetPage);
+                    });
                 });
-                document.querySelectorAll('.calculator-card').forEach(card => {
-                    card.addEventListener('click', function() {
-                        const targetPage = this.dataset.targetCalculator;
-                        if(targetPage) {
-                           setActivePage(targetPage);
-                        } else {
-                             alert(`Navegação para ${this.querySelector('h4').textContent} ainda não implementada.`);
-                        }
-                    })
-                });
-                 document.querySelectorAll('.btn-voltar-calculadoras').forEach(button => {
+                document.querySelectorAll('.btn-voltar-calculadoras').forEach(button => {
                     button.addEventListener('click', () => setActivePage('calculadoras-page'));
                 });
                 
                 // --- Listeners Página de Produtos ---
                 document.getElementById('btn-show-add-product-form').addEventListener('click', () => {
+                    document.getElementById('form-importar-planilha-container').style.display = 'none';
                     const formContainer = document.getElementById('form-cadastro-produto-container');
                     formContainer.style.display = 'block';
-                    document.getElementById('btn-show-add-product-form').style.display = 'none';
-                    formContainer.querySelector('form').reset();
+                    const form = formContainer.querySelector('form');
+                    form.reset();
                     document.getElementById('produto-id-edit').value = '';
                     document.getElementById('produto-imagem-preview').style.display = 'none';
+                    const unitExpenses = getUnitExpenses();
+                    document.getElementById('produto-custo-unitario-despesas').textContent = `R$ ${unitExpenses.toFixed(2)}`;
+                    updatePricingCalculation();
+                });
+                document.getElementById('btn-show-import-product-form').addEventListener('click', () => {
+                    document.getElementById('form-cadastro-produto-container').style.display = 'none';
+                    document.getElementById('form-importar-planilha-container').style.display = 'block';
                 });
                 document.getElementById('btn-cancel-add-product').addEventListener('click', () => {
                      document.getElementById('form-cadastro-produto-container').style.display = 'none';
-                     document.getElementById('btn-show-add-product-form').style.display = 'inline-flex';
                 });
                 document.getElementById('form-cadastro-produto').addEventListener('submit', handleProductFormSubmit);
                 document.getElementById('product-cards-list').addEventListener('click', event => {
                     const editButton = event.target.closest('.btn-edit-product');
-                    if (editButton) {
-                        openProductFormForEdit(editButton.dataset.productId);
+                    if (editButton) openProductFormForEdit(editButton.dataset.productId);
+                    const priceLink = event.target.closest('.link-definir-preco');
+                     if (priceLink) {
+                        event.preventDefault();
+                        openProductFormForEdit(priceLink.dataset.productId);
                     }
                 });
                 document.getElementById('produto-imagem').addEventListener('change', function() {
@@ -2690,6 +3466,25 @@
                         }
                         reader.readAsDataURL(this.files[0]);
                     }
+                });
+                document.getElementById('download-csv-template').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const csvContent = "data:text/csv;charset=utf-8,Nome,Categoria,PrecoCusto,Estoque\nBolsa Exemplo,bolsas,75.50,10\nSapato Teste,calcados,99.90,25";
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "modelo_produtos.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+                document.getElementById('import-csv-file').addEventListener('change', handleCSVFileSelect);
+                document.getElementById('btn-confirm-import').addEventListener('click', handleConfirmImport);
+                document.getElementById('btn-cancel-import').addEventListener('click', () => {
+                     document.getElementById('form-importar-planilha-container').style.display = 'none';
+                     document.getElementById('import-csv-file').value = '';
+                     document.getElementById('import-preview-container').innerHTML = '';
+                     document.getElementById('import-actions').style.display = 'none';
                 });
 
                 // --- Listeners Página de Vendas ---
@@ -2705,27 +3500,25 @@
                     const select = document.getElementById('venda-produto-select');
                     const selectedOption = select.options[select.selectedIndex];
                     const produtoId = selectedOption.value;
-                    if (!produtoId) { alert('Selecione um produto.'); return; }
+                    if (!produtoId) { showToast('Selecione um produto.', 'error'); return; }
 
                     const quantidadeInput = document.getElementById('venda-produto-qtd');
                     const quantidade = parseInt(quantidadeInput.value);
                     const estoqueDisponivel = parseInt(selectedOption.dataset.stock);
 
-                    if (isNaN(quantidade) || quantidade <= 0) { alert('Insira uma quantidade válida.'); return; }
+                    if (isNaN(quantidade) || quantidade <= 0) { showToast('Insira uma quantidade válida.', 'error'); return; }
                     
                     const itemJaNoCarrinho = itensVendaTemporarios.find(item => item.productId === produtoId);
                     const qtdTotalNoCarrinho = (itemJaNoCarrinho ? itemJaNoCarrinho.quantity : 0) + quantidade;
 
-                    if (qtdTotalNoCarrinho > estoqueDisponivel) { alert(`Estoque insuficiente! Apenas ${estoqueDisponivel} unidades disponíveis.`); return; }
+                    if (qtdTotalNoCarrinho > estoqueDisponivel) { showToast(`Estoque insuficiente! Apenas ${estoqueDisponivel} unidades disponíveis.`, 'error'); return; }
                     
                     if (itemJaNoCarrinho) {
                         itemJaNoCarrinho.quantity += quantidade;
                         itemJaNoCarrinho.subtotal = itemJaNoCarrinho.quantity * itemJaNoCarrinho.unitPrice;
                     } else {
                         itensVendaTemporarios.push({
-                            productId: produtoId,
-                            name: selectedOption.dataset.name,
-                            quantity: quantidade,
+                            productId: produtoId, name: selectedOption.dataset.name, quantity: quantidade,
                             unitPrice: parseFloat(selectedOption.dataset.price),
                             subtotal: quantidade * parseFloat(selectedOption.dataset.price)
                         });
@@ -2735,9 +3528,9 @@
                     select.value = "";
                 });
                 document.getElementById('venda-itens-lista').addEventListener('click', event => {
-                    const removeButton = event.target.closest('.sale-item-remove');
-                    if (removeButton) {
-                        const indexToRemove = parseInt(removeButton.dataset.index);
+                    if (event.target.classList.contains('remove-item-btn') || event.target.closest('.remove-item-btn')) {
+                        const button = event.target.closest('.remove-item-btn');
+                        const indexToRemove = parseInt(button.dataset.index);
                         itensVendaTemporarios.splice(indexToRemove, 1);
                         updateCurrentSaleUI();
                     }
@@ -2748,11 +3541,22 @@
                     document.getElementById('btn-show-nova-venda-form').style.display = 'inline-flex';
                  });
                  document.getElementById('venda-desconto').addEventListener('input', updateCurrentSaleUI);
+                
+                // --- Listener Página Clientes ---
+                document.getElementById('clientes-page').addEventListener('click', (event) => {
+                    const sellAgainBtn = event.target.closest('.btn-sell-again');
+                    if (sellAgainBtn) {
+                        const name = sellAgainBtn.dataset.name;
+                        const phone = sellAgainBtn.dataset.phone;
+                        setActivePage('vendas-page', { clientName: name, clientPhone: phone });
+                    }
+                });
 
-
-                // --- Listeners da Página de Despesas ---
+                // --- Listeners Página de Despesas ---
                 document.getElementById('form-add-custo-fixo').addEventListener('submit', handleAddFixedCost);
                 document.getElementById('form-add-custo-variavel').addEventListener('submit', handleAddVariableCost);
+                document.getElementById('form-add-custo-frete').addEventListener('submit', handleAddFreightCost);
+                document.getElementById('form-add-custo-imposto').addEventListener('submit', handleAddTaxCost);
                 document.getElementById('despesas-page').addEventListener('click', event => {
                     const removeBtn = event.target.closest('.remove-cost-btn');
                     if (removeBtn) {
@@ -2760,7 +3564,7 @@
                     }
                 });
 
-                // --- Listeners da Página Liberdade Financeira ---
+                // --- Listeners Página Liberdade Financeira ---
                 document.getElementById('btn-show-add-debt-form').addEventListener('click', () => {
                      document.getElementById('form-add-debt-container').style.display = 'block';
                      document.getElementById('btn-show-add-debt-form').style.display = 'none';
@@ -2772,26 +3576,11 @@
                 document.getElementById('form-add-debt').addEventListener('submit', handleAddDebt);
                 document.getElementById('liberdade-financeira-page').addEventListener('click', (event) => {
                     const planButton = event.target.closest('.btn-plan-payment');
-                    if (planButton) {
-                        const debtId = planButton.dataset.debtId;
-                        setActivePage('planejamento-divida-page', debtId);
-                    }
+                    if (planButton) setActivePage('planejamento-divida-page', planButton.dataset.debtId);
                 });
                 document.getElementById('btn-voltar-dividas').addEventListener('click', () => setActivePage('liberdade-financeira-page'));
-                document.getElementById('planejamento-divida-page').addEventListener('submit', (event) => {
-                    if (event.target.id === 'form-planejar-divida') {
-                        handleSaveDebtPlan(event);
-                    }
-                });
-                document.getElementById('planejamento-divida-page').addEventListener('click', (event) => {
-                    if (event.target.id === 'btn-simular-novamente') {
-                        const debtId = document.getElementById('plan-debt-id').value;
-                        setupPlanejamentoDividaPage(debtId); 
-                    }
-                });
-
-
-                // --- Listeners da Página Lucro Certo ---
+                
+                // --- Listeners Página Lucro Certo ---
                 const lucroMargemSlider = document.getElementById('lucro-margem-slider');
                 const lucroMargemInput = document.getElementById('lucro-margem-input');
                 lucroMargemSlider.addEventListener('input', () => {
@@ -2802,9 +3591,15 @@
                     lucroMargemSlider.value = lucroMargemInput.value;
                     calculateAndDisplayLucroCerto();
                 });
-
                 document.getElementById('lucro-produto-select').addEventListener('change', handleLucroCertoProductSelect);
                 document.getElementById('btn-salvar-preco-lucro-certo').addEventListener('click', handleSalvarPrecoLucroCerto);
+
+                // --- Listeners Página Metas (NOVO) ---
+                document.querySelectorAll('.save-goal-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        handleSaveGoal(e.target.dataset.period);
+                    });
+                });
 
 
                 // --- Inicialização ---
