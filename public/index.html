@@ -51,15 +51,15 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: #fef6fa; /* Fundo rosa bem claro */
+            background-color: var(--bg-light-pink);
             position: relative;
             overflow-x: hidden;
         }
 
         /* Cabeçalho */
         .app-header { 
-            background-color: #db1472; /* Rosa Principal da paleta */
-            background-image: linear-gradient(to right, #db1472, #ec4899); 
+            background-color: var(--color-primary);
+            background-image: linear-gradient(to right, var(--color-primary), var(--color-accent-pink)); 
             color: white; 
             padding: 0.8rem 1rem; 
             display: flex;
@@ -99,8 +99,8 @@
             z-index: 1001; 
             top: 0;
             left: 0;
-            background-color: #db1472; 
-            background-image: linear-gradient(to bottom, #db1472, #c01062); 
+            background-color: var(--color-primary); 
+            background-image: linear-gradient(to bottom, var(--color-primary), var(--color-dark-pink)); 
             overflow-x: hidden;
             transition: 0.3s ease-in-out; 
             padding-top: 20px; 
@@ -116,11 +116,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px; 
-            border-bottom: 1px solid #c01062; 
+            border-bottom: 1px solid var(--color-dark-pink); 
             margin-bottom: 10px;
         }
         .sidebar-nav-header .sidebar-title {
-            color: #ffffff;
+            color: var(--bg-white);
             font-size: 1.8em;
             font-weight: 700;
             margin:0;
@@ -128,14 +128,14 @@
         .sidebar-nav .close-btn { 
             font-size: 2.2rem; 
             font-weight: 700;
-            color: #fce7f3; 
+            color: var(--color-text-light); 
             background: none;
             border: none;
             cursor: pointer;
             padding: 5px; 
         }
         .sidebar-nav .close-btn:hover {
-            color: #f8b81f; 
+            color: var(--color-secondary); 
         }
         .sidebar-nav-links {
             flex-grow: 1;
@@ -147,11 +147,11 @@
             text-decoration: none;
             font-size: 1.15rem; 
             font-weight: 500; 
-            color: #fce7f3; 
+            color: var(--color-text-light); 
             display: flex; 
             align-items: center; 
             transition: 0.2s ease-in-out;
-            border-bottom: 1px solid #c01062; 
+            border-bottom: 1px solid var(--color-dark-pink); 
         }
         .sidebar-nav a svg { 
             margin-right: 12px; 
@@ -169,13 +169,13 @@
         }
         .sidebar-nav a:hover,
         .sidebar-nav a.active {
-            color: #db1472; 
-            background-color: #f8b81f; 
+            color: var(--color-primary); 
+            background-color: var(--color-secondary); 
             font-weight: 600;
         }
         .sidebar-nav a:hover svg,
         .sidebar-nav a.active svg {
-            stroke: #db1472; 
+            stroke: var(--color-primary); 
         }
 
 
@@ -200,8 +200,8 @@
             opacity: 0;
         }
         .page-title {
-            color: #db1472; 
-            border-bottom: 4px solid #f8b81f; 
+            color: var(--color-primary); 
+            border-bottom: 4px solid var(--color-secondary); 
             padding-bottom: 0.8rem;
             margin-top: 0;
             margin-bottom: 1.8rem; 
@@ -209,7 +209,7 @@
             font-weight: 600; 
         }
         .sub-page-title { 
-            color: #db1472; 
+            color: var(--color-primary); 
             font-size: 1.6rem;
             font-weight: 600;
             margin-top: 0;
@@ -218,7 +218,7 @@
 
         /* Rodapé */
         footer {
-            background-color: #f8f0f4; 
+            background-color: var(--bg-footer); 
             color: #575355; 
             text-align: center;
             padding: 1.5rem;
@@ -250,33 +250,34 @@
         /* ======= ESTILOS DO DASHBOARD - BREAKPOINTS ATUALIZADOS ======= */
         #dashboard-page .cards-grid {
             display: grid;
-            gap: 1.5rem;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
+            gap: 12px; /* Espaçamento entre cards */
+            grid-template-columns: 1fr;
         }
-        @media(min-width: 768px) { /* 2 colunas para tablet */
+        @media(min-width: 768px) {
             #dashboard-page .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-         @media(min-width: 1024px) { /* 3 colunas para desktop */
+         @media(min-width: 1024px) {
             #dashboard-page .cards-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
         
         .dashboard-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: var(--bg-white);
+            border-radius: var(--border-radius-lg);
+            padding: 16px; /* Padding interno */
+            box-shadow: var(--box-shadow-md);
             display: flex;
             align-items: center;
-            gap: 1.2rem;
+            gap: 12px; /* Espaçamento interno */
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
         .dashboard-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
         .dashboard-card:active {
             transform: translateY(0);
@@ -294,35 +295,37 @@
         .dashboard-card-icon svg {
             width: 24px;
             height: 24px;
-            color: #ffffff;
+            color: var(--bg-white);
         }
-        .icon-bg-pink { background-color: #db1472; }
+        .icon-bg-pink { background-color: var(--color-primary); }
         .icon-bg-green { background-color: #10b981; }
         .icon-bg-red { background-color: #ef4444; }
+        .icon-bg-yellow { background-color: var(--color-secondary); }
 
         .dashboard-card-content h4 {
             margin: 0 0 0.25rem 0;
             font-size: 1rem;
             font-weight: 500;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
         .dashboard-card-content p {
             margin: 0;
             font-size: 1.75rem;
             font-weight: 700;
-            color: #1f2937;
+            color: var(--color-text-dark);
         }
         
         .dashboard-list-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: var(--bg-white);
+            border-radius: var(--border-radius-lg);
+            padding: 16px; /* Padding interno */
+            box-shadow: var(--box-shadow-md);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
         .dashboard-list-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
          .dashboard-list-card:active {
             transform: translateY(0);
@@ -333,7 +336,7 @@
             margin-bottom: 1rem;
             font-size: 1.25rem;
             font-weight: 600;
-            color: #db1472;
+            color: var(--color-primary);
         }
          .dashboard-list-card ul {
             list-style: none;
@@ -345,16 +348,16 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.75rem 0.25rem;
-            border-bottom: 1px solid #fce7f3;
+            border-bottom: 1px solid var(--color-text-light);
             font-size: 0.95rem;
-            color: #666666;
+            color: var(--color-text-secondary);
          }
         .dashboard-list-card li:last-child {
             border-bottom: none;
         }
          .dashboard-list-card li strong {
             font-weight: 600;
-            color: #db1472;
+            color: var(--color-primary);
          }
          .dashboard-list-card .placeholder {
             text-align: center;
@@ -364,7 +367,7 @@
         
         .dashboard-summary-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 12px; /* Espaçamento entre cards */
             grid-template-columns: 1fr;
             margin-top: 1.5rem;
         }
@@ -372,6 +375,38 @@
              .dashboard-summary-grid {
                 grid-template-columns: repeat(2, 1fr);
              }
+        }
+        
+        /* NOVO: Estilos de Progresso de Metas no Dashboard */
+        #goals-progress-card li {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .goal-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+        .goal-info .goal-percentage {
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background-color: #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%; /* Atualizado por JS */
+            background-image: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            border-radius: 6px;
+            transition: width 0.5s ease-in-out;
         }
 
 
@@ -385,7 +420,7 @@
         
         .btn, 
         .btn-action {
-            background-color: #f8b81f; 
+            background-color: var(--color-secondary); 
             color: #5c3c00; 
             border: none;
             padding: 0.7rem 1.2rem;
@@ -394,7 +429,7 @@
             font-size: 1rem; 
             font-weight: 600; 
             transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow-sm);
             text-decoration: none; 
             display: inline-flex; 
             align-items: center;
@@ -408,20 +443,20 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
          .btn:focus-visible, .btn-action:focus-visible {
-            outline: 2px solid #db1472;
+            outline: 2px solid var(--color-primary);
             outline-offset: 2px;
         }
         .btn:active,
         .btn-action:active {
             transform: translateY(0px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow-sm);
         }
         .btn-primary { 
-            background-color: #db1472;
+            background-color: var(--color-primary);
             color: white;
         }
         .btn-primary:hover {
-            background-color: #c01062;
+            background-color: var(--color-dark-pink);
         }
         .btn-secondary { 
             background-color: #e2e8f0; 
@@ -451,7 +486,7 @@
         .form-group label {
             display: block;
             font-weight: 500;
-            color: #666666; 
+            color: var(--color-text-secondary); 
             margin-bottom: 0.4rem;
         }
         .form-group input,
@@ -463,7 +498,7 @@
             border-radius: 6px;
             box-sizing: border-box; 
             font-size: 1rem;
-            color: #374151; 
+            color: var(--color-text-primary); 
             transition: border-color 0.2s;
         }
         .form-group input.is-invalid, .form-group select.is-invalid {
@@ -519,10 +554,10 @@
         .status-cancelado { background-color: #fee2e2; color: #991b1b; } 
 
         .form-container { 
-            background-color: #ffffff;
+            background-color: var(--bg-white);
             padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow-md);
             margin-top: 1.5rem;
         }
         
@@ -547,7 +582,7 @@
             flex-grow: 1;
         }
         #form-nova-venda-container .sale-item-details strong {
-            color: #db1472;
+            color: var(--color-primary);
         }
         #form-nova-venda-container .sale-item-actions button {
             background: none;
@@ -569,12 +604,12 @@
             justify-content: space-between;
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
         #sale-summary p.total {
             font-size: 1.4rem;
             font-weight: 700;
-            color: #db1472;
+            color: var(--color-primary);
         }
         .summary-section { 
             margin-top: 2rem;
@@ -591,10 +626,10 @@
         /* ======= PÁGINA DE DESPESAS - BREAKPOINTS ATUALIZADOS ======= */
         .despesas-cards-container {
             display: grid;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
-            gap: 1.5rem;
+            gap: 12px; /* Espaçamento entre cards */
+            grid-template-columns: 1fr; 
         }
-        @media (min-width: 768px) { /* 2 colunas para tablet */
+        @media (min-width: 768px) {
             .despesas-cards-container {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -602,33 +637,34 @@
         .card-despesa {
             background-color: #fff1f2; 
             border-radius: 8px;
-            padding: 1.5rem;
+            padding: 16px; /* Padding interno */
             box-shadow: 0 4px 8px rgba(0,0,0,0.07);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
          .card-despesa:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
          .card-despesa:active {
             transform: translateY(0);
         }
         .card-despesa-title {
-            color: #db1472;
-            font-size: 1.4rem; /* Ajuste de tamanho para caber melhor */
+            color: var(--color-primary);
+            font-size: 1.4rem;
             margin-top: 0;
             margin-bottom: 0.75rem;
-            border-bottom: 2px solid #f8b81f;
+            border-bottom: 2px solid var(--color-secondary);
             padding-bottom: 0.5rem;
         }
         .informativo {
             font-size: 0.9rem;
-            color: #666666;
+            color: var(--color-text-secondary);
             margin-bottom: 1.5rem;
-            background-color: #fdf2f8;
+            background-color: var(--bg-soft-pink);
             padding: 0.75rem;
             border-radius: 4px;
-            border-left: 3px solid #f8b81f;
+            border-left: 3px solid var(--color-secondary);
         }
         .card-despesa .form-group { 
              margin-bottom: 1rem;
@@ -641,7 +677,7 @@
             list-style: none;
             padding: 0;
             margin-top: 1rem;
-            max-height: 180px; /* Reduz altura para melhor visualização */
+            max-height: 180px;
             overflow-y: auto;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
@@ -662,11 +698,11 @@
         }
         .custos-lista li .cost-name {
             font-weight: 500;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
-         .custos-lista li .cost-unit { /* Novo estilo para custo unitario */
+         .custos-lista li .cost-unit { 
              font-size: 0.85rem;
-             color: #666666;
+             color: var(--color-text-secondary);
              display: block;
          }
         .custos-lista li .cost-value {
@@ -687,10 +723,10 @@
         }
         .despesas-summary-container {
             margin-top: 2.5rem;
-            background-color: #ffffff;
+            background-color: var(--bg-white);
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow-md);
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
@@ -708,7 +744,7 @@
             gap: 1.5rem;
         }
         .summary-button {
-            background-color: #fdf2f8;
+            background-color: var(--bg-soft-pink);
             border: 1px solid #fbcfe8;
             border-radius: 8px;
             padding: 1rem 1.25rem;
@@ -717,29 +753,29 @@
         .summary-button .label {
             font-size: 1rem;
             font-weight: 500;
-            color: #666666;
+            color: var(--color-text-secondary);
             margin: 0 0 0.5rem 0;
         }
         .summary-button .value {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #c01062;
+            color: var(--color-dark-pink);
         }
         .summary-button.primary {
-            background-color: #db1472;
-            border-color: #c01062;
+            background-color: var(--color-primary);
+            border-color: var(--color-dark-pink);
         }
         .summary-button.primary .label {
-             color: #fce7f3;
+             color: var(--color-text-light);
         }
         .summary-button.primary .value {
-             color: #ffffff;
+             color: var(--bg-white);
         }
         .despesas-chart-container {
             position: relative;
             height: 250px;
             width: 100%;
-            max-width: 300px; /* Limita o tamanho do gráfico */
+            max-width: 300px; 
             margin: 0 auto;
         }
         
@@ -751,16 +787,16 @@
         }
         .item-cards-container { 
             display: grid;
-            gap: 1.5rem; 
+            gap: 12px; /* Espaçamento entre cards */ 
             margin-top: 1.5rem;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
+            grid-template-columns: 1fr;
         }
-        @media (min-width: 768px) { /* 2 colunas para tablet */
+        @media (min-width: 768px) { 
              .item-cards-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (min-width: 1024px) { /* 3 colunas para desktop */
+        @media (min-width: 1024px) { 
              .item-cards-container {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -768,19 +804,20 @@
 
 
         .product-card, .sale-card { 
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 0.8rem; 
+            background-color: var(--bg-white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--box-shadow-md);
+            padding: 16px; /* Padding interno */
             display: flex;
             flex-direction: column;
-            border-left: 5px solid #f8b81f; 
+            border-left: 5px solid var(--color-secondary); 
             font-size: 0.9rem;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
         .product-card:hover, .sale-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
          .product-card:active, .sale-card:active {
             transform: translateY(0);
@@ -795,7 +832,7 @@
         }
         .product-card h4, .sale-card h4 {
             font-size: 1rem; 
-            color: #db1472;
+            color: var(--color-primary);
             margin: 0 0 0.4rem 0;
             white-space: nowrap;
             overflow: hidden;
@@ -803,15 +840,15 @@
         }
         .product-card p, .sale-card p {
             font-size: 0.85rem; 
-            color: #666666;
+            color: var(--color-text-secondary);
             margin: 0.2rem 0;
             line-height: 1.3;
         }
         .product-card p strong, .sale-card p strong {
-            color: #374151;
+            color: var(--color-text-primary);
         }
         .product-card p a.link-definir-preco {
-            color: #c01062;
+            color: var(--color-dark-pink);
             font-weight: 600;
             text-decoration: none;
         }
@@ -832,7 +869,7 @@
 
         /* ======= FORMULÁRIO DE PRODUTO ======= */
         .cost-display-badge {
-            background-color: #fce7f3;
+            background-color: var(--color-text-light);
             border: 1px solid #fbcfe8;
             color: #9d174d;
             padding: 0.5rem 0.8rem;
@@ -871,20 +908,20 @@
             appearance: none;
             width: 22px;
             height: 22px;
-            background: #db1472;
+            background: var(--color-primary);
             cursor: pointer;
             border-radius: 50%;
         }
         .price-slider-group input[type="range"]::-moz-range-thumb {
             width: 22px;
             height: 22px;
-            background: #db1472;
+            background: var(--color-primary);
             cursor: pointer;
             border-radius: 50%;
         }
 
         .pricing-result {
-            background-color: #fdf2f8;
+            background-color: var(--bg-soft-pink);
             border-radius: 8px;
             padding: 1rem;
             text-align: center;
@@ -897,12 +934,12 @@
             margin: 0;
             font-size: 0.9rem;
             font-weight: 500;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
          .pricing-result div .suggested-price {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #db1472; 
+            color: var(--color-primary); 
         }
          .pricing-result div .profit-value {
             font-size: 1.3rem;
@@ -946,15 +983,15 @@
         /* ======= PÁGINA DE CLIENTES (CRM) - BREAKPOINTS ATUALIZADOS ======= */
         .customer-cards-container {
             display: grid;
-            gap: 1.5rem;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
+            gap: 12px; /* Espaçamento entre cards */
+            grid-template-columns: 1fr;
         }
-        @media (min-width: 768px) { /* 2 colunas para tablet */
+        @media (min-width: 768px) { 
             .customer-cards-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (min-width: 1024px) { /* 3 colunas para desktop */
+        @media (min-width: 1024px) { 
              .customer-cards-container {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -962,21 +999,22 @@
 
         .customer-card {
             background-color: #fff;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border-left: 5px solid #db1472;
+            border-radius: var(--border-radius-md);
+            padding: 16px; /* Padding interno */
+            box-shadow: var(--box-shadow-md);
+            border-left: 5px solid var(--color-primary);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
         .customer-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
          .customer-card:active {
             transform: translateY(0);
         }
         .customer-card.dormant {
-            border-left-color: #f59e0b; /* Laranja para chamar atenção */
+            border-left-color: #f59e0b; 
         }
         .customer-card-header {
             display: flex;
@@ -987,25 +1025,25 @@
         .customer-card-header h4 {
             margin: 0;
             font-size: 1.3rem;
-            color: #db1472;
+            color: var(--color-primary);
         }
         .customer-card-header p {
              margin: 0;
              font-size: 0.9rem;
-             color: #666666;
+             color: var(--color-text-secondary);
         }
         .customer-card-info p {
             font-size: 0.95rem;
             margin: 0.25rem 0;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
          .customer-card-info p strong {
-             color: #1f2937;
+             color: var(--color-text-primary);
          }
         .last-purchase-title {
             font-size: 1rem;
             font-weight: 600;
-            color: #db1472;
+            color: var(--color-primary);
             margin-top: 1rem;
             margin-bottom: 0.5rem;
         }
@@ -1014,7 +1052,7 @@
             padding: 0;
             margin: 0;
             font-size: 0.9rem;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
         .last-purchase-list li {
             padding: 0.2rem 0;
@@ -1023,7 +1061,7 @@
         /* ESTILOS LUCRO CERTO E LIBERDADE FINANCEIRA */
         .main-content-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 12px; /* Espaçamento entre cards */
             grid-template-columns: 1fr;
         }
         @media(min-width: 992px) {
@@ -1034,21 +1072,22 @@
         }
         
         .lucro-card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            background-color: var(--bg-white);
+            border-radius: var(--border-radius-md);
+            padding: 16px; /* Padding interno */
+            box-shadow: var(--box-shadow-md);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
         .lucro-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
          .lucro-card:active {
             transform: translateY(0);
         }
          .lucro-card h3 {
-            color: #db1472; 
+            color: var(--color-primary); 
             font-size: 1.3rem;
             margin-top: 0;
             margin-bottom: 1rem;
@@ -1070,7 +1109,7 @@
         }
         .lucro-info-item strong {
             font-weight: 600;
-            color: #db1472;
+            color: var(--color-primary);
         }
 
         .tooltip {
@@ -1095,7 +1134,7 @@
         .tooltip .tooltip-text {
             visibility: hidden;
             width: 220px;
-            background-color: #374151;
+            background-color: var(--color-text-primary);
             color: #fff;
             text-align: center;
             border-radius: 6px;
@@ -1141,14 +1180,14 @@
             appearance: none;
             width: 20px;
             height: 20px;
-            background: #db1472;
+            background: var(--color-primary);
             cursor: pointer;
             border-radius: 50%;
         }
         .slider-group input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            background: #db1472;
+            background: var(--color-primary);
             cursor: pointer;
             border-radius: 50%;
         }
@@ -1158,7 +1197,7 @@
         }
 
         .lucro-result-display {
-            background-color: #f8f0f4;
+            background-color: var(--bg-soft-pink);
             border-radius: 8px;
             padding: 1.5rem;
             text-align: center;
@@ -1168,12 +1207,12 @@
         .lucro-result-display p {
             margin: 0 0 0.5rem 0;
             font-size: 1.1rem;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
          .lucro-result-display .destaque-preco {
             font-size: 2rem;
             font-weight: 700;
-            color: #db1472; 
+            color: var(--color-primary); 
         }
          .lucro-result-display .destaque-lucro {
             font-size: 1.2rem;
@@ -1203,21 +1242,21 @@
         #plan-ai-assistant {
             margin-top: 1.5rem;
             padding: 1rem;
-            background-color: #fdf2f8;
+            background-color: var(--bg-soft-pink);
             border: 1px dashed #fbcfe8;
             border-radius: 8px;
             text-align: center;
         }
         #plan-ai-assistant p {
             margin: 0 0 1rem 0;
-            color: #666666;
+            color: var(--color-text-secondary);
             font-weight: 500;
         }
 
         /* ======= PÁGINA LIBERDADE FINANCEIRA - BREAKPOINTS ATUALIZADOS ======= */
         .lf-summary-grid {
             display: grid;
-            gap: 1.5rem;
+            gap: 12px; /* Espaçamento entre cards */
             grid-template-columns: 1fr;
             margin-bottom: 2rem;
         }
@@ -1229,15 +1268,15 @@
         
         #liberdade-financeira-page .debt-cards-container {
             display: grid;
-            gap: 1.5rem;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
+            gap: 12px; /* Espaçamento entre cards */
+            grid-template-columns: 1fr;
         }
-         @media (min-width: 768px) { /* 2 colunas para tablet */
+         @media (min-width: 768px) { 
             #liberdade-financeira-page .debt-cards-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (min-width: 1024px) { /* 3 colunas para desktop */
+        @media (min-width: 1024px) { 
              #liberdade-financeira-page .debt-cards-container {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1245,17 +1284,18 @@
 
         .debt-card {
             background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            padding: 1.5rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--box-shadow-md);
+            padding: 16px; /* Padding interno */
             border-left: 5px solid;
             display: flex;
             flex-direction: column;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
         .debt-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
         .debt-card:active {
             transform: translateY(0);
@@ -1267,13 +1307,13 @@
 
         .debt-card h4 {
             font-size: 1.2rem;
-            color: #db1472;
+            color: var(--color-primary);
             margin: 0 0 0.5rem 0;
         }
 
         .debt-card p {
             margin: 0.25rem 0;
-            color: #666666;
+            color: var(--color-text-secondary);
         }
 
         .debt-card .debt-actions {
@@ -1292,36 +1332,37 @@
         /* ======= PÁGINA METAS - BREAKPOINTS ATUALIZADOS ======= */
         #goals-container {
             display: grid;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
-            gap: 2rem;
+            gap: 12px; /* Espaçamento entre cards */
+            grid-template-columns: 1fr; 
         }
-        @media(min-width: 768px) { /* 2 colunas para tablet */
+        @media(min-width: 768px) { 
             #goals-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media(min-width: 1024px) { /* 3 colunas para desktop */
+        @media(min-width: 1024px) { 
             #goals-container {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
         .goal-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: var(--bg-white);
+            border-radius: var(--border-radius-lg);
+            padding: 16px; /* Padding interno */
+            box-shadow: var(--box-shadow-md);
             text-align: center;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            touch-action: manipulation;
         }
          .goal-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            box-shadow: var(--box-shadow-lg);
         }
          .goal-card:active {
             transform: translateY(0);
         }
         .goal-card h3 {
-            color: #db1472;
+            color: var(--color-primary);
             margin-top: 0;
             margin-bottom: 1rem;
         }
@@ -1337,59 +1378,7 @@
         .goal-card input {
             text-align: center;
             font-weight: 600;
-            color: #db1472;
-        }
-
-        /* ======= PÁGINA CALCULADORAS - BREAKPOINTS ATUALIZADOS ======= */
-        .calculators-grid-container {
-            display: grid;
-            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
-            gap: 1rem;
-        }
-        @media (min-width: 768px) { /* 2 colunas para tablet */
-            .calculators-grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (min-width: 1024px) { /* 3 colunas para desktop */
-            .calculators-grid-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        .calculator-card {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 1.5rem 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            border: 1px solid #fbcfe8; /* Borda rosa clara */
-            display: flex; /* Para alinhar conteúdo verticalmente */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 150px; /* Altura média */
-        }
-        .calculator-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(219, 20, 114, 0.15); /* Sombra rosa no hover */
-        }
-         .calculator-card:active {
-            transform: translateY(0);
-        }
-        .calculator-card svg {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 0.75rem;
-            color: #db1472; /* Ícone rosa */
-        }
-        .calculator-card h4 {
-            font-size: 1rem;
-            color: #db1472; 
-            margin: 0;
-            font-weight: 600;
-            line-height: 1.3;
+            color: var(--color-primary);
         }
         
         .toast-notification {
@@ -1413,8 +1402,8 @@
 
         .loading-spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #db1472;
-            border-right: 4px solid #f8b81f;
+            border-top: 4px solid var(--color-primary);
+            border-right: 4px solid var(--color-secondary);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -1528,6 +1517,15 @@
                         <p id="dashboard-despesas-vencimento">0</p>
                     </div>
                 </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon icon-bg-yellow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h4>Economia Planejada</h4>
+                        <p id="dashboard-economia-planejada">R$ 0,00</p>
+                    </div>
+                </div>
             </div>
 
             <div class="dashboard-summary-grid">
@@ -1545,6 +1543,13 @@
                 </div>
             </div>
             
+            <div class="dashboard-list-card" id="goals-progress-card">
+                <h3>Progresso das Metas</h3>
+                <ul id="dashboard-goals-list">
+                    <!-- Gerado por JS -->
+                </ul>
+            </div>
+
             <div class="dashboard-list-card">
                 <h3>Estoque Baixo</h3>
                 <ul id="dashboard-lista-estoque-baixo">
@@ -2168,7 +2173,7 @@
                              if (!appState.expenses.freight) appState.expenses.freight = [];
                              if (!appState.expenses.taxes) appState.expenses.taxes = [];
                              if (!appState.debtPlans) appState.debtPlans = [];
-                             if (!appState.goals) appState.goals = { daily: 0, weekly: 0, monthly: 0 }; // NOVO
+                             if (!appState.goals) appState.goals = { daily: 0, weekly: 0, monthly: 0 };
                         } else {
                             throw new Error("Dados salvos estão corrompidos.");
                         }
@@ -2197,7 +2202,7 @@
                     },
                     debts: [],
                     debtPlans: [],
-                    goals: { daily: 0, weekly: 0, monthly: 0 }, // NOVO
+                    goals: { daily: 0, weekly: 0, monthly: 0 },
                     settings: { 
                         lowStockThreshold: 5,
                         estimatedMonthlySales: 100
@@ -2294,48 +2299,62 @@
             }
 
             function updateDashboard() {
+                // Cálculos financeiros
                 const receitaBruta = appState.sales.reduce((total, sale) => total + sale.total, 0);
-                
                 let custoProdutosVendidos = 0;
-                const salesByProduct = {};
-                appState.sales.forEach(sale => {
-                    sale.items.forEach(item => {
-                        const product = appState.products.find(p => p.id === item.productId);
-                        if (product) custoProdutosVendidos += product.costPrice * item.quantity;
-                        
-                        if(salesByProduct[item.productId]) {
-                            salesByProduct[item.productId].quantity += item.quantity;
-                        } else {
-                            const productInfo = appState.products.find(p => p.id === item.productId);
-                            salesByProduct[item.productId] = { name: productInfo ? productInfo.name : 'Desconhecido', quantity: item.quantity };
-                        }
-                    });
-                });
-
+                appState.sales.forEach(sale => sale.items.forEach(item => {
+                    const product = appState.products.find(p => p.id === item.productId);
+                    if (product) custoProdutosVendidos += product.costPrice * item.quantity;
+                }));
                 const despesasFixas = appState.expenses.fixed.reduce((total, cost) => total + cost.value, 0);
                 const lucroLiquido = receitaBruta - custoProdutosVendidos - despesasFixas;
 
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                const upcomingLimit = new Date();
-                upcomingLimit.setDate(today.getDate() + 7);
+                // Despesas a vencer
+                const today = new Date(); today.setHours(0,0,0,0);
+                const upcomingLimit = new Date(); upcomingLimit.setDate(today.getDate() + 7);
                 const despesasVencimento = appState.expenses.fixed.filter(expense => {
                     if (!expense.dueDate) return false;
                     const dueDate = new Date(expense.dueDate + 'T03:00:00');
                     return dueDate >= today && dueDate <= upcomingLimit;
                 });
-                
+
+                // Economia planejada
+                const totalSavings = appState.debtPlans.reduce((sum, plan) => sum + plan.monthlyAmount, 0);
+
+                // Atualizar Cards principais
                 document.getElementById('dashboard-receita-bruta').textContent = `R$ ${receitaBruta.toFixed(2)}`;
                 document.getElementById('dashboard-lucro-liquido').textContent = `R$ ${lucroLiquido.toFixed(2)}`;
                 document.getElementById('dashboard-lucro-liquido').style.color = lucroLiquido < 0 ? '#ef4444' : '#1f2937';
                 document.getElementById('dashboard-despesas-vencimento').textContent = despesasVencimento.length;
+                document.getElementById('dashboard-economia-planejada').textContent = `R$ ${totalSavings.toFixed(2)}`;
 
-                const financialList = document.getElementById('financial-summary-list');
+                // Atualizar listas
+                updateDashboardFinancialSummary(lucroLiquido, custoProdutosVendidos, despesasFixas);
+                updateDashboardTopProducts();
+                updateDashboardLowStock();
+                updateDashboardGoals();
+            }
+
+            function updateDashboardFinancialSummary(lucro, custos, despesas) {
+                 const financialList = document.getElementById('financial-summary-list');
                 financialList.innerHTML = `
-                    <li><span>Lucro Líquido</span> <strong>R$ ${lucroLiquido.toFixed(2)}</strong></li>
-                    <li><span>Custo de Produtos</span> <strong>R$ ${custoProdutosVendidos.toFixed(2)}</strong></li>
-                    <li><span>Despesas Fixas</span> <strong>R$ ${despesasFixas.toFixed(2)}</strong></li>`;
+                    <li><span>Lucro Líquido</span> <strong>R$ ${lucro.toFixed(2)}</strong></li>
+                    <li><span>Custo de Produtos</span> <strong>R$ ${custos.toFixed(2)}</strong></li>
+                    <li><span>Despesas Fixas</span> <strong>R$ ${despesas.toFixed(2)}</strong></li>`;
+            }
 
+            function updateDashboardTopProducts() {
+                const salesByProduct = {};
+                appState.sales.forEach(sale => {
+                    sale.items.forEach(item => {
+                        const productInfo = appState.products.find(p => p.id === item.productId);
+                        if(salesByProduct[item.productId]) {
+                            salesByProduct[item.productId].quantity += item.quantity;
+                        } else {
+                            salesByProduct[item.productId] = { name: productInfo ? productInfo.name : 'Desconhecido', quantity: item.quantity };
+                        }
+                    });
+                });
                 const topProductsList = document.getElementById('top-products-list');
                 topProductsList.innerHTML = '';
                 const sortedBestSellers = Object.values(salesByProduct).sort((a, b) => b.quantity - a.quantity).slice(0, 5);
@@ -2346,8 +2365,10 @@
                 } else {
                     topProductsList.innerHTML = '<li class="placeholder">Nenhuma venda registrada.</li>';
                 }
+            }
 
-                const listaEstoqueBaixoEl = document.getElementById('dashboard-lista-estoque-baixo');
+            function updateDashboardLowStock() {
+                 const listaEstoqueBaixoEl = document.getElementById('dashboard-lista-estoque-baixo');
                 const produtosEstoqueBaixo = appState.products.filter(p => p.stock <= appState.settings.lowStockThreshold);
                 listaEstoqueBaixoEl.innerHTML = '';
                 if (produtosEstoqueBaixo.length > 0) {
@@ -2357,6 +2378,45 @@
                 } else {
                     listaEstoqueBaixoEl.innerHTML = '<li class="placeholder">Nenhum produto com estoque baixo.</li>';
                 }
+            }
+
+            function updateDashboardGoals() {
+                const list = document.getElementById('dashboard-goals-list');
+                list.innerHTML = ''; 
+
+                ['daily', 'weekly', 'monthly'].forEach(period => {
+                    const goal = appState.goals[period] || 0;
+                    let currentTotal = 0;
+                    const today = new Date('2025-06-07T17:30:00-03:00');
+                    const todayStr = today.toISOString().split('T')[0];
+
+                    if (period === 'daily') {
+                        currentTotal = appState.sales.filter(s => s.date === todayStr).reduce((sum, s) => sum + s.total, 0);
+                    } else if (period === 'weekly') {
+                        const startOfWeek = new Date(today);
+                        startOfWeek.setDate(startOfWeek.getDate() - today.getDay());
+                        const startOfWeekStr = startOfWeek.toISOString().split('T')[0];
+                        currentTotal = appState.sales.filter(s => s.date >= startOfWeekStr).reduce((sum, s) => sum + s.total, 0);
+                    } else if (period === 'monthly') {
+                        const startOfMonthStr = today.toISOString().slice(0, 8) + '01';
+                        currentTotal = appState.sales.filter(s => s.date >= startOfMonthStr).reduce((sum, s) => sum + s.total, 0);
+                    }
+                    
+                    const percentage = goal > 0 ? (currentTotal / goal) * 100 : 0;
+                    const periodName = { daily: 'Diária', weekly: 'Semanal', monthly: 'Mensal' }[period];
+
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="goal-info">
+                            <span>Meta ${periodName}</span>
+                            <span class="goal-percentage">${Math.round(percentage)}%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: ${Math.min(percentage, 100)}%;"></div>
+                        </div>
+                    `;
+                    list.appendChild(li);
+                });
             }
             
             // =================================================================================
@@ -3322,21 +3382,27 @@
             }
             
             function renderGoalChart(period, percentage, current, goal) {
-                const ctx = document.getElementById(`${period}-goal-chart`).getContext('2d');
+                const canvas = document.getElementById(`${period}-goal-chart`);
+                const ctx = canvas.getContext('2d');
                 if (goalCharts[period]) {
                     goalCharts[period].destroy();
                 }
 
                 const progress = Math.min(percentage / 100, 1);
 
+                // Criar o gradiente para a barra de progresso
+                const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+                gradient.addColorStop(0, '#DB1472'); // Cor primária (rosa)
+                gradient.addColorStop(1, '#F8B81F'); // Cor secundária (amarelo)
+
+
                 goalCharts[period] = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
                         datasets: [{
-                            data: [progress, 1 - progress],
-                            backgroundColor: ['#db1472', '#e2e8f0'],
-                            borderColor: ['#ffffff', '#ffffff'],
-                            borderWidth: 2,
+                            data: [progress, 1 - progress > 0.001 ? 1 - progress : 0],
+                            backgroundColor: [gradient, '#e2e8f0'],
+                            borderWidth: 0,
                             circumference: 180,
                             rotation: -90,
                         }]
@@ -3352,7 +3418,10 @@
                                 formatter: () => {
                                     return `${Math.round(percentage)}%\n(R$ ${current.toFixed(2)})`;
                                 },
-                                font: { size: 16, weight: 'bold' },
+                                font: { 
+                                    size: 14, 
+                                    weight: 'bold' 
+                                },
                                 textAlign: 'center',
                             }
                         }
