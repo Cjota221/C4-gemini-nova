@@ -7,6 +7,42 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
+        /* Variáveis CSS para um Design System consistente */
+        :root {
+            /* Cores Principais */
+            --color-primary: #DB1472;
+            --color-secondary: #F8B81F;
+            --color-accent-pink: #ec4899;
+            --color-dark-pink: #c01062;
+
+            /* Cores de Texto */
+            --color-text-dark: #1f2937;
+            --color-text-primary: #374151;
+            --color-text-secondary: #666666;
+            --color-text-light: #fce7f3;
+
+            /* Cores de Fundo */
+            --bg-light-pink: #fef6fa;
+            --bg-soft-pink: #fdf2f8;
+            --bg-white: #ffffff;
+            --bg-footer: #f8f0f4;
+
+            /* Espaçamentos */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+
+            /* Bordas e Sombras */
+            --border-radius-sm: 6px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 12px;
+            --box-shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --box-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --box-shadow-lg: 0 6px 14px rgba(0,0,0,0.12);
+        }
+
         /* Estilos básicos para visualização inicial e mobile-first */
         body { 
             font-family: 'Poppins', sans-serif; /* Tipografia sugerida */
@@ -173,7 +209,7 @@
             font-weight: 600; 
         }
         .sub-page-title { 
-            color: #c01062; 
+            color: #db1472; 
             font-size: 1.6rem;
             font-weight: 600;
             margin-top: 0;
@@ -211,18 +247,18 @@
             display: block;
         }
 
-        /* ======= ESTILOS ATUALIZADOS DO DASHBOARD ======= */
+        /* ======= ESTILOS DO DASHBOARD - BREAKPOINTS ATUALIZADOS ======= */
         #dashboard-page .cards-grid {
             display: grid;
             gap: 1.5rem;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
         }
-        @media(min-width: 500px) {
+        @media(min-width: 768px) { /* 2 colunas para tablet */
             #dashboard-page .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-         @media(min-width: 1024px) {
+         @media(min-width: 1024px) { /* 3 colunas para desktop */
             #dashboard-page .cards-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -236,7 +272,16 @@
             display: flex;
             align-items: center;
             gap: 1.2rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+        .dashboard-card:active {
+            transform: translateY(0);
+        }
+
         .dashboard-card-icon {
             width: 50px;
             height: 50px;
@@ -259,7 +304,7 @@
             margin: 0 0 0.25rem 0;
             font-size: 1rem;
             font-weight: 500;
-            color: #6b7280;
+            color: #666666;
         }
         .dashboard-card-content p {
             margin: 0;
@@ -273,13 +318,22 @@
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
+        .dashboard-list-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+         .dashboard-list-card:active {
+            transform: translateY(0);
+        }
+
          .dashboard-list-card h3 {
             margin-top: 0;
             margin-bottom: 1rem;
             font-size: 1.25rem;
             font-weight: 600;
-            color: #500724;
+            color: #db1472;
         }
          .dashboard-list-card ul {
             list-style: none;
@@ -293,7 +347,7 @@
             padding: 0.75rem 0.25rem;
             border-bottom: 1px solid #fce7f3;
             font-size: 0.95rem;
-            color: #4b5563;
+            color: #666666;
          }
         .dashboard-list-card li:last-child {
             border-bottom: none;
@@ -397,7 +451,7 @@
         .form-group label {
             display: block;
             font-weight: 500;
-            color: #4b5563; 
+            color: #666666; 
             margin-bottom: 0.4rem;
         }
         .form-group input,
@@ -515,7 +569,7 @@
             justify-content: space-between;
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
-            color: #500724;
+            color: #666666;
         }
         #sale-summary p.total {
             font-size: 1.4rem;
@@ -534,13 +588,13 @@
             color: #9d174d;
         }
 
-        /* ======= ESTILOS ATUALIZADOS: PÁGINA DE DESPESAS ======= */
+        /* ======= PÁGINA DE DESPESAS - BREAKPOINTS ATUALIZADOS ======= */
         .despesas-cards-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 colunas para mobile */
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
             gap: 1.5rem;
         }
-        @media (min-width: 992px) { /* 2x2 para desktop para harmonia */
+        @media (min-width: 768px) { /* 2 colunas para tablet */
             .despesas-cards-container {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -550,6 +604,14 @@
             border-radius: 8px;
             padding: 1.5rem;
             box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+         .card-despesa:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+         .card-despesa:active {
+            transform: translateY(0);
         }
         .card-despesa-title {
             color: #db1472;
@@ -561,7 +623,7 @@
         }
         .informativo {
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #666666;
             margin-bottom: 1.5rem;
             background-color: #fdf2f8;
             padding: 0.75rem;
@@ -600,11 +662,11 @@
         }
         .custos-lista li .cost-name {
             font-weight: 500;
-            color: #374151;
+            color: #666666;
         }
          .custos-lista li .cost-unit { /* Novo estilo para custo unitario */
              font-size: 0.85rem;
-             color: #6b7280;
+             color: #666666;
              display: block;
          }
         .custos-lista li .cost-value {
@@ -655,7 +717,7 @@
         .summary-button .label {
             font-size: 1rem;
             font-weight: 500;
-            color: #500724;
+            color: #666666;
             margin: 0 0 0.5rem 0;
         }
         .summary-button .value {
@@ -681,7 +743,7 @@
             margin: 0 auto;
         }
         
-        /* ======= ESTILOS ATUALIZADOS: PÁGINA DE PRODUTOS ======= */
+        /* ======= PÁGINA DE PRODUTOS E VENDAS - BREAKPOINTS ATUALIZADOS ======= */
         #produtos-page .page-actions {
             display: flex;
             gap: 1rem;
@@ -689,10 +751,21 @@
         }
         .item-cards-container { 
             display: grid;
-            gap: 1rem; 
+            gap: 1.5rem; 
             margin-top: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
         }
+        @media (min-width: 768px) { /* 2 colunas para tablet */
+             .item-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) { /* 3 colunas para desktop */
+             .item-cards-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
 
         .product-card, .sale-card { 
             background-color: #ffffff;
@@ -703,10 +776,14 @@
             flex-direction: column;
             border-left: 5px solid #f8b81f; 
             font-size: 0.9rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
         .product-card:hover, .sale-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+         .product-card:active, .sale-card:active {
+            transform: translateY(0);
         }
 
         .product-card-image {
@@ -726,7 +803,7 @@
         }
         .product-card p, .sale-card p {
             font-size: 0.85rem; 
-            color: #4b5563;
+            color: #666666;
             margin: 0.2rem 0;
             line-height: 1.3;
         }
@@ -753,7 +830,7 @@
             margin-top: 0.5rem;
         }
 
-        /* ======= NOVOS ESTILOS: FORMULÁRIO DE PRODUTO ATUALIZADO ======= */
+        /* ======= FORMULÁRIO DE PRODUTO ======= */
         .cost-display-badge {
             background-color: #fce7f3;
             border: 1px solid #fbcfe8;
@@ -820,7 +897,7 @@
             margin: 0;
             font-size: 0.9rem;
             font-weight: 500;
-            color: #500724;
+            color: #666666;
         }
          .pricing-result div .suggested-price {
             font-size: 1.6rem;
@@ -833,7 +910,7 @@
             color: #10b981; 
         }
         
-        /* ======= NOVOS ESTILOS: IMPORTAÇÃO DE PRODUTOS ======= */
+        /* ======= IMPORTAÇÃO DE PRODUTOS ======= */
         #import-preview-table-container {
             max-height: 300px;
             overflow-y: auto;
@@ -866,11 +943,21 @@
             font-weight: bold;
         }
 
-        /* ======= NOVOS ESTILOS: PÁGINA DE CLIENTES (CRM) ======= */
+        /* ======= PÁGINA DE CLIENTES (CRM) - BREAKPOINTS ATUALIZADOS ======= */
         .customer-cards-container {
             display: grid;
             gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
+        }
+        @media (min-width: 768px) { /* 2 colunas para tablet */
+            .customer-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) { /* 3 colunas para desktop */
+             .customer-cards-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .customer-card {
@@ -879,6 +966,14 @@
             padding: 1.5rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             border-left: 5px solid #db1472;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .customer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+         .customer-card:active {
+            transform: translateY(0);
         }
         .customer-card.dormant {
             border-left-color: #f59e0b; /* Laranja para chamar atenção */
@@ -892,17 +987,17 @@
         .customer-card-header h4 {
             margin: 0;
             font-size: 1.3rem;
-            color: #500724;
+            color: #db1472;
         }
         .customer-card-header p {
              margin: 0;
              font-size: 0.9rem;
-             color: #6b7280;
+             color: #666666;
         }
         .customer-card-info p {
             font-size: 0.95rem;
             margin: 0.25rem 0;
-            color: #4b5563;
+            color: #666666;
         }
          .customer-card-info p strong {
              color: #1f2937;
@@ -910,7 +1005,7 @@
         .last-purchase-title {
             font-size: 1rem;
             font-weight: 600;
-            color: #c01062;
+            color: #db1472;
             margin-top: 1rem;
             margin-bottom: 0.5rem;
         }
@@ -919,13 +1014,13 @@
             padding: 0;
             margin: 0;
             font-size: 0.9rem;
-            color: #4b5563;
+            color: #666666;
         }
         .last-purchase-list li {
             padding: 0.2rem 0;
         }
 
-        /* ESTILOS ATUALIZADOS: LUCRO CERTO E LIBERDADE FINANCEIRA */
+        /* ESTILOS LUCRO CERTO E LIBERDADE FINANCEIRA */
         .main-content-grid {
             display: grid;
             gap: 1.5rem;
@@ -943,9 +1038,17 @@
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .lucro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+         .lucro-card:active {
+            transform: translateY(0);
         }
          .lucro-card h3 {
-            color: #c01062; 
+            color: #db1472; 
             font-size: 1.3rem;
             margin-top: 0;
             margin-bottom: 1rem;
@@ -1065,7 +1168,7 @@
         .lucro-result-display p {
             margin: 0 0 0.5rem 0;
             font-size: 1.1rem;
-            color: #500724;
+            color: #666666;
         }
          .lucro-result-display .destaque-preco {
             font-size: 2rem;
@@ -1107,11 +1210,11 @@
         }
         #plan-ai-assistant p {
             margin: 0 0 1rem 0;
-            color: #500724;
+            color: #666666;
             font-weight: 500;
         }
 
-        /* ESTILOS LIBERDADE FINANCEIRA */
+        /* ======= PÁGINA LIBERDADE FINANCEIRA - BREAKPOINTS ATUALIZADOS ======= */
         .lf-summary-grid {
             display: grid;
             gap: 1.5rem;
@@ -1127,7 +1230,17 @@
         #liberdade-financeira-page .debt-cards-container {
             display: grid;
             gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
+        }
+         @media (min-width: 768px) { /* 2 colunas para tablet */
+            #liberdade-financeira-page .debt-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) { /* 3 colunas para desktop */
+             #liberdade-financeira-page .debt-cards-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .debt-card {
@@ -1138,6 +1251,14 @@
             border-left: 5px solid;
             display: flex;
             flex-direction: column;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .debt-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+        .debt-card:active {
+            transform: translateY(0);
         }
 
         .debt-card.prioridade-alta { border-color: #ef4444; }
@@ -1152,7 +1273,7 @@
 
         .debt-card p {
             margin: 0.25rem 0;
-            color: #4b5563;
+            color: #666666;
         }
 
         .debt-card .debt-actions {
@@ -1168,13 +1289,18 @@
             cursor: not-allowed;
         }
 
-        /* ======= NOVOS ESTILOS: PÁGINA METAS ======= */
+        /* ======= PÁGINA METAS - BREAKPOINTS ATUALIZADOS ======= */
         #goals-container {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
             gap: 2rem;
         }
-        @media(min-width: 992px) {
+        @media(min-width: 768px) { /* 2 colunas para tablet */
+            #goals-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media(min-width: 1024px) { /* 3 colunas para desktop */
             #goals-container {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1185,9 +1311,17 @@
             padding: 1.5rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             text-align: center;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+         .goal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+         .goal-card:active {
+            transform: translateY(0);
         }
         .goal-card h3 {
-            color: #c01062;
+            color: #db1472;
             margin-top: 0;
             margin-bottom: 1rem;
         }
@@ -1206,13 +1340,18 @@
             color: #db1472;
         }
 
-        /* Página Calculadoras Hub */
+        /* ======= PÁGINA CALCULADORAS - BREAKPOINTS ATUALIZADOS ======= */
         .calculators-grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 colunas no mobile */
+            grid-template-columns: 1fr; /* 1 coluna por padrão (mobile) */
             gap: 1rem;
         }
-        @media (min-width: 992px) { /* 3 colunas para desktop */
+        @media (min-width: 768px) { /* 2 colunas para tablet */
+            .calculators-grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) { /* 3 colunas para desktop */
             .calculators-grid-container {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1236,6 +1375,9 @@
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(219, 20, 114, 0.15); /* Sombra rosa no hover */
         }
+         .calculator-card:active {
+            transform: translateY(0);
+        }
         .calculator-card svg {
             width: 40px;
             height: 40px;
@@ -1244,7 +1386,7 @@
         }
         .calculator-card h4 {
             font-size: 1rem;
-            color: #500724; /* Rosa escuro */
+            color: #db1472; 
             margin: 0;
             font-weight: 600;
             line-height: 1.3;
@@ -1324,9 +1466,6 @@
             <a href="#liberdade-financeira" class="sidebar-nav-item" data-page="liberdade-financeira-page">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 Liberdade Financeira
-            </a>
-            <a href="#calculadoras" class="sidebar-nav-item" data-page="calculadoras-page"> <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="16" y2="18"></line></svg>
-                Calculadoras
             </a>
             <a href="#metas" class="sidebar-nav-item" data-page="metas-page">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
@@ -1416,7 +1555,6 @@
             <div class="quick-actions">
                 <button class="btn-action" data-target-page="vendas-page">Nova Venda</button>
                 <button class="btn-action" data-target-page="produtos-page">Novo Produto</button>
-                <button class="btn-action" data-target-page="calculadoras-page">Calculadoras</button>
             </div>
         </section>
 
@@ -1545,7 +1683,7 @@
                         </div>
                     </div>
                     <fieldset style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
-                        <legend style="color: #4b5563; font-weight:500; padding: 0 0.5rem;">Adicionar Produtos</legend>
+                        <legend style="color: #666666; font-weight:500; padding: 0 0.5rem;">Adicionar Produtos</legend>
                         <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom:1rem;">
                             <div class="form-group" style="flex-grow:3; margin-bottom:0;">
                                 <label for="venda-produto-select">Produto</label>
@@ -1559,7 +1697,7 @@
                             </div>
                             <button type="button" class="btn btn-secondary" id="btn-add-produto-venda" style="padding: 0.7rem;">Adicionar</button>
                         </div>
-                        <h4 style="color:#500724; font-weight:500; margin-top:1.5rem; margin-bottom:0.5rem;">Itens da Venda:</h4>
+                        <h4 style="color:#db1472; font-weight:500; margin-top:1.5rem; margin-bottom:0.5rem;">Itens da Venda:</h4>
                         <ul id="venda-itens-lista" class="sale-items-list" style="list-style: none; padding:0;">
                              <p id="venda-sem-itens" style="text-align: center; color: #6b7280; padding: 1rem 0;">Nenhum item adicionado à venda.</p>
                         </ul>
@@ -1628,7 +1766,7 @@
                             <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
                         </div>
                     </form>
-                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Cadastrados:</h4>
+                    <h4 style="margin-top:1.5rem; color:#db1472;">Custos Cadastrados:</h4>
                     <ul id="lista-custos-fixos" class="custos-lista"></ul>
                 </div>
 
@@ -1649,7 +1787,7 @@
                             <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
                         </div>
                     </form>
-                    <h4 style="margin-top:1.5rem; color:#500724;">Custos Cadastrados:</h4>
+                    <h4 style="margin-top:1.5rem; color:#db1472;">Custos Cadastrados:</h4>
                     <ul id="lista-custos-variaveis" class="custos-lista"></ul>
                 </div>
 
@@ -1670,7 +1808,7 @@
                             <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
                         </div>
                     </form>
-                    <h4 style="margin-top:1.5rem; color:#500724;">Fretes Cadastrados:</h4>
+                    <h4 style="margin-top:1.5rem; color:#db1472;">Fretes Cadastrados:</h4>
                     <ul id="lista-custos-frete" class="custos-lista"></ul>
                 </div>
 
@@ -1691,7 +1829,7 @@
                             <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
                         </div>
                     </form>
-                    <h4 style="margin-top:1.5rem; color:#500724;">Impostos Cadastrados:</h4>
+                    <h4 style="margin-top:1.5rem; color:#db1472;">Impostos Cadastrados:</h4>
                     <ul id="lista-custos-impostos" class="custos-lista"></ul>
                 </div>
             </div>
@@ -1916,87 +2054,6 @@
             <p id="lucro-certo-selecione-produto-msg" style="text-align:center; color:#6b7280; padding:1rem;">Selecione um produto para começar.</p>
         </section>
 
-        <!-- PÁGINA HUB DE CALCULADORAS -->
-        <section id="calculadoras-page" class="page-content">
-            <h2 class="page-title">Calculadoras</h2>
-            <p style="text-align: center; margin-bottom: 2rem; color: #500724;">Selecione uma calculadora abaixo para começar!</p>
-
-            <div class="calculators-grid-container">
-                <div class="calculator-card" data-target-calculator="calc-preco-venda-page">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.57,14.85C21.68,13.74 22.25,12.2 22,10.25C21.75,8.3 20.26,6.81 18.31,6.56C16.36,6.31 14.81,6.88 13.7,8L10,11.69L12.31,14L13.7,12.63C14.81,11.5 16.36,10.94 18.31,11.19C20.26,11.44 21.75,12.93 22,14.88C22.25,16.83 21.68,18.38 20.57,19.5L14,26L2,14L8.5,7.5C9.62,6.38 11.17,5.81 13.12,6.06C15.07,6.31 16.56,7.8 16.81,9.75C17.06,11.7 16.49,13.25 15.37,14.37L10,19.74L7.69,17.41L11.37,13.7Z"/></svg>
-                    <h4>Preço de Venda Inteligente</h4>
-                </div>
-                <div class="calculator-card" data-target-calculator="calc-pecas-vender">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                    <h4>Quantas Peças Vender</h4>
-                </div>
-                <div class="calculator-card" data-target-calculator="calc-frete-gratis">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.08,4.23L12,2L13.92,4.23C16.83,5.77 18.23,8.83 17.65,11.9L16.5,17.55C16.22,19.14 14.86,20.23 13.2,20.23H10.8C9.14,20.23 7.78,19.14 7.5,17.55L6.35,11.9C5.77,8.83 7.17,5.77 10.08,4.23Z"></path><path d="M12,22C14.21,22 16,20.21 16,18H8C8,20.21 9.79,22 12,22Z"></path></svg>
-                    <h4>Frete Grátis Inteligente</h4>
-                </div>
-                <div class="calculator-card" data-target-calculator="calc-margem-real">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                    <h4>Margem Real</h4>
-                </div>
-                <div class="calculator-card" data-target-calculator="calc-promocao">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-                    <h4>Promoção Inteligente</h4>
-                </div>
-                <div class="calculator-card" data-target-calculator="calc-frete-unidade">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9.5L16.5 12L14 14.5"></path><path d="M9.5 14.5L7 12L9.5 9.5"></path><circle cx="12" cy="12" r="10"></circle></svg>
-                    <h4>Custo de Frete por Unidade</h4>
-                </div>
-                 <div class="calculator-card" data-target-calculator="calc-imposto">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                    <h4>Imposto por Produto</h4>
-                </div>
-            </div>
-        </section>
-        
-        <!-- SUBPÁGINA CALCULADORA PREÇO DE VENDA -->
-        <section id="calc-preco-venda-page" class="page-content">
-             <button class="btn btn-secondary btn-voltar-calculadoras" style="margin-bottom: 1.5rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Voltar para Calculadoras
-            </button>
-            <h2 class="page-title">Preço de Venda Inteligente</h2>
-             <div class="form-container" style="max-width: 600px; margin: 1.5rem auto;">
-                <div id="calc-pvi-content">
-                    <div class="form-group">
-                        <label for="calc-pvi-produto-select">Selecione o Produto</label>
-                        <select id="calc-pvi-produto-select">
-                            <option value="">-- Escolha um Produto --</option>
-                        </select>
-                    </div>
-                    <div id="calc-pvi-details" style="display:none;">
-                        <div class="form-group">
-                            <label for="calc-pvi-custo-produto">Custo do Produto (R$)</label>
-                            <input type="number" id="calc-pvi-custo-produto" readonly class="readonly-field">
-                        </div>
-                         <div class="form-group">
-                            <label for="calc-pvi-margem-slider">Margem de Lucro Desejada (<span id="calc-pvi-margem-value">100</span>%)</label>
-                            <input type="range" id="calc-pvi-margem-slider" min="10" max="200" value="100" step="1">
-                        </div>
-                        <div class="lucro-result-display" style="margin-top: 0; padding: 1rem;">
-                             <p>Preço de Venda Sugerido</p>
-                             <p class="destaque-preco" id="calc-pvi-preco-sugerido">R$ 0,00</p>
-                             <p class="destaque-lucro" id="calc-pvi-lucro-liquido">Lucro de R$ 0,00</p>
-                        </div>
-                        <div id="calc-pvi-alerta-margem" class="lucro-certo-alert alert-warning" style="text-align: center; font-weight: bold;">
-                             Atenção: margem abaixo do recomendado!
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-primary" id="btn-pvi-salvar-produto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                                Salvar Preço no Produto
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                 <p id="calc-pvi-initial-msg" style="text-align:center; color:#6b7280; padding:1rem;">Selecione um produto para começar.</p>
-             </div>
-        </section>
-
         <section id="metas-page" class="page-content">
             <h2 class="page-title">Minhas Metas de Vendas</h2>
              <div id="goals-container">
@@ -2180,7 +2237,6 @@
 
                     const targetPage = document.getElementById(pageId);
                     let targetNavItemKey = pageId;
-                    if (pageId.startsWith('calc-')) targetNavItemKey = 'calculadoras-page';
                     if (pageId === 'planejamento-divida-page') targetNavItemKey = 'liberdade-financeira-page';
 
                     const targetNavItem = document.querySelector(`.sidebar-nav-item[data-page="${targetNavItemKey}"]`);
@@ -2209,12 +2265,10 @@
                     case 'vendas-page': setupVendasPage(data); break;
                     case 'clientes-page': setupClientesPage(); break;
                     case 'despesas-page': setupDespesasPage(); break;
-                    case 'metas-page': setupMetasPage(); break; // NOVO
+                    case 'metas-page': setupMetasPage(); break;
                     case 'lucro-certo-page': setupLucroCertoPage(); break;
                     case 'liberdade-financeira-page': setupLiberdadeFinanceiraPage(); break;
                     case 'planejamento-divida-page': setupPlanejamentoDividaPage(data); break;
-                    case 'calculadoras-page': break;
-                    case 'calc-preco-venda-page': setupCalcPrecoVendaPage(); break;
                 }
             }
             
@@ -3226,86 +3280,6 @@
             }
 
             // =================================================================================
-            // ======================== MÓDULO: CALCULADORA DE PREÇO ===========================
-            // =================================================================================
-
-            function setupCalcPrecoVendaPage() {
-                let selectedProduct = null;
-                const selectEl = document.getElementById('calc-pvi-produto-select');
-                const detailsEl = document.getElementById('calc-pvi-details');
-                const msgEl = document.getElementById('calc-pvi-initial-msg');
-                const costInput = document.getElementById('calc-pvi-custo-produto');
-                const marginSlider = document.getElementById('calc-pvi-margem-slider');
-                const marginValueSpan = document.getElementById('calc-pvi-margem-value');
-                const priceResultEl = document.getElementById('calc-pvi-preco-sugerido');
-                const profitResultEl = document.getElementById('calc-pvi-lucro-liquido');
-                const alertEl = document.getElementById('calc-pvi-alerta-margem');
-                const saveBtn = document.getElementById('btn-pvi-salvar-produto');
-
-                selectEl.innerHTML = '<option value="">-- Escolha um Produto --</option>';
-                appState.products.forEach(p => {
-                    const option = document.createElement('option');
-                    option.value = p.id;
-                    option.textContent = p.name;
-                    selectEl.appendChild(option);
-                });
-                
-                detailsEl.style.display = 'none';
-                msgEl.style.display = 'block';
-
-                const calculateAndDisplay = () => {
-                    if (!selectedProduct) return;
-                    const cost = parseFloat(costInput.value);
-                    const margin = parseFloat(marginSlider.value);
-                    
-                    marginValueSpan.textContent = margin;
-
-                    if (isNaN(cost) || cost < 0) {
-                        priceResultEl.textContent = 'R$ 0,00';
-                        profitResultEl.textContent = 'Lucro de R$ 0,00';
-                        return;
-                    }
-
-                    const salePrice = cost / (1 - (margin / 100));
-                    const netProfit = salePrice - cost;
-
-                    priceResultEl.textContent = `R$ ${salePrice.toFixed(2)}`;
-                    profitResultEl.textContent = `Lucro de R$ ${netProfit.toFixed(2)}`;
-                    alertEl.style.display = margin < 20 ? 'block' : 'none';
-                };
-
-                selectEl.onchange = () => {
-                    const productId = selectEl.value;
-                    selectedProduct = appState.products.find(p => p.id === productId);
-
-                    if (selectedProduct) {
-                        detailsEl.style.display = 'block';
-                        msgEl.style.display = 'none';
-                        costInput.value = selectedProduct.costPrice.toFixed(2);
-                        calculateAndDisplay();
-                    } else {
-                        detailsEl.style.display = 'none';
-                        msgEl.style.display = 'block';
-                    }
-                };
-                marginSlider.oninput = calculateAndDisplay;
-                saveBtn.onclick = () => {
-                    if (!selectedProduct) { showToast('Selecione um produto.', 'error'); return; }
-                    const newPriceText = priceResultEl.textContent;
-                    const newPrice = parseFloat(newPriceText.replace('R$ ', '').replace(',', '.'));
-                    if (isNaN(newPrice) || newPrice <= 0) { showToast('Preço inválido.', 'error'); return; }
-
-                    const productIndex = appState.products.findIndex(p => p.id === selectedProduct.id);
-                    if (productIndex > -1) {
-                        appState.products[productIndex].salePrice = newPrice;
-                        saveState();
-                        showToast(`Preço de "${selectedProduct.name}" salvo com sucesso!`);
-                        updateAllProductSelects();
-                    }
-                };
-            }
-
-            // =================================================================================
             // ============================= MÓDULO: METAS (NOVO) ==============================
             // =================================================================================
             function setupMetasPage() {
@@ -3394,7 +3368,6 @@
             function updateAllProductSelects() {
                 if (document.getElementById('vendas-page').classList.contains('active')) populateSalesProductSelect();
                 if (document.getElementById('lucro-certo-page').classList.contains('active')) setupLucroCertoPage();
-                if (document.getElementById('calc-preco-venda-page').classList.contains('active')) setupCalcPrecoVendaPage();
             }
 
             // =================================================================================
@@ -3415,15 +3388,12 @@
                         closeSidebar(); 
                     });
                 });
-                document.querySelectorAll('.btn-action[data-target-page], .calculator-card[data-target-calculator], #plan-ai-assistant button').forEach(button => {
+                document.querySelectorAll('.btn-action[data-target-page], #plan-ai-assistant button').forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.preventDefault();
-                        const targetPage = button.dataset.targetPage || button.dataset.targetCalculator;
+                        const targetPage = button.dataset.targetPage;
                         if(targetPage) setActivePage(targetPage);
                     });
-                });
-                document.querySelectorAll('.btn-voltar-calculadoras').forEach(button => {
-                    button.addEventListener('click', () => setActivePage('calculadoras-page'));
                 });
                 
                 // --- Listeners Página de Produtos ---
