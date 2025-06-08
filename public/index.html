@@ -44,9 +44,21 @@
             --box-shadow-lg: 0 6px 14px rgba(0,0,0,0.12);
         }
 
-        /* Estilos básicos para visualização inicial e mobile-first */
+        /* Tema Escuro */
+        body.theme-dark {
+            --color-text-dark: #f9fafb;
+            --color-text-primary: #e5e7eb;
+            --color-text-secondary: #9ca3af;
+            --color-text-light: #1f2937;
+            --bg-light-pink: #111827;
+            --bg-soft-pink: #1f2937;
+            --bg-white: #374151;
+            --bg-footer: #1f2937;
+        }
+
+        /* Tipografia */
         body { 
-            font-family: 'Poppins', sans-serif; /* Tipografia sugerida */
+            font-family: 'Poppins', sans-serif;
             margin: 0; 
             padding: 0;
             display: flex;
@@ -55,6 +67,13 @@
             background-color: var(--bg-light-pink);
             position: relative;
             overflow-x: hidden;
+            color: var(--color-text-primary);
+        }
+        body.font-large {
+            font-size: 1.1em;
+        }
+        body.font-opensans {
+            font-family: 'Open Sans', sans-serif;
         }
 
         /* Cabeçalho */
@@ -121,7 +140,7 @@
             margin-bottom: 10px;
         }
         .sidebar-nav-header .sidebar-title {
-            color: var(--bg-white);
+            color: #ffffff;
             font-size: 1.8em;
             font-weight: 700;
             margin:0;
@@ -129,7 +148,7 @@
         .sidebar-nav .close-btn { 
             font-size: 2.2rem; 
             font-weight: 700;
-            color: var(--color-text-light); 
+            color: #fce7f3;
             background: none;
             border: none;
             cursor: pointer;
@@ -148,7 +167,7 @@
             text-decoration: none;
             font-size: 1.15rem; 
             font-weight: 500; 
-            color: var(--color-text-light); 
+            color: #fce7f3;
             display: flex; 
             align-items: center; 
             transition: 0.2s ease-in-out;
@@ -220,7 +239,7 @@
         /* Rodapé */
         footer {
             background-color: var(--bg-footer); 
-            color: #575355; 
+            color: var(--color-text-secondary); 
             text-align: center;
             padding: 1.5rem;
             font-size: 0.9rem;
@@ -296,7 +315,7 @@
         .dashboard-card-icon svg {
             width: 24px;
             height: 24px;
-            color: var(--bg-white);
+            color: #ffffff;
         }
         .icon-bg-pink { background-color: var(--color-primary); }
         .icon-bg-green { background-color: #10b981; }
@@ -323,6 +342,7 @@
             box-shadow: var(--box-shadow-md);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             touch-action: manipulation;
+            margin-top: 1rem;
         }
         .dashboard-list-card:hover {
             transform: translateY(-5px);
@@ -349,7 +369,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.75rem 0.25rem;
-            border-bottom: 1px solid var(--color-text-light);
+            border-bottom: 1px solid var(--bg-soft-pink);
             font-size: 13px; /* Bullet points */
             color: var(--color-text-secondary); /* Melhor contraste para bullets */
          }
@@ -503,6 +523,7 @@
             box-sizing: border-box; 
             font-size: 1rem;
             color: var(--color-text-primary); 
+            background-color: var(--bg-white);
             transition: border-color 0.2s;
         }
         .form-group input.is-invalid, .form-group select.is-invalid {
@@ -618,7 +639,7 @@
         .summary-section { 
             margin-top: 2rem;
             padding: 1.5rem;
-            background-color: #fff1f2; 
+            background-color: var(--bg-soft-pink); 
             border-radius: 8px;
             border: 1px solid #ffe4e6;
         }
@@ -639,7 +660,7 @@
             }
         }
         .card-despesa {
-            background-color: #fff1f2; 
+            background-color: var(--bg-soft-pink); 
             border-radius: 8px;
             padding: 16px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.07);
@@ -775,7 +796,7 @@
              color: var(--color-text-light);
         }
         .summary-button.primary .value {
-             color: var(--bg-white);
+             color: #ffffff;
         }
         .despesas-chart-container {
             position: relative;
@@ -876,7 +897,7 @@
 
         /* ======= FORMULÁRIO DE PRODUTO ======= */
         .cost-display-badge {
-            background-color: var(--color-text-light);
+            background-color: var(--bg-soft-pink);
             border: 1px solid #fbcfe8;
             color: #9d174d;
             padding: 0.5rem 0.8rem;
@@ -973,7 +994,7 @@
             font-size: 0.9rem;
         }
         #import-preview-table th {
-            background-color: #f9fafb;
+            background-color: var(--bg-soft-pink);
             font-weight: 600;
             position: sticky;
             top: 0;
@@ -1005,7 +1026,7 @@
         }
 
         .customer-card {
-            background-color: #fff;
+            background-color: var(--bg-white);
             border-radius: var(--border-radius-md);
             padding: 16px;
             box-shadow: var(--box-shadow-md);
@@ -1296,7 +1317,7 @@
         }
 
         .debt-card {
-            background-color: #fff;
+            background-color: var(--bg-white);
             border-radius: var(--border-radius-md);
             box-shadow: var(--box-shadow-md);
             padding: 16px;
@@ -1434,11 +1455,172 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* ======= PÁGINA PERFIL E CONFIGURAÇÕES (NOVOS ESTILOS) ======= */
+        .settings-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        @media(min-width: 768px) {
+            .settings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media(min-width: 1024px) {
+            .settings-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .setting-card {
+            background-color: var(--bg-white);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow-md);
+            border-left: 4px solid var(--color-secondary);
+        }
         
+        .setting-card h3 {
+            font-size: 1.25rem;
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--color-primary);
+        }
+        #upload-pic-button {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 36px;
+            height: 36px;
+            background-color: var(--color-secondary);
+            color: #5c3c00;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        #upload-pic-button svg { width: 18px; height: 18px; }
+
+        .setting-card .form-group label {
+             font-size: 0.9em;
+             font-weight: 500;
+             color: var(--color-text-secondary);
+        }
+
+        .toggle-switch-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .toggle-switch-container span {
+            font-weight: 500;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .toggle-switch input { display: none; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            border-radius: 28px;
+            transition: .3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px; width: 20px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+        input:checked + .toggle-slider { background-color: var(--color-primary); }
+        input:checked + .toggle-slider:before { transform: translateX(22px); }
+
+        .settings-button-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .settings-button-list button, .settings-button-list a {
+            width: 100%;
+            text-align: left;
+            background-color: var(--bg-soft-pink);
+            color: var(--color-text-primary);
+            justify-content: flex-start;
+        }
+        .settings-button-list button:hover, .settings-button-list a:hover {
+            background-color: #fbcfe8;
+        }
+        body:not(.theme-dark) .settings-button-list .btn-danger { background-color: #fee2e2; color: #b91c1c; }
+        body:not(.theme-dark) .settings-button-list .btn-danger:hover { background-color: #fecaca; }
+
+        #app-version {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            margin-top: 1.5rem;
+        }
+
+        /* ======= MODAL DE CONFIRMAÇÃO ======= */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background-color: var(--bg-white);
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 450px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--box-shadow-lg);
+            text-align: center;
+        }
+        .modal-content h3 { color: #ef4444; }
+        .modal-content p { margin-bottom: 1.5rem; }
+        .modal-actions { display: flex; justify-content: center; gap: 1rem; }
+
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
 <body>
@@ -1493,8 +1675,8 @@
         </div>
     </aside>
 
-    <header class="app-header header-gradient">
-        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Fechar menu">
+    <header class="app-header">
+        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Abrir menu">
             <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
             </svg>
@@ -1706,7 +1888,7 @@
                         </div>
                     </div>
                     <fieldset style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
-                        <legend style="color: #666666; font-weight:500; padding: 0 0.5rem;">Adicionar Produtos</legend>
+                        <legend style="color: var(--color-text-secondary); font-weight:500; padding: 0 0.5rem;">Adicionar Produtos</legend>
                         <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom:1rem;">
                             <div class="form-group" style="flex-grow:3; margin-bottom:0;">
                                 <label for="venda-produto-select">Produto</label>
@@ -2124,43 +2306,151 @@
             </div>
         </section>
         
-         <section id="relatorios-page" class="page-content">
-             <h2 class="page-title">Relatórios</h2>
-             <div class="form-container"><p><em>Em breve...</em></p></div>
+        <section id="relatorios-page" class="page-content">
+            <h2 class="page-title">Relatórios</h2>
+            <div class="form-container"><p><em>Em breve...</em></p></div>
         </section>
-         <section id="c4-ia-page" class="page-content">
-             <h2 class="page-title">C4 IA</h2>
-             <div class="form-container"><p><em>Em breve...</em></p></div>
+        <section id="c4-ia-page" class="page-content">
+            <h2 class="page-title">C4 IA</h2>
+            <div class="form-container"><p><em>Em breve...</em></p></div>
         </section>
-         <section id="perfil-page" class="page-content">
+        
+        <section id="perfil-page" class="page-content">
             <h2 class="page-title">Perfil e Configurações</h2>
-             <div class="form-container">
-                <h3 class="sub-page-title">Informações do Perfil</h3>
-                <form id="form-perfil">
-                    <div class="form-group">
-                        <label for="perfil-nome">Seu Nome</label>
-                        <input type="text" id="perfil-nome" placeholder="Como podemos te chamar?">
-                    </div>
-                    <div class="form-actions" style="justify-content: flex-start;">
-                        <button type="submit" class="btn btn-primary">Salvar Nome</button>
-                    </div>
-                </form>
-            </div>
-             <div class="form-container">
-                <h3 class="sub-page-title">Backup e Restauração</h3>
-                <p class="informativo">Salve seus dados em um arquivo seguro ou restaure a partir de um backup.</p>
-                <div class="form-actions" style="justify-content: flex-start;">
-                    <button class="btn btn-secondary" id="btn-export-data">Exportar Dados</button>
-                    <input type="file" id="import-file-input" style="display: none;" accept=".json">
-                    <button class="btn btn-primary" id="btn-import-data">Importar Dados</button>
+            <div class="settings-grid">
+                
+                <!-- Card: Informações do Usuário -->
+                <div class="setting-card">
+                    <h3>👤 Informações do Usuário</h3>
+                    <form id="form-perfil">
+                        <div class="profile-pic-container">
+                            <img src="https://placehold.co/120x120/fbcfe8/db1472?text=C4" id="profile-pic-preview" class="profile-pic" alt="Foto de Perfil">
+                            <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                            <button type="button" id="upload-pic-button" aria-label="Alterar foto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <label for="perfil-nome">Nome Completo</label>
+                            <input type="text" id="perfil-nome" placeholder="Seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="perfil-loja">Nome da Loja</label>
+                            <input type="text" id="perfil-loja" placeholder="O nome do seu negócio">
+                        </div>
+                        <div class="form-group">
+                            <label for="perfil-email">E-mail</label>
+                            <input type="email" id="perfil-email" placeholder="seu@email.com">
+                         </div>
+                         <div class="form-group">
+                            <label for="perfil-telefone">Telefone de Contato</label>
+                            <input type="tel" id="perfil-telefone" placeholder="(99) 99999-9999">
+                         </div>
+                        <div class="form-actions" style="justify-content: flex-start;">
+                            <button type="submit" class="btn btn-primary">Salvar Informações</button>
+                        </div>
+                    </form>
                 </div>
-             </div>
+
+                <!-- Card: Personalização Visual -->
+                <div class="setting-card">
+                    <h3>🎨 Personalização Visual</h3>
+                    <div class="form-group">
+                        <label>Tema</label>
+                         <div class="toggle-switch-container">
+                             <span>Tema Claro / Escuro</span>
+                             <label class="toggle-switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                         <label>Tipografia</label>
+                         <select id="font-select" class="form-group">
+                             <option value="poppins">Poppins (Padrão)</option>
+                             <option value="opensans">Open Sans</option>
+                         </select>
+                    </div>
+                     <div class="form-group">
+                         <label>Tamanho da Fonte</label>
+                         <select id="font-size-select" class="form-group">
+                             <option value="standard">Padrão</option>
+                             <option value="large">Grande</option>
+                         </select>
+                    </div>
+                </div>
+
+                <!-- Card: Segurança e Privacidade -->
+                <div class="setting-card">
+                    <h3>🔒 Segurança e Privacidade</h3>
+                     <div class="settings-button-list">
+                         <button class="btn btn-secondary">Alterar Senha ou PIN</button>
+                         <button class="btn btn-secondary" id="btn-export-data">Exportar Dados (Backup)</button>
+                         <button class="btn-danger" id="btn-reset-app">Zerar Dados do App</button>
+                     </div>
+                </div>
+
+                <!-- Card: Preferências e Idioma -->
+                <div class="setting-card">
+                    <h3>🌐 Preferências e Idioma</h3>
+                    <div class="form-group">
+                        <label>Lembretes e Notificações</label>
+                         <div class="toggle-switch-container">
+                             <span>Metas não atingidas</span>
+                             <label class="toggle-switch">
+                                <input type="checkbox" id="reminder-goals-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                         </div>
+                         <div class="toggle-switch-container">
+                             <span>Vencimento de despesas</span>
+                             <label class="toggle-switch">
+                                <input type="checkbox" id="reminder-dues-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="language-select">Idioma</label>
+                        <select id="language-select" class="form-group">
+                            <option value="pt-br">Português (Brasil)</option>
+                            <option value="es" disabled>Español (em breve)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Card: Ajuda e Suporte -->
+                <div class="setting-card">
+                    <h3>🤝 Ajuda e Suporte</h3>
+                    <div class="settings-button-list">
+                        <button class="btn btn-primary" data-target-page="c4-ia-page">Falar com a C4 IA</button>
+                        <a href="https://wa.me/556299999999" target="_blank" class="btn btn-secondary">Suporte via WhatsApp</a>
+                        <a href="#" class="btn btn-secondary">Política de Privacidade</a>
+                        <a href="#" class="btn btn-secondary">Termos de Uso</a>
+                    </div>
+                    <p id="app-version">C4 App v1.1.0</p>
+                </div>
+                
+            </div>
         </section>
     </main>
 
     <footer class="app-footer">
         <p>&copy; <span id="current-year"></span> C4. Todos os direitos reservados.</p>
     </footer>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="modal-title">Confirmar Ação</h3>
+            <p id="modal-message">Você tem certeza que deseja continuar? Esta ação não pode ser desfeita.</p>
+            <div class="modal-actions">
+                <button id="modal-cancel-btn" class="btn btn-secondary">Cancelar</button>
+                <button id="modal-confirm-btn" class="btn btn-danger">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -2175,6 +2465,8 @@
             let produtoSelecionadoLucroCerto = null;
             let itensVendaTemporarios = [];
             let produtosImportadosParaConfirmacao = [];
+            let confirmationCallback = null;
+
             const motivationalQuotes = [
                 "Cada real guardado é um passo em direção à sua tranquilidade financeira. Continue!",
                 "Pequenas economias diárias constroem grandes fortunas. Você está no caminho certo!",
@@ -2192,19 +2484,35 @@
                     showToast("Erro: Não foi possível salvar os dados. O armazenamento pode estar cheio.", "error");
                 }
             }
-
+            
             function loadState() {
                 const savedState = localStorage.getItem('c4AppState');
                 if (savedState) {
                     try {
                         const parsedState = JSON.parse(savedState);
-                        if(parsedState && typeof parsedState === 'object' && parsedState.products && parsedState.expenses){
+                        if(parsedState && typeof parsedState === 'object' && parsedState.products){
                              appState = parsedState;
-                             if (!appState.expenses.freight) appState.expenses.freight = [];
-                             if (!appState.expenses.taxes) appState.expenses.taxes = [];
+                             // Garantir que as novas propriedades do state existem
+                             if (!appState.settings) appState.settings = {};
+                             const defaultSettings = {
+                                userName: 'Empreendedora',
+                                storeName: 'Minha Loja',
+                                email: '',
+                                phone: '',
+                                profilePic: 'https://placehold.co/120x120/fbcfe8/db1472?text=C4',
+                                theme: 'light',
+                                font: 'poppins',
+                                fontSize: 'standard',
+                                reminders: { goals: true, dues: true },
+                                lowStockThreshold: 5,
+                                estimatedMonthlySales: 100
+                             };
+                             appState.settings = { ...defaultSettings, ...appState.settings };
+                             
+                             if (!appState.expenses) appState.expenses = { fixed: [], variable: [], freight: [], taxes: [] };
                              if (!appState.debtPlans) appState.debtPlans = [];
                              if (!appState.goals) appState.goals = { daily: 0, weekly: 0, monthly: 0 };
-                             if (!appState.settings) appState.settings = { userName: 'Empreendedora' };
+
                         } else {
                             throw new Error("Dados salvos estão corrompidos.");
                         }
@@ -2216,6 +2524,7 @@
                 } else {
                     loadDefaultState();
                 }
+                applyAppearanceSettings();
             }
 
             function loadDefaultState() {
@@ -2226,7 +2535,7 @@
                     ],
                     sales: [],
                     expenses: {
-                        fixed: [ { id: 'fix1', name: 'Aluguel do Espaço', value: 800.00, dueDate: '2025-06-10' } ],
+                        fixed: [ { id: 'fix1', name: 'Aluguel do Espaço', value: 800.00, dueDate: '2025-07-10' } ],
                         variable: [ { id: 'var1', name: 'Embalagem de Luxo', unitValue: 2.50 } ],
                         freight: [],
                         taxes: []
@@ -2234,8 +2543,16 @@
                     debts: [],
                     debtPlans: [],
                     goals: { daily: 0, weekly: 0, monthly: 0 },
-                    settings: { 
+                    settings: {
                         userName: 'Empreendedora',
+                        storeName: 'Minha Loja',
+                        email: '',
+                        phone: '',
+                        profilePic: 'https://placehold.co/120x120/fbcfe8/db1472?text=C4',
+                        theme: 'light',
+                        font: 'poppins',
+                        fontSize: 'standard',
+                        reminders: { goals: true, dues: true },
                         lowStockThreshold: 5,
                         estimatedMonthlySales: 100
                     }
@@ -2268,13 +2585,17 @@
                 if(currentPage) currentPage.classList.add('exiting');
 
                 setTimeout(() => {
-                    if(currentPage) currentPage.classList.remove('exiting');
-                    document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+                    if(currentPage) {
+                         currentPage.classList.remove('active');
+                         currentPage.classList.remove('exiting');
+                    }
                     document.querySelectorAll('.sidebar-nav-item').forEach(nav => nav.classList.remove('active'));
 
                     const targetPage = document.getElementById(pageId);
                     let targetNavItemKey = pageId;
                     if (pageId === 'planejamento-divida-page') targetNavItemKey = 'liberdade-financeira-page';
+                    else if (pageId === 'lucro-certo-page') targetNavItemKey = 'produtos-page'; 
+
 
                     const targetNavItem = document.querySelector(`.sidebar-nav-item[data-page="${targetNavItemKey}"]`);
 
@@ -2285,11 +2606,10 @@
                     }
                     if (targetNavItem) targetNavItem.classList.add('active');
                     
-                    document.querySelectorAll('.form-container').forEach(form => {
-                        if (form.id !== 'form-cadastro-produto-container' && form.id !== 'form-importar-planilha-container') {
-                            if (pageId.includes('page') && !pageId.startsWith(form.id.split('-')[1])) {
-                                // Lógica de esconder outros forms se necessário
-                            }
+                    document.querySelectorAll('.form-container[id]').forEach(form => {
+                        const isProductForm = form.id === 'form-cadastro-produto-container' || form.id === 'form-importar-planilha-container';
+                        if (pageId !== 'produtos-page' && isProductForm) {
+                            form.style.display = 'none';
                         }
                     });
                 }, 200);
@@ -2322,6 +2642,15 @@
                 setTimeout(() => { toast.classList.add('show'); }, 100);
                 setTimeout(() => { toast.classList.remove('show'); }, 3000);
             }
+
+            function showConfirmationModal(title, message, callback) {
+                document.getElementById('modal-title').textContent = title;
+                document.getElementById('modal-message').textContent = message;
+                const modal = document.getElementById('confirmation-modal');
+                modal.classList.add('show');
+                confirmationCallback = callback;
+            }
+
 
             // =================================================================================
             // ============================== MÓDULO: DASHBOARD ================================
@@ -2358,7 +2687,7 @@
                 // Atualizar Cards principais
                 document.getElementById('dashboard-receita-bruta').textContent = `R$ ${receitaBruta.toFixed(2)}`;
                 document.getElementById('dashboard-lucro-liquido').textContent = `R$ ${lucroLiquido.toFixed(2)}`;
-                document.getElementById('dashboard-lucro-liquido').style.color = lucroLiquido < 0 ? '#ef4444' : '#1f2937';
+                document.getElementById('dashboard-lucro-liquido').style.color = lucroLiquido < 0 ? '#ef4444' : 'var(--color-text-dark)';
                 document.getElementById('dashboard-despesas-vencimento').textContent = despesasVencimento.length;
                 document.getElementById('dashboard-economia-planejada').textContent = `R$ ${totalSavings.toFixed(2)}`;
 
@@ -2417,11 +2746,17 @@
             function updateDashboardGoals() {
                 const list = document.getElementById('dashboard-goals-list');
                 list.innerHTML = ''; 
+                if(!appState.goals || (appState.goals.daily === 0 && appState.goals.weekly === 0 && appState.goals.monthly === 0)) {
+                    list.innerHTML = '<li class="placeholder">Nenhuma meta definida.</li>';
+                    return;
+                }
 
                 ['daily', 'weekly', 'monthly'].forEach(period => {
                     const goal = appState.goals[period] || 0;
+                    if(goal === 0) return;
+
                     let currentTotal = 0;
-                    const today = new Date('2025-06-07T17:30:00-03:00');
+                    const today = new Date();
                     const todayStr = today.toISOString().split('T')[0];
 
                     if (period === 'daily') {
@@ -2442,7 +2777,7 @@
                     const li = document.createElement('li');
                     li.innerHTML = `
                         <div class="goal-info">
-                            <span>Meta ${periodName}</span>
+                            <span>Meta ${periodName} (R$ ${goal.toFixed(2)})</span>
                             <span class="goal-percentage">${Math.round(percentage)}%</span>
                         </div>
                         <div class="progress-bar-container">
@@ -2474,17 +2809,16 @@
                 const costPrice = parseFloat(document.getElementById('produto-valor-custo').value) || 0;
                 const unitExpenses = getUnitExpenses();
                 const marginPercent = parseFloat(document.getElementById('produto-margem-lucro-slider').value);
-                const effectiveMargin = Math.min(marginPercent, 99.99); // Prevenir divisão por zero
-
+                
                 document.getElementById('produto-margem-lucro-label').textContent = marginPercent;
 
                 const totalCost = costPrice + unitExpenses;
                 let salePrice = 0;
                 let profit = 0;
 
-                if (totalCost > 0 && effectiveMargin < 100) {
-                    salePrice = totalCost / (1 - (effectiveMargin / 100));
-                    profit = salePrice - totalCost;
+                if (totalCost > 0) {
+                     salePrice = totalCost * (1 + (marginPercent / 100));
+                     profit = salePrice - totalCost;
                 }
 
                 document.getElementById('produto-preco-sugerido').textContent = `R$ ${salePrice.toFixed(2)}`;
@@ -2514,7 +2848,7 @@
                     const cardDiv = document.createElement('div');
                     cardDiv.classList.add('product-card');
                     cardDiv.innerHTML = `
-                        <img src="${produto.image || 'https://placehold.co/400x400/f8b81f/db1472?text=C4'}" alt="${produto.name}" class="product-card-image">
+                        <img src="${produto.image || 'https://placehold.co/400x400/f8b81f/db1472?text=C4'}" alt="${produto.name}" class="product-card-image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/f8b81f/db1472?text=C4';">
                         <h4>${produto.name}</h4>
                         <p><strong>Custo:</strong> R$ ${parseFloat(produto.costPrice || 0).toFixed(2)}</p>
                         <p><strong>Estoque:</strong> ${produto.stock || 0}</p>
@@ -2547,24 +2881,25 @@
                     return;
                 }
 
+                const previewSrc = document.getElementById('produto-imagem-preview').src;
+
                 const produtoData = {
                     id: produtoId || `prod_${Date.now()}`,
                     name: nameInput.value,
                     category: document.getElementById('produto-categoria').value,
                     costPrice: parseFloat(costInput.value) || 0,
                     stock: parseInt(stockInput.value) || 0,
-                    image: document.getElementById('produto-imagem-preview').src.startsWith('data:') ? document.getElementById('produto-imagem-preview').src : '',
+                    image: previewSrc.startsWith('data:') ? previewSrc : (produtoId ? appState.products.find(p=>p.id === produtoId).image : ''),
                     salePrice: salePrice,
-                    dateAdded: new Date().toISOString()
                 };
 
                 if (produtoId) {
                     const index = appState.products.findIndex(p => p.id === produtoId);
                     if (index > -1) {
-                         produtoData.dateAdded = appState.products[index].dateAdded; 
                         appState.products[index] = { ...appState.products[index], ...produtoData };
                     }
                 } else {
+                    produtoData.dateAdded = new Date().toISOString();
                     appState.products.push(produtoData);
                 }
 
@@ -2601,8 +2936,9 @@
                 document.getElementById('produto-custo-unitario-despesas').textContent = `R$ ${unitExpenses.toFixed(2)}`;
                 const totalCost = product.costPrice + unitExpenses;
                 let margin = 100;
-                if (product.salePrice > totalCost && product.salePrice > 0) {
-                    margin = (1 - (totalCost / product.salePrice)) * 100;
+
+                if (product.salePrice > totalCost && totalCost > 0) {
+                     margin = ((product.salePrice / totalCost) - 1) * 100;
                 }
                 const marginSlider = document.getElementById('produto-margem-lucro-slider');
                 marginSlider.value = Math.round(margin);
@@ -2624,10 +2960,15 @@
 
             function parseAndPreviewCSV(csvText) {
                 const lines = csvText.split('\n').filter(line => line.trim() !== '');
-                const headers = lines.shift().trim().split(',').map(h => h.toLowerCase());
+                const headersLine = lines.shift();
+                if(!headersLine) {
+                     showToast('Arquivo CSV vazio ou sem cabeçalho.', 'error');
+                     return;
+                }
+                const headers = headersLine.trim().split(',').map(h => h.toLowerCase().trim());
                 
                 const expectedHeaders = ['nome', 'categoria', 'precocusto', 'estoque'];
-                if (headers.length !== expectedHeaders.length || !expectedHeaders.every((h, i) => headers[i].trim() === h)) {
+                if (headers.length !== expectedHeaders.length || !expectedHeaders.every((h, i) => headers[i] === h)) {
                     showToast('O cabeçalho do arquivo CSV está incorreto. Use o modelo.', 'error');
                     return;
                 }
@@ -2707,7 +3048,7 @@
 
 
             // =================================================================================
-            // =============================== MÓDULO: VENDAS (ATUALIZADO) =====================
+            // =============================== MÓDULO: VENDAS ==================================
             // =================================================================================
             function setupVendasPage(data = null) {
                 renderSalesHistory();
@@ -2770,7 +3111,7 @@
                 const listEl = document.getElementById('venda-itens-lista');
                 listEl.innerHTML = ''; 
                 if (itensVendaTemporarios.length === 0) {
-                    listEl.innerHTML = '<p id="venda-sem-itens" style="text-align: center; color: #6b7280; padding: 1rem 0;">Nenhum item adicionado.</p>';
+                    listEl.innerHTML = '<p id="venda-sem-itens" style="text-align: center; color: var(--color-text-secondary); padding: 1rem 0;">Nenhum item adicionado.</p>';
                 } else {
                     itensVendaTemporarios.forEach((item, index) => {
                         const li = document.createElement('li');
@@ -2813,7 +3154,7 @@
                     id: `VEN_${Date.now()}`,
                     date: new Date().toISOString().split('T')[0],
                     client: clientName,
-                    phone: document.getElementById('venda-cliente-telefone').value, // NOVO
+                    phone: document.getElementById('venda-cliente-telefone').value,
                     items: [...itensVendaTemporarios],
                     total: totalVenda,
                     status: 'pago'
@@ -2836,7 +3177,7 @@
             }
 
             // =================================================================================
-            // ========================= MÓDULO: CLIENTES (NOVO) ===============================
+            // ========================= MÓDULO: CLIENTES ======================================
             // =================================================================================
             function setupClientesPage() {
                 const customers = {};
@@ -2859,12 +3200,11 @@
 
             function calculateTimeSince(dateString) {
                 const saleDate = new Date(dateString + 'T03:00:00');
-                const today = new Date('2025-06-07T17:30:00-03:00');
+                const today = new Date();
                 const diffTime = Math.abs(today - saleDate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                if (diffDays === 0) return 'hoje';
-                if (diffDays === 1) return 'há 1 dia';
+                if (diffDays <= 1) return 'hoje';
                 if (diffDays <= 30) return `há ${diffDays} dias`;
                 const diffMonths = Math.floor(diffDays / 30);
                 if (diffMonths === 1) return 'há 1 mês';
@@ -2884,7 +3224,7 @@
 
                 customerList.forEach(customer => {
                     const timeSince = calculateTimeSince(customer.lastSale.date);
-                    const daysSince = (new Date('2025-06-07T17:30:00-03:00') - new Date(customer.lastSale.date + 'T03:00:00')) / (1000 * 60 * 60 * 24);
+                    const daysSince = (new Date() - new Date(customer.lastSale.date + 'T03:00:00')) / (1000 * 60 * 60 * 24);
                     const isDormant = daysSince > 30;
 
                     const card = document.createElement('div');
@@ -2984,7 +3324,7 @@
                 });
             }
 
-            function renderTaxCosts() {
+             function renderTaxCosts() {
                 const list = document.getElementById('lista-custos-impostos');
                 list.innerHTML = '';
                  if(!appState.expenses.taxes || appState.expenses.taxes.length === 0) {
@@ -3007,7 +3347,7 @@
                 const name = document.getElementById('custo-fixo-nome').value;
                 const value = parseFloat(document.getElementById('custo-fixo-valor').value);
                 const dueDate = document.getElementById('custo-fixo-vencimento').value;
-                if (!name || isNaN(value) || value <= 0 || !dueDate) { alert("Preencha todos os campos."); return; }
+                if (!name || isNaN(value) || value <= 0 || !dueDate) { showToast("Preencha todos os campos do custo fixo.", "error"); return; }
                 appState.expenses.fixed.push({ id: `fix_${Date.now()}`, name, value, dueDate });
                 saveState();
                 renderFixedCosts();
@@ -3019,7 +3359,7 @@
                 event.preventDefault();
                 const name = document.getElementById('custo-variavel-nome').value;
                 const unitValue = parseFloat(document.getElementById('custo-variavel-valor-unitario').value);
-                if (!name || isNaN(unitValue) || unitValue <= 0) { alert("Preencha todos os campos."); return; }
+                if (!name || isNaN(unitValue) || unitValue <= 0) { showToast("Preencha todos os campos do custo variável.", "error"); return; }
                 appState.expenses.variable.push({ id: `var_${Date.now()}`, name, unitValue });
                 saveState();
                 renderVariableCosts();
@@ -3031,7 +3371,7 @@
                  event.preventDefault();
                 const totalValue = parseFloat(document.getElementById('frete-valor-total').value);
                 const quantity = parseInt(document.getElementById('frete-quantidade-pecas').value);
-                if (isNaN(totalValue) || totalValue <= 0 || isNaN(quantity) || quantity <= 0) { alert("Preencha valores válidos para frete."); return; }
+                if (isNaN(totalValue) || totalValue <= 0 || isNaN(quantity) || quantity <= 0) { showToast("Preencha valores válidos para frete.", "error"); return; }
                 
                 const unitValue = totalValue / quantity;
                 const name = `Frete Compra (${new Date().toLocaleDateString('pt-BR')})`;
@@ -3047,7 +3387,7 @@
                 event.preventDefault();
                 const name = document.getElementById('imposto-nome').value;
                 const percentageValue = parseFloat(document.getElementById('imposto-valor-percentual').value);
-                if (!name || isNaN(percentageValue) || percentageValue < 0) { alert("Preencha um nome e percentual válidos."); return; }
+                if (!name || isNaN(percentageValue) || percentageValue < 0) { showToast("Preencha um nome e percentual válidos.", "error"); return; }
                 appState.expenses.taxes.push({ id: `tax_${Date.now()}`, name, percentageValue });
                 saveState();
                 renderTaxCosts();
@@ -3107,13 +3447,13 @@
                     type: 'pie',
                     data: {
                         labels: labels,
-                        datasets: [{ data: values, backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }]
+                        datasets: [{ data: values, backgroundColor: colors, borderColor: 'var(--bg-white)', borderWidth: 2 }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: 'bottom' },
+                            legend: { position: 'bottom', labels: { color: 'var(--color-text-secondary)' } },
                             tooltip: { callbacks: { label: (context) => `R$ ${context.parsed.toFixed(2)}` } }
                         }
                     }
@@ -3122,7 +3462,7 @@
 
 
              // =================================================================================
-            // ======================== MÓDULO: LIBERDADE FINANCEIRA (ATUALIZADO) ==================
+            // ======================== MÓDULO: LIBERDADE FINANCEIRA =============================
             // =================================================================================
             function setupLiberdadeFinanceiraPage() {
                 renderDebtCards();
@@ -3174,7 +3514,7 @@
                 const priority = document.getElementById('debt-priority').value;
 
                 if (!name || isNaN(value) || value <= 0) {
-                    alert("Preencha nome e valor da dívida."); return;
+                    showToast("Preencha nome e valor da dívida.", "error"); return;
                 }
                 appState.debts.push({ id: `debt_${Date.now()}`, name, value, priority, paid: 0 });
                 saveState();
@@ -3194,17 +3534,14 @@
                 document.getElementById('plan-debt-name-display').value = `${debt.name} (R$ ${debt.value.toFixed(2)})`;
                 
                 const form = document.getElementById('form-planejar-divida');
-                const valorInput = document.getElementById('planejar-divida-valor');
-                const freqSelect = document.getElementById('planejar-divida-frequencia');
                 
-                // Resetar e recriar listeners para evitar duplicação
                 const newForm = form.cloneNode(true);
                 form.parentNode.replaceChild(newForm, form);
                 
                 newForm.addEventListener('input', () => updateDebtPlanSimulation(debt));
                 newForm.addEventListener('submit', (e) => handleSaveDebtPlan(e, debt));
 
-                updateDebtPlanSimulation(debt); // Executar uma vez para limpar os campos
+                updateDebtPlanSimulation(debt); 
             }
 
             function updateDebtPlanSimulation(debt) {
@@ -3320,7 +3657,7 @@
                 const totalFixedCosts = appState.expenses.fixed.reduce((sum, cost) => sum + cost.value, 0);
                 const fixedCostPerUnit = totalFixedCosts / (appState.settings.estimatedMonthlySales || 1);
                 const totalVariableCost = appState.expenses.variable.reduce((sum, cost) => sum + cost.unitValue, 0);
-                const freightCost = getUnitExpenses();
+                const freightCost = appState.expenses.freight.reduce((sum, cost) => sum + cost.unitValue, 0);
                 const purchaseCost = produtoSelecionadoLucroCerto.costPrice;
 
                 const totalUnitCost = purchaseCost + totalVariableCost + fixedCostPerUnit + freightCost;
@@ -3334,7 +3671,7 @@
                 const marginInput = document.getElementById('lucro-margem-input');
                 const margin = parseFloat(marginInput.value) || 100;
 
-                const salePrice = totalUnitCost / (1 - (margin / 100));
+                const salePrice = totalUnitCost * (1 + margin / 100);
                 const netProfit = salePrice - totalUnitCost;
 
                 document.getElementById('lucro-preco-venda-sugerido').textContent = `R$ ${salePrice.toFixed(2)}`;
@@ -3357,13 +3694,13 @@
                         datasets: [{
                             data: [ data.purchaseCost, data.totalVariableCost, data.fixedCostPerUnit, data.freightCost, data.netProfit ],
                             backgroundColor: [ '#db1472', '#f8b81f', '#fbcfe8', '#fee2e2', '#10b981' ],
-                            borderColor: '#fff', borderWidth: 2,
+                            borderColor: 'var(--bg-white)', borderWidth: 2,
                         }]
                     },
                     options: {
                         responsive: true, maintainAspectRatio: false, cutout: '60%',
                         plugins: {
-                            legend: { position: 'bottom' },
+                            legend: { position: 'bottom', labels: { color: 'var(--color-text-secondary)' } },
                             tooltip: { callbacks: { label: (c) => `${c.label}: R$ ${c.parsed.toFixed(2)}` } }
                         }
                     }
@@ -3388,7 +3725,7 @@
             }
 
             // =================================================================================
-            // ============================= MÓDULO: METAS (NOVO) ==============================
+            // ============================= MÓDULO: METAS =====================================
             // =================================================================================
             function setupMetasPage() {
                 ['daily', 'weekly', 'monthly'].forEach(period => {
@@ -3410,7 +3747,7 @@
             function updateGoalChart(period) {
                 const goal = appState.goals[period] || 0;
                 let currentTotal = 0;
-                const today = new Date('2025-06-07T17:30:00-03:00');
+                const today = new Date();
                 const todayStr = today.toISOString().split('T')[0];
                 
                 if (period === 'daily') {
@@ -3437,12 +3774,10 @@
                 }
 
                 const progress = Math.min(percentage / 100, 1);
-
-                // Criar o gradiente para a barra de progresso
+                
                 const gradient = ctx.createLinearGradient(0, 0, 0, 150);
-                gradient.addColorStop(0, '#DB1472'); // Cor primária (rosa)
-                gradient.addColorStop(1, '#F8B81F'); // Cor secundária (amarelo)
-
+                gradient.addColorStop(0, '#DB1472'); 
+                gradient.addColorStop(1, '#F8B81F');
 
                 goalCharts[period] = new Chart(ctx, {
                     type: 'doughnut',
@@ -3462,15 +3797,12 @@
                         plugins: {
                             tooltip: { enabled: false },
                             datalabels: {
-                                color: '#500724',
-                                formatter: () => {
-                                    return `${Math.round(percentage)}%\n(R$ ${current.toFixed(2)})`;
-                                },
-                                font: { 
-                                    size: 14, 
-                                    weight: 'bold' 
-                                },
+                                color: 'var(--color-primary)',
+                                formatter: () => `${Math.round(percentage)}%`,
+                                font: { size: 24, weight: 'bold' },
                                 textAlign: 'center',
+                                anchor: 'center',
+                                align: 'center'
                             }
                         }
                     },
@@ -3480,23 +3812,114 @@
 
 
             // =================================================================================
+            // ============================= MÓDULO: PERFIL E CONFIGURAÇÕES ======================
+            // =================================================================================
+            function setupPerfilPage() {
+                const settings = appState.settings;
+                document.getElementById('profile-pic-preview').src = settings.profilePic;
+                document.getElementById('perfil-nome').value = settings.userName;
+                document.getElementById('perfil-loja').value = settings.storeName;
+                document.getElementById('perfil-email').value = settings.email;
+                document.getElementById('perfil-telefone').value = settings.phone;
+                
+                document.getElementById('theme-toggle').checked = settings.theme === 'dark';
+                document.getElementById('font-select').value = settings.font;
+                document.getElementById('font-size-select').value = settings.fontSize;
+                
+                document.getElementById('reminder-goals-toggle').checked = settings.reminders.goals;
+                document.getElementById('reminder-dues-toggle').checked = settings.reminders.dues;
+            }
+            
+            function applyAppearanceSettings() {
+                const settings = appState.settings;
+                const body = document.body;
+                
+                body.classList.toggle('theme-dark', settings.theme === 'dark');
+                
+                body.classList.remove('font-opensans', 'font-poppins');
+                body.classList.add(`font-${settings.font}`);
+                
+                body.classList.toggle('font-large', settings.fontSize === 'large');
+            }
+            
+            function handleProfileFormSubmit(event) {
+                event.preventDefault();
+                appState.settings.userName = document.getElementById('perfil-nome').value;
+                appState.settings.storeName = document.getElementById('perfil-loja').value;
+                appState.settings.email = document.getElementById('perfil-email').value;
+                appState.settings.phone = document.getElementById('perfil-telefone').value;
+                saveState();
+                showToast('Informações salvas com sucesso!', 'success');
+                 if (document.getElementById('dashboard-page').classList.contains('active')) {
+                    document.getElementById('dashboard-username').textContent = appState.settings.userName;
+                }
+            }
+
+            function handleProfilePicUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const newPicUrl = e.target.result;
+                        document.getElementById('profile-pic-preview').src = newPicUrl;
+                        appState.settings.profilePic = newPicUrl;
+                        saveState();
+                        showToast('Foto de perfil atualizada!', 'success');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function handleAppearanceChange() {
+                 appState.settings.theme = document.getElementById('theme-toggle').checked ? 'dark' : 'light';
+                 appState.settings.font = document.getElementById('font-select').value;
+                 appState.settings.fontSize = document.getElementById('font-size-select').value;
+                 applyAppearanceSettings();
+                 saveState();
+            }
+
+            function handleRemindersChange() {
+                appState.settings.reminders.goals = document.getElementById('reminder-goals-toggle').checked;
+                appState.settings.reminders.dues = document.getElementById('reminder-dues-toggle').checked;
+                saveState();
+            }
+
+            function handleExportData() {
+                try {
+                    const dataStr = JSON.stringify(appState, null, 2);
+                    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                    const exportFileDefaultName = `c4_backup_${new Date().toISOString().split('T')[0]}.json`;
+                    
+                    const linkElement = document.createElement('a');
+                    linkElement.setAttribute('href', dataUri);
+                    linkElement.setAttribute('download', exportFileDefaultName);
+                    linkElement.click();
+                    showToast('Backup gerado com sucesso!', 'success');
+                } catch (error) {
+                    showToast('Falha ao gerar o backup.', 'error');
+                    console.error("Erro ao exportar dados:", error);
+                }
+            }
+            
+            function handleResetApp() {
+                 showConfirmationModal(
+                    'Zerar o Aplicativo?',
+                    'Todos os seus dados (produtos, vendas, despesas, etc.) serão apagados permanentemente. Deseja continuar?',
+                    () => {
+                        localStorage.removeItem('c4AppState');
+                        showToast('Dados zerados. O aplicativo será reiniciado.');
+                        setTimeout(() => window.location.reload(), 1500);
+                    }
+                );
+            }
+
+            // =================================================================================
             // ============================= FUNÇÕES GLOBAIS DE APOIO ==========================
             // =================================================================================
             function updateAllProductSelects() {
                 if (document.getElementById('vendas-page').classList.contains('active')) populateSalesProductSelect();
                 if (document.getElementById('lucro-certo-page').classList.contains('active')) setupLucroCertoPage();
             }
-
-            // =================================================================================
-            // ============================= MÓDULO: PERFIL (NOVO) =============================
-            // =================================================================================
-            function setupPerfilPage() {
-                const nomeInput = document.getElementById('perfil-nome');
-                if (nomeInput) {
-                    nomeInput.value = appState.settings.userName || 'Empreendedora';
-                }
-            }
-
 
             // =================================================================================
             // ========================== INICIALIZAÇÃO E EVENT LISTENERS ========================
@@ -3512,11 +3935,14 @@
                 document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
-                        setActivePage(item.dataset.page);
-                        closeSidebar(); 
+                        const pageId = item.dataset.page;
+                        if(pageId) {
+                            setActivePage(pageId);
+                            closeSidebar(); 
+                        }
                     });
                 });
-                document.querySelectorAll('.btn-action[data-target-page], #plan-ai-assistant button').forEach(button => {
+                document.querySelectorAll('.btn-action[data-target-page], #plan-ai-assistant button, .settings-button-list button[data-target-page]').forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.preventDefault();
                         const targetPage = button.dataset.targetPage;
@@ -3692,7 +4118,7 @@
                 document.getElementById('lucro-produto-select').addEventListener('change', handleLucroCertoProductSelect);
                 document.getElementById('btn-salvar-preco-lucro-certo').addEventListener('click', handleSalvarPrecoLucroCerto);
 
-                // --- Listeners Página Metas (NOVO) ---
+                // --- Listeners Página Metas ---
                 document.querySelectorAll('.save-goal-btn').forEach(button => {
                     button.addEventListener('click', (e) => {
                         handleSaveGoal(e.target.dataset.period);
@@ -3700,19 +4126,26 @@
                 });
 
                 // --- Listeners Página Perfil ---
-                document.getElementById('form-perfil').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const newName = document.getElementById('perfil-nome').value.trim();
-                    if (newName) {
-                        appState.settings.userName = newName;
-                        saveState();
-                        showToast('Nome atualizado com sucesso!', 'success');
-                        if (document.getElementById('dashboard-page').classList.contains('active')) {
-                            document.getElementById('dashboard-username').textContent = newName;
-                        }
-                    } else {
-                        showToast('Por favor, insira um nome.', 'error');
-                    }
+                document.getElementById('form-perfil').addEventListener('submit', handleProfileFormSubmit);
+                document.getElementById('upload-pic-button').addEventListener('click', () => document.getElementById('profile-pic-input').click());
+                document.getElementById('profile-pic-input').addEventListener('change', handleProfilePicUpload);
+                document.getElementById('theme-toggle').addEventListener('change', handleAppearanceChange);
+                document.getElementById('font-select').addEventListener('change', handleAppearanceChange);
+                document.getElementById('font-size-select').addEventListener('change', handleAppearanceChange);
+                document.getElementById('reminder-goals-toggle').addEventListener('change', handleRemindersChange);
+                document.getElementById('reminder-dues-toggle').addEventListener('change', handleRemindersChange);
+                document.getElementById('btn-export-data').addEventListener('click', handleExportData);
+                document.getElementById('btn-reset-app').addEventListener('click', handleResetApp);
+                document.getElementById('modal-cancel-btn').addEventListener('click', () => {
+                     document.getElementById('confirmation-modal').classList.remove('show');
+                     confirmationCallback = null;
+                });
+                document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+                     if (typeof confirmationCallback === 'function') {
+                        confirmationCallback();
+                     }
+                     document.getElementById('confirmation-modal').classList.remove('show');
+                     confirmationCallback = null;
                 });
 
                 // --- Inicialização ---
