@@ -247,10 +247,10 @@
             display: block;
         }
 
-        /* ======= ESTILOS DO DASHBOARD - BREAKPOINTS ATUALIZADOS ======= */
+        /* ======= ESTILOS DO DASHBOARD ======= */
         #dashboard-page .cards-grid {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr;
         }
         @media(min-width: 768px) {
@@ -267,11 +267,11 @@
         .dashboard-card {
             background-color: var(--bg-white);
             border-radius: var(--border-radius-lg);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             box-shadow: var(--box-shadow-md);
             display: flex;
             align-items: center;
-            gap: 12px; /* Espaçamento interno */
+            gap: 12px;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             touch-action: manipulation;
         }
@@ -304,9 +304,9 @@
 
         .dashboard-card-content h4 {
             margin: 0 0 0.25rem 0;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 500;
-            color: var(--color-text-secondary);
+            color: var(--color-text-primary);
         }
         .dashboard-card-content p {
             margin: 0;
@@ -318,7 +318,7 @@
         .dashboard-list-card {
             background-color: var(--bg-white);
             border-radius: var(--border-radius-lg);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             box-shadow: var(--box-shadow-md);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             touch-action: manipulation;
@@ -334,7 +334,7 @@
          .dashboard-list-card h3 {
             margin-top: 0;
             margin-bottom: 1rem;
-            font-size: 1.25rem;
+            font-size: 18px;
             font-weight: 600;
             color: var(--color-primary);
         }
@@ -349,8 +349,8 @@
             align-items: center;
             padding: 0.75rem 0.25rem;
             border-bottom: 1px solid var(--color-text-light);
-            font-size: 0.95rem;
-            color: var(--color-text-secondary);
+            font-size: 13px; /* Bullet points */
+            color: var(--color-text-secondary); /* Melhor contraste para bullets */
          }
         .dashboard-list-card li:last-child {
             border-bottom: none;
@@ -367,7 +367,7 @@
         
         .dashboard-summary-grid {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr;
             margin-top: 1.5rem;
         }
@@ -377,7 +377,6 @@
              }
         }
         
-        /* NOVO: Estilos de Progresso de Metas no Dashboard */
         #goals-progress-card li {
             flex-direction: column;
             align-items: stretch;
@@ -387,8 +386,9 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: var(--spacing-sm);
-            font-size: 0.9rem;
+            font-size: 14px; /* Descrições */
             color: var(--color-text-secondary);
+            line-height: 1.5;
         }
         .goal-info .goal-percentage {
             font-weight: 700;
@@ -403,7 +403,7 @@
         }
         .progress-bar-fill {
             height: 100%;
-            width: 0%; /* Atualizado por JS */
+            width: 0%; 
             background-image: linear-gradient(to right, var(--color-primary), var(--color-secondary));
             border-radius: 6px;
             transition: width 0.5s ease-in-out;
@@ -434,7 +434,7 @@
             display: inline-flex; 
             align-items: center;
             justify-content: center;
-            min-height: 44px; /* Altura mínima para botões */
+            min-height: 44px; 
         }
         .btn:hover,
         .btn-action:hover {
@@ -623,10 +623,10 @@
             color: #9d174d;
         }
 
-        /* ======= PÁGINA DE DESPESAS - BREAKPOINTS ATUALIZADOS ======= */
+        /* ======= PÁGINA DE DESPESAS ======= */
         .despesas-cards-container {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr; 
         }
         @media (min-width: 768px) {
@@ -637,7 +637,7 @@
         .card-despesa {
             background-color: #fff1f2; 
             border-radius: 8px;
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.07);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             touch-action: manipulation;
@@ -651,15 +651,17 @@
         }
         .card-despesa-title {
             color: var(--color-primary);
-            font-size: 1.4rem;
+            font-size: 18px; /* Títulos dos cards */
+            font-weight: 600; /* Títulos dos cards */
             margin-top: 0;
             margin-bottom: 0.75rem;
             border-bottom: 2px solid var(--color-secondary);
             padding-bottom: 0.5rem;
         }
         .informativo {
-            font-size: 0.9rem;
+            font-size: 14px; /* Descrições */
             color: var(--color-text-secondary);
+            line-height: 1.5; /* Descrições */
             margin-bottom: 1.5rem;
             background-color: var(--bg-soft-pink);
             padding: 0.75rem;
@@ -688,7 +690,7 @@
             align-items: center;
             padding: 0.75rem 1rem;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 0.95rem;
+            font-size: 13px; /* Bullet points */
         }
         .custos-lista li:last-child {
             border-bottom: none;
@@ -701,7 +703,7 @@
             color: var(--color-text-secondary);
         }
          .custos-lista li .cost-unit { 
-             font-size: 0.85rem;
+             font-size: 13px; /* Bullet points */
              color: var(--color-text-secondary);
              display: block;
          }
@@ -751,9 +753,9 @@
             text-align: center;
         }
         .summary-button .label {
-            font-size: 1rem;
+            font-size: 16px; /* Subtítulos */
             font-weight: 500;
-            color: var(--color-text-secondary);
+            color: var(--color-text-primary);
             margin: 0 0 0.5rem 0;
         }
         .summary-button .value {
@@ -779,7 +781,7 @@
             margin: 0 auto;
         }
         
-        /* ======= PÁGINA DE PRODUTOS E VENDAS - BREAKPOINTS ATUALIZADOS ======= */
+        /* ======= PÁGINA DE PRODUTOS E VENDAS ======= */
         #produtos-page .page-actions {
             display: flex;
             gap: 1rem;
@@ -787,7 +789,7 @@
         }
         .item-cards-container { 
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */ 
+            gap: 12px;
             margin-top: 1.5rem;
             grid-template-columns: 1fr;
         }
@@ -807,7 +809,7 @@
             background-color: var(--bg-white);
             border-radius: var(--border-radius-md);
             box-shadow: var(--box-shadow-md);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             display: flex;
             flex-direction: column;
             border-left: 5px solid var(--color-secondary); 
@@ -831,7 +833,8 @@
             margin-bottom: 0.75rem;
         }
         .product-card h4, .sale-card h4 {
-            font-size: 1rem; 
+            font-size: 18px; /* Títulos dos cards */
+            font-weight: 600; /* Títulos dos cards */
             color: var(--color-primary);
             margin: 0 0 0.4rem 0;
             white-space: nowrap;
@@ -839,10 +842,10 @@
             text-overflow: ellipsis;
         }
         .product-card p, .sale-card p {
-            font-size: 0.85rem; 
+            font-size: 14px; /* Descrições */
             color: var(--color-text-secondary);
             margin: 0.2rem 0;
-            line-height: 1.3;
+            line-height: 1.5; /* Descrições */
         }
         .product-card p strong, .sale-card p strong {
             color: var(--color-text-primary);
@@ -980,10 +983,10 @@
             font-weight: bold;
         }
 
-        /* ======= PÁGINA DE CLIENTES (CRM) - BREAKPOINTS ATUALIZADOS ======= */
+        /* ======= PÁGINA DE CLIENTES (CRM) ======= */
         .customer-cards-container {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr;
         }
         @media (min-width: 768px) { 
@@ -1000,7 +1003,7 @@
         .customer-card {
             background-color: #fff;
             border-radius: var(--border-radius-md);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             box-shadow: var(--box-shadow-md);
             border-left: 5px solid var(--color-primary);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -1024,25 +1027,28 @@
         }
         .customer-card-header h4 {
             margin: 0;
-            font-size: 1.3rem;
+            font-size: 18px; /* Títulos dos cards */
+            font-weight: 600; /* Títulos dos cards */
             color: var(--color-primary);
         }
         .customer-card-header p {
              margin: 0;
-             font-size: 0.9rem;
+             font-size: 14px; /* Descrições */
              color: var(--color-text-secondary);
+             line-height: 1.5;
         }
         .customer-card-info p {
-            font-size: 0.95rem;
+            font-size: 14px; /* Descrições */
             margin: 0.25rem 0;
             color: var(--color-text-secondary);
+            line-height: 1.5;
         }
          .customer-card-info p strong {
              color: var(--color-text-primary);
          }
         .last-purchase-title {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 16px; /* Subtítulos */
+            font-weight: 500; /* Subtítulos */
             color: var(--color-primary);
             margin-top: 1rem;
             margin-bottom: 0.5rem;
@@ -1051,17 +1057,18 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 13px; /* Bullet points */
             color: var(--color-text-secondary);
         }
         .last-purchase-list li {
             padding: 0.2rem 0;
+            border: none;
         }
 
         /* ESTILOS LUCRO CERTO E LIBERDADE FINANCEIRA */
         .main-content-grid {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr;
         }
         @media(min-width: 992px) {
@@ -1074,7 +1081,7 @@
         .lucro-card {
             background-color: var(--bg-white);
             border-radius: var(--border-radius-md);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             box-shadow: var(--box-shadow-md);
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
             touch-action: manipulation;
@@ -1088,7 +1095,8 @@
         }
          .lucro-card h3 {
             color: var(--color-primary); 
-            font-size: 1.3rem;
+            font-size: 18px; /* Títulos dos cards */
+            font-weight: 600; /* Títulos dos cards */
             margin-top: 0;
             margin-bottom: 1rem;
             border-bottom: 1px solid #fbcfe8;
@@ -1100,7 +1108,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.8rem;
-            font-size: 1rem;
+            font-size: 14px; /* Descrições */
+            line-height: 1.5;
         }
          .lucro-info-item .label-group {
             display: flex;
@@ -1253,10 +1262,10 @@
             font-weight: 500;
         }
 
-        /* ======= PÁGINA LIBERDADE FINANCEIRA - BREAKPOINTS ATUALIZADOS ======= */
+        /* ======= PÁGINA LIBERDADE FINANCEIRA ======= */
         .lf-summary-grid {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr;
             margin-bottom: 2rem;
         }
@@ -1268,7 +1277,7 @@
         
         #liberdade-financeira-page .debt-cards-container {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr;
         }
          @media (min-width: 768px) { 
@@ -1286,7 +1295,7 @@
             background-color: #fff;
             border-radius: var(--border-radius-md);
             box-shadow: var(--box-shadow-md);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             border-left: 5px solid;
             display: flex;
             flex-direction: column;
@@ -1306,14 +1315,17 @@
         .debt-card.prioridade-baixa { border-color: #10b981; }
 
         .debt-card h4 {
-            font-size: 1.2rem;
+            font-size: 18px; /* Títulos dos cards */
+            font-weight: 600; /* Títulos dos cards */
             color: var(--color-primary);
             margin: 0 0 0.5rem 0;
         }
 
         .debt-card p {
             margin: 0.25rem 0;
+            font-size: 14px; /* Descrições */
             color: var(--color-text-secondary);
+            line-height: 1.5;
         }
 
         .debt-card .debt-actions {
@@ -1329,10 +1341,10 @@
             cursor: not-allowed;
         }
 
-        /* ======= PÁGINA METAS - BREAKPOINTS ATUALIZADOS ======= */
+        /* ======= PÁGINA METAS ======= */
         #goals-container {
             display: grid;
-            gap: 12px; /* Espaçamento entre cards */
+            gap: 12px;
             grid-template-columns: 1fr; 
         }
         @media(min-width: 768px) { 
@@ -1348,7 +1360,7 @@
         .goal-card {
             background-color: var(--bg-white);
             border-radius: var(--border-radius-lg);
-            padding: 16px; /* Padding interno */
+            padding: 16px;
             box-shadow: var(--box-shadow-md);
             text-align: center;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -1363,6 +1375,8 @@
         }
         .goal-card h3 {
             color: var(--color-primary);
+            font-size: 18px; /* Títulos dos cards */
+            font-weight: 600; /* Títulos dos cards */
             margin-top: 0;
             margin-bottom: 1rem;
         }
@@ -2510,11 +2524,13 @@
                     stock: parseInt(document.getElementById('produto-estoque').value) || 0,
                     image: document.getElementById('produto-imagem-preview').src.startsWith('data:') ? document.getElementById('produto-imagem-preview').src : '',
                     salePrice: salePrice,
+                    dateAdded: new Date().toISOString() // Adicionado para cálculo de tempo em estoque
                 };
 
                 if (produtoId) {
                     const index = appState.products.findIndex(p => p.id === produtoId);
                     if (index > -1) {
+                         produtoData.dateAdded = appState.products[index].dateAdded; // Preserva a data original
                         appState.products[index] = { ...appState.products[index], ...produtoData };
                     }
                 } else {
@@ -2642,7 +2658,8 @@
                     costPrice: p.costPrice,
                     stock: p.stock,
                     salePrice: 0, 
-                    image: ''
+                    image: '',
+                    dateAdded: new Date().toISOString()
                 }));
 
                 appState.products.push(...newProducts);
@@ -3651,4 +3668,4 @@
         });
     </script>
 </body>
-</html>
+</ht
