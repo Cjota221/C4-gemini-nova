@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="C4 App - Gestão financeira para revendedoras e microempreendedoras">
     <title>C4 - Gestão para Empreendedoras</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -248,18 +249,18 @@
         }
 
         /* ======= ESTILOS DO DASHBOARD ======= */
-        #dashboard-page .cards-grid {
+        .cards-grid {
             display: grid;
             gap: 12px;
             grid-template-columns: 1fr;
         }
         @media(min-width: 768px) {
-            #dashboard-page .cards-grid {
+            .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
          @media(min-width: 1024px) {
-            #dashboard-page .cards-grid {
+            .cards-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
@@ -419,11 +420,12 @@
         }
         
         .btn, 
-        .btn-action {
+        .btn-action,
+        button {
             background-color: var(--color-secondary); 
             color: #5c3c00; 
             border: none;
-            padding: 0.7rem 1.2rem;
+            padding: 12px 16px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem; 
@@ -437,17 +439,19 @@
             min-height: 44px; 
         }
         .btn:hover,
-        .btn-action:hover {
+        .btn-action:hover,
+        button:hover {
             background-color: #faca50; 
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-         .btn:focus-visible, .btn-action:focus-visible {
+         .btn:focus-visible, .btn-action:focus-visible, button:focus-visible {
             outline: 2px solid var(--color-primary);
             outline-offset: 2px;
         }
         .btn:active,
-        .btn-action:active {
+        .btn-action:active,
+        button:active {
             transform: translateY(0px);
             box-shadow: var(--box-shadow-sm);
         }
@@ -1490,7 +1494,7 @@
     </aside>
 
     <header class="app-header header-gradient">
-        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Abrir menu">
+        <button class="menu-toggle" id="menu-toggle-btn" aria-label="Fechar menu">
             <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
             </svg>
@@ -1501,7 +1505,7 @@
 
     <main id="app-content">
         <section id="dashboard-page" class="page-content active">
-            <h2 class="page-title">Dashboard</h2>
+            <h2 class="page-title">Olá, <span id="dashboard-username"></span></h2>
             
             <div class="cards-grid" id="dashboard-cards-summary">
                 <div class="dashboard-card">
@@ -1572,8 +1576,8 @@
             </div>
 
             <div class="quick-actions">
-                <button class="btn-action" data-target-page="vendas-page">Nova Venda</button>
-                <button class="btn-action" data-target-page="produtos-page">Novo Produto</button>
+                <button class="btn-action" data-target-page="vendas-page" aria-label="Registrar nova venda">Nova Venda</button>
+                <button class="btn-action" data-target-page="produtos-page" aria-label="Adicionar novo produto">Novo Produto</button>
             </div>
         </section>
 
@@ -1585,7 +1589,7 @@
                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                         Importar Planilha
                     </button>
-                    <button class="btn btn-primary" id="btn-show-add-product-form">
+                    <button class="btn btn-primary" id="btn-show-add-product-form" aria-label="Adicionar novo produto">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         Cadastro Manual
                     </button>
@@ -1683,7 +1687,7 @@
         <section id="vendas-page" class="page-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                 <h2 class="page-title" style="margin-bottom: 0;">Vendas</h2>
-                <button class="btn btn-primary" id="btn-show-nova-venda-form">
+                <button class="btn btn-primary" id="btn-show-nova-venda-form" aria-label="Registrar nova venda">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Nova Venda
                 </button>
@@ -2131,6 +2135,18 @@
          <section id="perfil-page" class="page-content">
             <h2 class="page-title">Perfil e Configurações</h2>
              <div class="form-container">
+                <h3 class="sub-page-title">Informações do Perfil</h3>
+                <form id="form-perfil">
+                    <div class="form-group">
+                        <label for="perfil-nome">Seu Nome</label>
+                        <input type="text" id="perfil-nome" placeholder="Como podemos te chamar?">
+                    </div>
+                    <div class="form-actions" style="justify-content: flex-start;">
+                        <button type="submit" class="btn btn-primary">Salvar Nome</button>
+                    </div>
+                </form>
+            </div>
+             <div class="form-container">
                 <h3 class="sub-page-title">Backup e Restauração</h3>
                 <p class="informativo">Salve seus dados em um arquivo seguro ou restaure a partir de um backup.</p>
                 <div class="form-actions" style="justify-content: flex-start;">
@@ -2188,6 +2204,7 @@
                              if (!appState.expenses.taxes) appState.expenses.taxes = [];
                              if (!appState.debtPlans) appState.debtPlans = [];
                              if (!appState.goals) appState.goals = { daily: 0, weekly: 0, monthly: 0 };
+                             if (!appState.settings) appState.settings = { userName: 'Empreendedora' };
                         } else {
                             throw new Error("Dados salvos estão corrompidos.");
                         }
@@ -2218,6 +2235,7 @@
                     debtPlans: [],
                     goals: { daily: 0, weekly: 0, monthly: 0 },
                     settings: { 
+                        userName: 'Empreendedora',
                         lowStockThreshold: 5,
                         estimatedMonthlySales: 100
                     }
@@ -2288,6 +2306,7 @@
                     case 'lucro-certo-page': setupLucroCertoPage(); break;
                     case 'liberdade-financeira-page': setupLiberdadeFinanceiraPage(); break;
                     case 'planejamento-divida-page': setupPlanejamentoDividaPage(data); break;
+                    case 'perfil-page': setupPerfilPage(); break;
                 }
             }
             
@@ -2309,6 +2328,7 @@
             // =================================================================================
 
             function setupDashboardPage() {
+                document.getElementById('dashboard-username').textContent = appState.settings.userName || 'Empreendedora';
                 updateDashboard();
             }
 
@@ -2454,6 +2474,7 @@
                 const costPrice = parseFloat(document.getElementById('produto-valor-custo').value) || 0;
                 const unitExpenses = getUnitExpenses();
                 const marginPercent = parseFloat(document.getElementById('produto-margem-lucro-slider').value);
+                const effectiveMargin = Math.min(marginPercent, 99.99); // Prevenir divisão por zero
 
                 document.getElementById('produto-margem-lucro-label').textContent = marginPercent;
 
@@ -2461,8 +2482,8 @@
                 let salePrice = 0;
                 let profit = 0;
 
-                if (totalCost > 0) {
-                    salePrice = totalCost / (1 - (marginPercent / 100));
+                if (totalCost > 0 && effectiveMargin < 100) {
+                    salePrice = totalCost / (1 - (effectiveMargin / 100));
                     profit = salePrice - totalCost;
                 }
 
@@ -2508,29 +2529,39 @@
 
             function handleProductFormSubmit(event) {
                 event.preventDefault();
+                const form = event.target;
+                const nameInput = document.getElementById('produto-nome');
+                const costInput = document.getElementById('produto-valor-custo');
+                const stockInput = document.getElementById('produto-estoque');
+
+                if(!nameInput.value.trim() || !costInput.value || !stockInput.value) {
+                    showToast('Por favor, preencha todos os campos obrigatórios.', 'error');
+                    return;
+                }
+
                 const produtoId = document.getElementById('produto-id-edit').value;
                 const salePrice = parseFloat(document.getElementById('produto-preco-sugerido').textContent.replace('R$ ', '')) || 0;
 
-                if (salePrice <= 0) {
+                if (salePrice <= 0 || !isFinite(salePrice)) {
                     showToast("Defina um preço de venda válido movendo a régua de margem.", "error");
                     return;
                 }
 
                 const produtoData = {
                     id: produtoId || `prod_${Date.now()}`,
-                    name: document.getElementById('produto-nome').value,
+                    name: nameInput.value,
                     category: document.getElementById('produto-categoria').value,
-                    costPrice: parseFloat(document.getElementById('produto-valor-custo').value) || 0,
-                    stock: parseInt(document.getElementById('produto-estoque').value) || 0,
+                    costPrice: parseFloat(costInput.value) || 0,
+                    stock: parseInt(stockInput.value) || 0,
                     image: document.getElementById('produto-imagem-preview').src.startsWith('data:') ? document.getElementById('produto-imagem-preview').src : '',
                     salePrice: salePrice,
-                    dateAdded: new Date().toISOString() // Adicionado para cálculo de tempo em estoque
+                    dateAdded: new Date().toISOString()
                 };
 
                 if (produtoId) {
                     const index = appState.products.findIndex(p => p.id === produtoId);
                     if (index > -1) {
-                         produtoData.dateAdded = appState.products[index].dateAdded; // Preserva a data original
+                         produtoData.dateAdded = appState.products[index].dateAdded; 
                         appState.products[index] = { ...appState.products[index], ...produtoData };
                     }
                 } else {
@@ -2541,7 +2572,7 @@
                 renderProductCards();
                 updateAllProductSelects();
                 
-                document.getElementById('form-cadastro-produto').reset();
+                form.reset();
                 document.getElementById('form-cadastro-produto-container').style.display = 'none';
                 showToast('Produto salvo com sucesso!', 'success');
             }
@@ -2570,7 +2601,7 @@
                 document.getElementById('produto-custo-unitario-despesas').textContent = `R$ ${unitExpenses.toFixed(2)}`;
                 const totalCost = product.costPrice + unitExpenses;
                 let margin = 100;
-                if (product.salePrice > totalCost) {
+                if (product.salePrice > totalCost && product.salePrice > 0) {
                     margin = (1 - (totalCost / product.salePrice)) * 100;
                 }
                 const marginSlider = document.getElementById('produto-margem-lucro-slider');
@@ -3457,6 +3488,17 @@
             }
 
             // =================================================================================
+            // ============================= MÓDULO: PERFIL (NOVO) =============================
+            // =================================================================================
+            function setupPerfilPage() {
+                const nomeInput = document.getElementById('perfil-nome');
+                if (nomeInput) {
+                    nomeInput.value = appState.settings.userName || 'Empreendedora';
+                }
+            }
+
+
+            // =================================================================================
             // ========================== INICIALIZAÇÃO E EVENT LISTENERS ========================
             // =================================================================================
             
@@ -3657,6 +3699,21 @@
                     });
                 });
 
+                // --- Listeners Página Perfil ---
+                document.getElementById('form-perfil').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newName = document.getElementById('perfil-nome').value.trim();
+                    if (newName) {
+                        appState.settings.userName = newName;
+                        saveState();
+                        showToast('Nome atualizado com sucesso!', 'success');
+                        if (document.getElementById('dashboard-page').classList.contains('active')) {
+                            document.getElementById('dashboard-username').textContent = newName;
+                        }
+                    } else {
+                        showToast('Por favor, insira um nome.', 'error');
+                    }
+                });
 
                 // --- Inicialização ---
                 document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -3668,4 +3725,4 @@
         });
     </script>
 </body>
-</ht
+</html>
